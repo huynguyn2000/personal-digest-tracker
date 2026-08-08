@@ -95,8 +95,14 @@ sources:
     weight: 1.5
 
   # --- youtube ------------------------------------------------------------
-  # TODO: add your channels. Find channel_id via a channel's page source
-  # (or a "channel id finder"); it looks like UCxxxxxxxxxxxxxxxxxxxxxx.
+  - id: tubakhuym-yt              # @TùBàKhuỳm — Vietnamese AI / agents
+    type: youtube
+    channel_id: UCLDxPaAsHbsLPMms6i4fMdw
+    tags: [ai]
+    weight: 1.0
+
+  # TODO: add more channels. Paste a channel URL and it can be resolved to a
+  # channel_id (the UCxxxxxxxxxxxxxxxxxxxxxx string) from the page source.
   # - id: some-yt-channel
   #   type: youtube
   #   channel_id: UCxxxxxxxxxxxxxxxxxxxxxx
