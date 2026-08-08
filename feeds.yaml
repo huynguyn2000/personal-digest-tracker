@@ -25,6 +25,48 @@ sources:
     tags: [dataeng, releases]
     weight: 1.2
 
+  - id: iceberg-releases
+    type: github
+    url: https://github.com/apache/iceberg/releases.atom
+    tags: [dataeng, lakehouse, releases]
+    weight: 1.4
+
+  - id: flink-releases
+    type: github
+    url: https://github.com/apache/flink/releases.atom
+    tags: [dataeng, streaming, releases]
+    weight: 1.2
+
+  - id: kafka-releases
+    type: github
+    url: https://github.com/apache/kafka/releases.atom
+    tags: [dataeng, streaming, releases]
+    weight: 1.1
+
+  - id: spark-releases
+    type: github
+    url: https://github.com/apache/spark/releases.atom
+    tags: [dataeng, releases]
+    weight: 1.1
+
+  - id: clickhouse-releases
+    type: github
+    url: https://github.com/ClickHouse/ClickHouse/releases.atom
+    tags: [dataeng, releases]
+    weight: 1.0
+
+  - id: dbt-releases
+    type: github
+    url: https://github.com/dbt-labs/dbt-core/releases.atom
+    tags: [dataeng, releases]
+    weight: 1.0
+
+  - id: netflix-tech
+    type: rss
+    url: https://netflixtechblog.com/feed
+    tags: [dataeng]
+    weight: 1.0
+
   - id: trino-blog
     type: rss
     url: https://trino.io/blog/feed.xml
@@ -37,13 +79,11 @@ sources:
     tags: [ai]
     weight: 1.0
 
-  # --- deliberately broken, to prove the pipeline survives a dead feed ----
-  # (remove once you've seen it land in the "dead feeds" section)
-  - id: broken-example
+  - id: huggingface-blog
     type: rss
-    url: https://example.invalid/does-not-exist/feed.xml
-    tags: [dataeng]
-    weight: 0.1
+    url: https://huggingface.co/blog/feed.xml
+    tags: [ai]
+    weight: 0.9
 
   # --- newsletters (Gmail) ------------------------------------------------
   # Requires GMAIL_USER + GMAIL_APP_PASSWORD env vars (needs 2FA + app password).
