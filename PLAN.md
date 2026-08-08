@@ -1,0 +1,165 @@
+# Personal Digest + Tracker — Build Plan
+
+A single spec for Claude Code. Read the whole thing before writing any code.
+
+---
+
+## 1. Goal
+
+One HTML page and one Telegram message per morning that replaces:
+
+- scrolling Facebook/YouTube for AI news
+- opening Gmail for Data Engineering Weekly and similar newsletters
+- checking gold price, FX, and air quality separately
+
+Success = I open the digest instead of the apps, and I'm still doing it in week three.
+
+## 2. Non-goals (do not build these)
+
+- **No LLM at runtime.** No Anthropic/OpenAI/Gemini API calls anywhere in the pipeline. Ranking is a deterministic scoring function. This is a hard constraint, not a preference.
+- No web server, no Docker, no Postgres.
+- No auth, no multi-user, no accounts.
+- No mobile app. Telegram is the mobile surface.
+- No React frontend. Server-rendered static HTML only.
+- No Facebook scraping.
+- No splitting newsletters into constituent links. One email = one item.
+- No embedding models or ML dependencies (`torch`, `sentence-transformers`, etc.). Dedup is string-based.
+
+If a feature isn't in this document, don't add it. Ask first.
+
+## 3. Stack
+
+| Choice | Why |
+|---|---|
+| Python 3.11+ | familiar, best feed tooling |
+| SQLite (`data/digest.db`) | single file, commits back to repo, zero ops |
+| `feedparser` | handles RSS + Atom + YouTube feeds identically |
+| `imaplib` (stdlib) | Gmail newsletters without OAuth |
+| `httpx` | tracker APIs |
+| `selectolax` or `beautifulsoup4` | HTML → text for email bodies |
+| `PyYAML` | `feeds.yaml` config |
+| `Jinja2` | HTML render |
+| GitHub Actions cron | scheduler, free, no server |
+
+Pin versions in `requirements.txt`.
+
+## 4. Repo layout
+
+```
+digest/
+  feeds.yaml            # all sources, hand-edited
+  config.yaml           # scoring weights, thresholds, timezone
+  requirements.txt
+  data/
+    digest.db           # committed
+  src/
+    db.py               # schema init, connection helper
+    fetch_rss.py        # rss + youtube + github releases
+    fetch_imap.py       # gmail
+    fetch_metrics.py    # gold, fx, aqi, weather
+    dedup.py
+    score.py
+    render.py           # html
+    notify.py           # telegram
+    run.py              # orchestrator: fetch -> dedup -> score -> render -> notify
+  templates/
+    digest.html.j2
+  out/
+    index.html          # committed, viewable via GitHub Pages
+  .github/workflows/
+    digest.yml
+```
+
+`run.py` is the only entrypoint. Each stage must also be runnable alone for debugging:
+`python -m src.fetch_rss`, `python -m src.score`, etc.
+
+## 5. Schema
+
+```sql
+CREATE TABLE IF NOT EXISTS items (
+  id            TEXT PRIMARY KEY,      -- sha256 of canonical_url
+  source_id     TEXT NOT NULL,
+  source_type   TEXT NOT NULL,         -- rss | youtube | github | imap
+  title         TEXT NOT NULL,
+  url           TEXT NOT NULL,         -- canonical
+  author        TEXT,
+  published_at  TEXT NOT NULL,         -- ISO8601 UTC
+  fetched_at    TEXT NOT NULL,         -- ISO8601 UTC
+  raw_text      TEXT,                  -- description / email body, plain text
+  cluster_id    TEXT,                  -- set by dedup
+  is_primary    INTEGER DEFAULT 0,     -- representative of its cluster
+  score         REAL,
+  score_why     TEXT,                  -- e.g. "kw:iceberg,trino src:1.4 age:0.8"
+  state         TEXT DEFAULT 'new'     -- new | digested
+);
+CREATE INDEX IF NOT EXISTS idx_items_pub   ON items(published_at);
+CREATE INDEX IF NOT EXISTS idx_items_state ON items(state);
+
+CREATE TABLE IF NOT EXISTS feed_state (
+  source_id     TEXT PRIMARY KEY,
+  etag          TEXT,
+  last_modified TEXT,
+  last_ok_at    TEXT,
+  last_error    TEXT,
+  error_count   INTEGER DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS metrics (
+  name    TEXT NOT NULL,               -- sjc_gold_buy, usd_vnd, hcmc_aqi, ...
+  ts      TEXT NOT NULL,               -- ISO8601 UTC
+  value   REAL NOT NULL,
+  meta    TEXT,                        -- optional JSON
+  PRIMARY KEY (name, ts)
+);
+```
+
+All timestamps stored UTC. Convert to `Asia/Ho_Chi_Minh` only at render time.
+
+## 6. feeds.yaml
+
+Adding a source must be one line. If it's more, the format is wrong.
+
+## 7. Fetchers
+
+See section 7 of the original spec. Key rules:
+- etag / last-modified conditional fetching; skip on 304.
+- `INSERT OR IGNORE` on `id` — idempotent, never resurrect a digested item.
+- Publish date: `published_parsed` -> `updated_parsed` -> `fetched_at`; clamp future to now.
+- Strip HTML into `raw_text`, truncate ~2000 chars.
+- One bad feed never kills the run; write error to `feed_state`, increment `error_count`.
+- `error_count >= 5` -> "dead feeds" section at bottom of digest.
+- IMAP: `imap.gmail.com:993` SSL, app password; SINCE last 3 days; id = sha256(Message-ID).
+- Metrics: weather+AQI (open-meteo), FX (Vietcombank XML), gold (SJC, fragile). Record gold spread.
+
+## 8. Dedup
+
+- Level 1 exact: canonicalize URL before hashing (lowercase scheme+host, strip www, drop utm_*/ref/source/fbclid/gclid, strip trailing slash+fragment, youtu.be -> watch?v=).
+- Level 2 near-dup: 48h window, normalized-title char-trigram Jaccard, threshold 0.6, single-link clustering, representative = highest source weight then longest raw_text.
+
+## 9. Scoring
+
+`score = source_weight * (1 + keyword_score) * recency_factor`, keyword_score capped at 3.0, recency `0.5 ** (age_hours / half_life_hours)`. Newsletters get a floor (always included, own section). Every item writes `score_why`.
+
+## 10. Render + notify
+
+- HTML: trackers at top with hand-rolled SVG sparklines (30d), then items grouped by tag, dead-feeds section at bottom. Self-contained, inline CSS, dark-mode-friendly, no JS.
+- Telegram: top 5 + tracker one-liner + Pages link, `parse_mode=HTML`, no preview.
+- After render, mark rendered items `state='digested'`.
+
+## 11. GitHub Actions
+
+Daily cron `0 0 * * *` (07:00 Asia/Ho_Chi_Minh) + `workflow_dispatch`; checkout -> setup-python -> pip install -> `python -m src.run` -> commit `data/digest.db` + `out/index.html`. `concurrency: digest, cancel-in-progress: false`. Private repo. Pages serves `out/`.
+
+## 12. Build order
+
+Day 1: skeleton+db -> rss -> youtube/github+feeds.yaml -> etag -> imap -> metrics.
+Day 2: dedup -> score -> render -> sparklines -> notify -> run.py + Actions.
+If short, cut in order: sparklines, gold, Actions. **Never cut dedup.**
+
+## 13. Known traps
+
+Timezones (normalize UTC, clamp future). Encoding (decode defensively, errors='replace'). Feed death (surface error_count). Dedup threshold (tune 0.6 on real data). Scope creep (out of scope).
+
+## 14. Handover
+
+`README.md`: how to add a feed, tune weights, run each stage, env vars needed.

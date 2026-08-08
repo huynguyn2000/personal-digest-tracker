@@ -1,0 +1,66 @@
+# All sources, hand-edited. Adding a source should be one line + a couple of keys.
+#
+# types:
+#   rss     - any RSS or Atom feed
+#   youtube - give channel_id; the feed URL is built for you
+#   github  - a repo releases.atom feed (badged separately in the digest)
+#   imap    - a Gmail label; body comes from IMAP, no URL
+#
+# Every source may set: tags: [..]  and  weight: <float> (defaults.weight if omitted)
+
+defaults:
+  weight: 1.0
+
+sources:
+  # --- data engineering ---------------------------------------------------
+  - id: airflow-releases
+    type: github
+    url: https://github.com/apache/airflow/releases.atom
+    tags: [dataeng, releases]
+    weight: 1.4
+
+  - id: duckdb-releases
+    type: github
+    url: https://github.com/duckdb/duckdb/releases.atom
+    tags: [dataeng, releases]
+    weight: 1.2
+
+  - id: trino-blog
+    type: rss
+    url: https://trino.io/blog/feed.xml
+    tags: [dataeng, lakehouse]
+
+  # --- ai -----------------------------------------------------------------
+  - id: simonwillison
+    type: rss
+    url: https://simonwillison.net/atom/everything/
+    tags: [ai]
+    weight: 1.0
+
+  # --- deliberately broken, to prove the pipeline survives a dead feed ----
+  # (remove once you've seen it land in the "dead feeds" section)
+  - id: broken-example
+    type: rss
+    url: https://example.invalid/does-not-exist/feed.xml
+    tags: [dataeng]
+    weight: 0.1
+
+  # --- newsletters (Gmail) ------------------------------------------------
+  # Requires GMAIL_USER + GMAIL_APP_PASSWORD env vars (needs 2FA + app password).
+  # 'label' is the Gmail label; nested labels use '/'.
+  - id: de-weekly
+    type: imap
+    label: Newsletters/DEWeekly
+    tags: [dataeng, newsletter]
+    weight: 1.5
+
+  # --- youtube ------------------------------------------------------------
+  # TODO: add your channels. Find channel_id via a channel's page source
+  # (or a "channel id finder"); it looks like UCxxxxxxxxxxxxxxxxxxxxxx.
+  # - id: some-yt-channel
+  #   type: youtube
+  #   channel_id: UCxxxxxxxxxxxxxxxxxxxxxx
+  #   tags: [ai]
+  #   weight: 0.8
+
+  # TODO: add your channels / blogs / newsletters below.

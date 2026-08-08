@@ -1,0 +1,77 @@
+name: digest
+
+on:
+  schedule:
+    # 00:00 UTC == 07:00 Asia/Ho_Chi_Minh
+    - cron: "0 0 * * *"
+  workflow_dispatch: {}
+
+# Concurrent runs would corrupt the committed SQLite file.
+concurrency:
+  group: digest
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run digest
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          PAGES_URL: ${{ vars.PAGES_URL }}
+        run: python -m src.run
+
+      - name: Commit digest.db and index.html
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/digest.db out/index.html
+          if git diff --cached --quiet; then
+            echo "no changes to commit"
+          else
+            git commit -m "digest: $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          fi
+
+  # Serves out/index.html via GitHub Pages. Requires Pages -> Source: GitHub Actions
+  # in repo settings. If you'd rather serve from a branch folder, delete this job
+  # and set Pages Source to "main / (out)" instead.
+  deploy-pages:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: Pull the commit the build job just pushed
+        run: git pull --ff-only || true
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+      - id: deploy
+        uses: actions/deploy-pages@v4

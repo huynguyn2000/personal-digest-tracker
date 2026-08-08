@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Morning Digest — {{ generated_local }}</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1a1a; --muted: #666; --card: #f4f4f5;
+    --border: #e4e4e7; --accent: #2563eb; --spark: #2563eb;
+    --badge-rss:#0891b2; --badge-youtube:#dc2626; --badge-github:#7c3aed; --badge-imap:#059669;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#0b0b0c; --fg:#e7e7ea; --muted:#9a9aa0; --card:#161618;
+      --border:#27272a; --accent:#60a5fa; --spark:#60a5fa;
+      --badge-rss:#22d3ee; --badge-youtube:#f87171; --badge-github:#c084fc; --badge-imap:#34d399;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:#0b0b0c; --fg:#e7e7ea; --muted:#9a9aa0; --card:#161618;
+    --border:#27272a; --accent:#60a5fa; --spark:#60a5fa;
+    --badge-rss:#22d3ee; --badge-youtube:#f87171; --badge-github:#c084fc; --badge-imap:#34d399;
+  }
+  :root[data-theme="light"] {
+    --bg:#ffffff; --fg:#1a1a1a; --muted:#666; --card:#f4f4f5;
+    --border:#e4e4e7; --accent:#2563eb; --spark:#2563eb;
+    --badge-rss:#0891b2; --badge-youtube:#dc2626; --badge-github:#7c3aed; --badge-imap:#059669;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; background:var(--bg); color:var(--fg);
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 20px 16px 64px; }
+  header h1 { font-size: 1.3rem; margin: 0 0 2px; }
+  header .sub { color: var(--muted); font-size: .85rem; margin-bottom: 18px; }
+
+  .trackers { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:26px; }
+  .tracker {
+    flex:1 1 140px; background:var(--card); border:1px solid var(--border);
+    border-radius:12px; padding:10px 12px;
+  }
+  .tracker .label { color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; }
+  .tracker .value { font-size:1.25rem; font-weight:650; margin-top:2px; }
+  .tracker svg { display:block; margin-top:6px; width:100%; height:26px; overflow:visible; }
+
+  h2.section { font-size:.8rem; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--muted); border-bottom:1px solid var(--border); padding-bottom:6px; margin:28px 0 10px; }
+
+  .item { padding:12px 0; border-bottom:1px solid var(--border); }
+  .item:last-child { border-bottom:none; }
+  .item .top { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+  .item a.title { color:var(--fg); text-decoration:none; font-weight:600; font-size:1.02rem; }
+  .item a.title:hover { color:var(--accent); text-decoration:underline; }
+  .badge { font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.03em;
+    padding:2px 6px; border-radius:6px; color:#fff; white-space:nowrap; }
+  .badge.rss{background:var(--badge-rss);} .badge.youtube{background:var(--badge-youtube);}
+  .badge.github{background:var(--badge-github);} .badge.imap{background:var(--badge-imap);}
+  .age { color:var(--muted); font-size:.78rem; }
+  .src { color:var(--muted); font-size:.78rem; }
+  .snippet { color:var(--muted); font-size:.9rem; margin-top:4px; }
+  .also { color:var(--muted); font-size:.78rem; margin-top:4px; font-style:italic; }
+
+  .dead { margin-top:36px; background:var(--card); border:1px solid var(--border);
+    border-radius:12px; padding:12px 14px; }
+  .dead h2 { font-size:.8rem; text-transform:uppercase; color:#dc2626; margin:0 0 8px; }
+  .dead code { font-size:.78rem; color:var(--muted); }
+  footer { margin-top:40px; color:var(--muted); font-size:.75rem; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Morning Digest</h1>
+    <div class="sub">{{ generated_local }} · {{ counts.news }} items · {{ counts.newsletters }} newsletters</div>
+  </header>
+
+  {% if trackers %}
+  <div class="trackers">
+    {% for t in trackers %}
+    <div class="tracker">
+      <div class="label">{{ t.label }}</div>
+      <div class="value">{{ t.value }}</div>
+      {% if t.spark %}
+      <svg viewBox="0 0 110 26" preserveAspectRatio="none" aria-hidden="true">
+        <polyline points="{{ t.spark }}" fill="none" stroke="var(--spark)" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% macro item_block(it) %}
+  <div class="item">
+    <div class="top">
+      <span class="badge {{ it.source_type }}">{{ it.source_type }}</span>
+      {% if it.url %}
+      <a class="title" href="{{ it.url }}" target="_blank" rel="noopener">{{ it.title }}</a>
+      {% else %}
+      <span class="title">{{ it.title }}</span>
+      {% endif %}
+      <span class="age">· {{ it.age }} ago</span>
+      <span class="src">· {{ it.source_id }}</span>
+    </div>
+    {% if it.snippet %}<div class="snippet">{{ it.snippet }}</div>{% endif %}
+    {% if it.siblings %}<div class="also">also covered by: {{ it.siblings | join(", ") }}</div>{% endif %}
+  </div>
+  {% endmacro %}
+
+  {% for section in sections %}
+  <h2 class="section">{{ section.tag }}</h2>
+  {% for it in section.entries %}{{ item_block(it) }}{% endfor %}
+  {% endfor %}
+
+  {% if newsletters %}
+  <h2 class="section">newsletters</h2>
+  {% for it in newsletters %}{{ item_block(it) }}{% endfor %}
+  {% endif %}
+
+  {% if not sections and not newsletters %}
+  <p style="color:var(--muted)">Nothing in the digest window. Feeds may be quiet, or run the fetchers.</p>
+  {% endif %}
+
+  {% if dead_feeds %}
+  <div class="dead">
+    <h2>⚠ dead feeds ({{ dead_feeds | length }})</h2>
+    {% for d in dead_feeds %}
+    <div><strong>{{ d.source_id }}</strong> — {{ d.error_count }} consecutive errors<br>
+      <code>{{ d.last_error }}</code></div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <footer>Deterministic digest · no LLM in the loop · generated by personal-digest-tracker</footer>
+</div>
+</body>
+</html>

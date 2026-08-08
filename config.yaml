@@ -1,0 +1,45 @@
+# Scoring weights, thresholds, timezone. Hand-tuned against real digest output.
+timezone: Asia/Ho_Chi_Minh
+
+# Public URL where out/index.html is served (GitHub Pages). Used in the Telegram
+# message. Overridable at runtime via the PAGES_URL env var.
+pages_url: ""
+
+keywords:
+  iceberg: 1.0
+  trino: 1.0
+  airflow: 0.8
+  flink: 0.8
+  kafka: 0.7
+  duckdb: 0.7
+  dbt: 0.6
+  clickhouse: 0.5
+  lakehouse: 1.0
+  streaming: 0.5
+  "data engineering": 0.8
+  postmortem: 0.9
+  outage: 0.7
+  benchmark: 0.5
+  anthropic: 0.6
+  claude: 0.5
+  "context engineering": 0.6
+  agent: 0.3
+  vietnam: 0.8
+
+negative_keywords:
+  "top 10": -1.0
+  "you won't believe": -2.0
+  webinar: -0.8
+  sponsored: -1.5
+
+digest:
+  max_items: 12
+  half_life_hours: 36
+  window_hours: 48
+  dedup_threshold: 0.6
+  # How far back render/notify look for candidate items (days). Keeps the digest
+  # bounded even if older 'new' items linger.
+  render_window_days: 4
+  keyword_score_cap: 3.0
+  # Section ordering in the HTML. Tags not listed fall into "other".
+  section_order: [dataeng, ai]

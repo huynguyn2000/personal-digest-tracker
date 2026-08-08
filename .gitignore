@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# SQLite side files (the DB itself IS committed; its journals are not)
+data/*.db-wal
+data/*.db-shm
+data/*.db-journal
+
+# render side artifacts we don't commit
+out/digest.json
