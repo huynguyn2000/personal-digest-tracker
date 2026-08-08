@@ -12,3 +12,4 @@ data/*.db-journal
 
 # render side artifacts we don't commit
 out/digest.json
+out/_dashboard_inner.html

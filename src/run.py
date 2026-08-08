@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import sys
 
-from . import dedup, fetch_imap, fetch_metrics, fetch_rss, notify, render, score
+from . import dashboard, dedup, fetch_imap, fetch_metrics, fetch_rss, notify, render, score
 from .db import init_db
 
 
@@ -51,6 +51,9 @@ def main() -> int:
         )
         conn.commit()
     print(f"\n== done == marked {len(rendered_ids)} items digested")
+
+    # --- dashboard (best-effort; reflects post-run state) ---
+    _stage("dashboard", lambda: dashboard.run(conn), fatal=False)
     return 0
 
 

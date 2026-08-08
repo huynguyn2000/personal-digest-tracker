@@ -45,6 +45,21 @@ Each stage runs standalone and prints what it did:
 `render` and `notify` are side-effect-free (they don't mark items digested);
 only `python -m src.run` advances item state. So you can re-render freely.
 
+## Dashboard (pipeline console)
+
+A self-contained observability GUI over the live DB — pipeline health, sources,
+an interactive item explorer (search / filter / sort with score bars and
+`score_why`), the actual digest selection, dedup clusters, and tracker charts:
+
+```bash
+./.venv/bin/python -m src.dashboard   # -> out/dashboard.html (open in a browser)
+```
+
+It regenerates automatically at the end of every `python -m src.run`, and the
+GitHub Action commits it, so it's served next to the digest on Pages at
+`/dashboard.html`. It's a read-only visualization — a dev/ops view, separate
+from the shipped digest.
+
 ## Adding a feed
 
 Add one entry to [`feeds.yaml`](feeds.yaml):
