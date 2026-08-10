@@ -28,18 +28,35 @@ from .db import (
     source_map,
 )
 
-# Trackers to display, in order: (metric_name, label, formatter)
+# Trackers to display, in order. Each: name, label, fmt; optional icon/kind.
 TRACKER_SPECS = [
-    ("usd_vnd", "USD/VND", lambda v: f"{v:,.0f}"),
-    ("cny_vnd", "CNY/VND", lambda v: f"{v:,.0f}"),
-    ("hcmc_temp", "Temp", lambda v: f"{v:.0f}°C"),
-    ("hcmc_rain_prob", "Rain", lambda v: f"{v:.0f}%"),
-    ("hcmc_aqi", "AQI", lambda v: f"{v:.0f}"),
-    ("sjc_gold_buy", "Gold buy", lambda v: f"{v:,.0f}"),
-    ("sjc_gold_sell", "Gold sell", lambda v: f"{v:,.0f}"),
-    ("sjc_gold_spread", "Gold spread", lambda v: f"{v:,.0f}"),
+    {"name": "usd_vnd", "label": "USD/VND", "fmt": lambda v: f"{v:,.0f}"},
+    {"name": "cny_vnd", "label": "CNY/VND", "fmt": lambda v: f"{v:,.0f}"},
+    {"name": "hcmc_temp", "label": "Temp", "fmt": lambda v: f"{v:.0f}°C", "icon": "🌡"},
+    {"name": "hcmc_rain_prob", "label": "Rain", "fmt": lambda v: f"{v:.0f}%", "icon": "🌧"},
+    {"name": "hcmc_aqi", "label": "AQI", "fmt": lambda v: f"{v:.0f}", "kind": "aqi"},
+    {"name": "sjc_gold_buy", "label": "Gold buy", "fmt": lambda v: f"{v:,.0f}"},
+    {"name": "sjc_gold_sell", "label": "Gold sell", "fmt": lambda v: f"{v:,.0f}"},
+    {"name": "sjc_gold_spread", "label": "Gold spread", "fmt": lambda v: f"{v:,.0f}"},
 ]
 DEAD_FEED_THRESHOLD = 5
+
+# US AQI categories with their standard (theme-independent) colors.
+_AQI_BANDS = [
+    (50, "Good", "#2fa36b"),
+    (100, "Moderate", "#c9a227"),
+    (150, "Unhealthy for sensitive", "#e8730c"),
+    (200, "Unhealthy", "#d63b5b"),
+    (300, "Very unhealthy", "#8b5cf6"),
+    (10 ** 9, "Hazardous", "#7f1d1d"),
+]
+
+
+def _aqi_band(v: float) -> dict | None:
+    for hi, label, color in _AQI_BANDS:
+        if v <= hi:
+            return {"label": label, "color": color}
+    return None
 
 
 def humanize_age(published_at: str, now: datetime) -> str:
@@ -53,39 +70,52 @@ def humanize_age(published_at: str, now: datetime) -> str:
     return f"{int(hours / 24)}d"
 
 
-def sparkline_points(values: list[float], w: int = 110, h: int = 26, pad: int = 3) -> str:
-    """Hand-rolled <polyline> points from a value series. Empty if <2 points."""
+def _spark(values: list[float], w: int = 120, h: int = 32, pad: int = 3) -> dict | None:
+    """Area + line + endpoint for a sparkline. None if <2 points."""
     if len(values) < 2:
-        return ""
+        return None
     lo, hi = min(values), max(values)
     span = (hi - lo) or 1.0
     n = len(values)
-    pts = []
-    for i, v in enumerate(values):
-        x = pad + (w - 2 * pad) * (i / (n - 1))
-        y = pad + (h - 2 * pad) * (1 - (v - lo) / span)
-        pts.append(f"{x:.1f},{y:.1f}")
-    return " ".join(pts)
+    pts = [
+        (pad + (w - 2 * pad) * (i / (n - 1)), pad + (h - 2 * pad) * (1 - (v - lo) / span))
+        for i, v in enumerate(values)
+    ]
+    line = " ".join(f"{x:.1f},{y:.1f}" for x, y in pts)
+    area = f"{pad},{h - pad} " + line + f" {w - pad},{h - pad}"
+    return {"line": line, "area": area, "cx": f"{pts[-1][0]:.1f}",
+            "cy": f"{pts[-1][1]:.1f}", "w": w, "h": h}
 
 
 def _trackers(conn: sqlite3.Connection, links: dict | None = None) -> list[dict]:
     links = links or {}
     cutoff = now_utc().timestamp() - 30 * 86400
     out = []
-    for name, label, fmt in TRACKER_SPECS:
+    for spec in TRACKER_SPECS:
         rows = conn.execute(
-            "SELECT ts, value FROM metrics WHERE name=? ORDER BY ts", (name,)
+            "SELECT ts, value FROM metrics WHERE name=? ORDER BY ts", (spec["name"],)
         ).fetchall()
         rows = [r for r in rows if parse_iso(r["ts"]).timestamp() >= cutoff]
         if not rows:
             continue
         values = [r["value"] for r in rows]
+        latest = values[-1]
+        delta = None
+        if len(values) >= 2 and values[-2]:
+            d = latest - values[-2]
+            direction = "up" if d > 1e-9 else "down" if d < -1e-9 else "flat"
+            arrow = {"up": "▲", "down": "▼", "flat": "·"}[direction]
+            delta = {"pct": f"{abs(d) / abs(values[-2]) * 100:.1f}%",
+                     "dir": direction, "arrow": arrow}
         out.append(
             {
-                "label": label,
-                "value": fmt(values[-1]),
-                "spark": sparkline_points(values),
-                "link": links.get(name),
+                "label": spec["label"],
+                "value": spec["fmt"](latest),
+                "icon": spec.get("icon"),
+                "delta": delta,
+                "band": _aqi_band(latest) if spec.get("kind") == "aqi" else None,
+                "spark": _spark(values),
+                "link": links.get(spec["name"]),
             }
         )
     return out

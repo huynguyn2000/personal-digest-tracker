@@ -42,8 +42,16 @@
     border-radius:12px; padding:10px 12px;
   }
   .tracker .label { color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; }
-  .tracker .value { font-size:1.25rem; font-weight:650; margin-top:2px; }
-  .tracker svg { display:block; margin-top:6px; width:100%; height:26px; overflow:visible; }
+  .tracker .value-row { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin-top:3px; }
+  .tracker .value { font-size:1.3rem; font-weight:680; font-variant-numeric:tabular-nums; }
+  .tracker .delta { font-size:.72rem; font-variant-numeric:tabular-nums; color:var(--muted); }
+  .tracker .delta.up::before, .tracker .delta.down::before { content:""; }
+  .tracker .band { display:flex; align-items:center; gap:5px; font-size:.72rem; color:var(--muted); margin-top:5px; }
+  .tracker .band .dot { width:8px; height:8px; border-radius:50%; flex:none; }
+  .tracker svg.spark { display:block; margin-top:8px; width:100%; height:32px; overflow:visible; }
+  .spark-area { fill:var(--accent); opacity:.14; }
+  .spark-line { fill:none; stroke:var(--accent); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+  .spark-dot { fill:var(--accent); }
 
   h2.section { font-size:.8rem; text-transform:uppercase; letter-spacing:.06em;
     color:var(--muted); border-bottom:1px solid var(--border); padding-bottom:6px; margin:28px 0 10px; }
@@ -119,12 +127,17 @@
   <div class="trackers">
     {% for t in trackers %}
     <div class="tracker">
-      <div class="label">{% if t.link %}<a href="{{ t.link }}" target="_blank" rel="noopener" title="Larger time window">{{ t.label }} ↗</a>{% else %}{{ t.label }}{% endif %}</div>
-      <div class="value">{{ t.value }}</div>
+      <div class="label">{% if t.link %}<a href="{{ t.link }}" target="_blank" rel="noopener" title="Open a larger time-window view">{{ t.label }} ↗</a>{% else %}{{ t.label }}{% endif %}</div>
+      <div class="value-row">
+        <span class="value">{% if t.icon %}{{ t.icon }} {% endif %}{{ t.value }}</span>
+        {% if t.delta %}<span class="delta {{ t.delta.dir }}" title="vs previous reading">{{ t.delta.arrow }} {{ t.delta.pct }}</span>{% endif %}
+      </div>
+      {% if t.band %}<div class="band"><span class="dot" style="background:{{ t.band.color }}"></span>{{ t.band.label }}</div>{% endif %}
       {% if t.spark %}
-      <svg viewBox="0 0 110 26" preserveAspectRatio="none" aria-hidden="true">
-        <polyline points="{{ t.spark }}" fill="none" stroke="var(--spark)" stroke-width="1.5"
-                  stroke-linecap="round" stroke-linejoin="round"/>
+      <svg class="spark" viewBox="0 0 {{ t.spark.w }} {{ t.spark.h }}" preserveAspectRatio="none" aria-hidden="true">
+        <polygon points="{{ t.spark.area }}" class="spark-area"/>
+        <polyline points="{{ t.spark.line }}" class="spark-line"/>
+        <circle cx="{{ t.spark.cx }}" cy="{{ t.spark.cy }}" r="2.4" class="spark-dot"/>
       </svg>
       {% endif %}
     </div>

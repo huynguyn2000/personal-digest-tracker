@@ -21,12 +21,12 @@ MAX_LEN = 3900  # Telegram hard limit is 4096; leave headroom
 
 def _tracker_line(conn: sqlite3.Connection) -> str:
     parts = []
-    for name, label, fmt in TRACKER_SPECS:
+    for spec in TRACKER_SPECS:
         row = conn.execute(
-            "SELECT value FROM metrics WHERE name=? ORDER BY ts DESC LIMIT 1", (name,)
+            "SELECT value FROM metrics WHERE name=? ORDER BY ts DESC LIMIT 1", (spec["name"],)
         ).fetchone()
         if row is not None:
-            parts.append(f"{label} {fmt(row['value'])}")
+            parts.append(f"{spec['label']} {spec['fmt'](row['value'])}")
     return " · ".join(parts)
 
 

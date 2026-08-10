@@ -96,21 +96,21 @@ def _collect(conn: sqlite3.Connection) -> dict:
 
     # --- metrics (full history for charts) ---
     metrics = []
-    for name, label, fmt in TRACKER_SPECS:
+    for spec in TRACKER_SPECS:
         rows = conn.execute(
-            "SELECT ts, value FROM metrics WHERE name=? ORDER BY ts", (name,)
+            "SELECT ts, value FROM metrics WHERE name=? ORDER BY ts", (spec["name"],)
         ).fetchall()
         if not rows:
             continue
         vals = [r["value"] for r in rows]
         metrics.append(
             {
-                "name": name,
-                "label": label,
-                "latest": fmt(vals[-1]),
+                "name": spec["name"],
+                "label": spec["label"],
+                "latest": spec["fmt"](vals[-1]),
                 "points": vals,
                 "n": len(vals),
-                "link": links.get(name),
+                "link": links.get(spec["name"]),
             }
         )
 
