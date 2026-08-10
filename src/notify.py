@@ -13,7 +13,7 @@ import sqlite3
 import httpx
 
 from .db import get_conn, init_db, load_config
-from .render import TRACKER_SPECS, select_digest
+from .render import _trackers, select_digest
 
 TELEGRAM_API = "https://api.telegram.org/bot{token}/sendMessage"
 MAX_LEN = 3900  # Telegram hard limit is 4096; leave headroom
@@ -21,12 +21,14 @@ MAX_LEN = 3900  # Telegram hard limit is 4096; leave headroom
 
 def _tracker_line(conn: sqlite3.Connection) -> str:
     parts = []
-    for spec in TRACKER_SPECS:
-        row = conn.execute(
-            "SELECT value FROM metrics WHERE name=? ORDER BY ts DESC LIMIT 1", (spec["name"],)
-        ).fetchone()
-        if row is not None:
-            parts.append(f"{spec['label']} {spec['fmt'](row['value'])}")
+    for t in _trackers(conn):
+        seg = (f"{t['icon']} " if t.get("icon") else "") + f"{t['label']} {t['value']}"
+        if t.get("band"):
+            seg += f" ({t['band']['label']})"
+        d = t.get("delta")
+        if d and d["dir"] != "flat":
+            seg += f" {d['arrow']}{d['pct']}"
+        parts.append(seg)
     return " · ".join(parts)
 
 
