@@ -145,7 +145,7 @@
   {% for s in sections %}{% if s.entries %}{% set _ = nav.append((s.tag, 'sec-' ~ s.tag)) %}{% endif %}{% endfor %}
   {% if newsletters %}{% set _ = nav.append(('newsletters', 'sec-newsletters')) %}{% endif %}
   {% if nav %}
-  <nav class="jump">
+  <nav class="jump" aria-label="Jump to section">
     {% if trackers %}<a href="#trackers">Trackers</a>{% endif %}
     {% for label, anchor in nav %}<a href="#{{ anchor }}">{{ SECTION_NAMES.get(label, label) }}</a>{% endfor %}
   </nav>
@@ -153,7 +153,7 @@
 
   {% if overview %}
   <div class="overview">
-    <span class="ov-label">Today</span>{{ overview }}
+    <span class="ov-label">Today{% if today_label %} · {{ today_label }}{% endif %}</span>{{ overview }}
   </div>
   {% endif %}
 

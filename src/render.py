@@ -338,6 +338,7 @@ def select_digest(conn: sqlite3.Connection) -> dict:
     return {
         "generated_local": now_local.strftime("%Y-%m-%d %H:%M %Z"),
         "generated_iso": now.isoformat(),
+        "today_label": now_local.strftime("%a %d %b"),
         "overview": get_kv(conn, "overview"),
         "trackers": _trackers(conn, cfg.get("tracker_links", {})),
         "sections": ordered_sections,
