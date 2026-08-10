@@ -32,7 +32,7 @@ def weather_hcmc() -> list[tuple]:
             "latitude": HCMC_LAT,
             "longitude": HCMC_LON,
             "current": "temperature_2m,precipitation",
-            "daily": "precipitation_probability_max,temperature_2m_max,temperature_2m_min",
+            "daily": "precipitation_probability_max,temperature_2m_max,temperature_2m_min,uv_index_max",
             "timezone": "Asia/Ho_Chi_Minh",
             "forecast_days": 1,
         },
@@ -51,6 +51,9 @@ def weather_hcmc() -> list[tuple]:
         out.append(("hcmc_temp_hi", float(hi), {"unit": "C"}))
     if lo is not None:
         out.append(("hcmc_temp_lo", float(lo), {"unit": "C"}))
+    uv = (daily.get("uv_index_max") or [None])[0]
+    if uv is not None:
+        out.append(("hcmc_uv", float(uv), {"scale": "who"}))
     return out
 
 

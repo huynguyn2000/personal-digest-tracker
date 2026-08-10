@@ -35,6 +35,7 @@ TRACKER_SPECS = [
     {"name": "hcmc_temp", "label": "Temp", "fmt": lambda v: f"{v:.0f}°C", "icon": "🌡"},
     {"name": "hcmc_rain_prob", "label": "Rain", "fmt": lambda v: f"{v:.0f}%", "icon": "🌧"},
     {"name": "hcmc_aqi", "label": "AQI", "fmt": lambda v: f"{v:.0f}", "kind": "aqi"},
+    {"name": "hcmc_uv", "label": "UV", "fmt": lambda v: f"{v:.0f}", "kind": "uv", "icon": "☀️"},
     {"name": "sjc_gold_buy", "label": "Gold buy", "fmt": lambda v: f"{v:,.0f}"},
     {"name": "sjc_gold_sell", "label": "Gold sell", "fmt": lambda v: f"{v:,.0f}"},
     {"name": "sjc_gold_spread", "label": "Gold spread", "fmt": lambda v: f"{v:,.0f}"},
@@ -56,6 +57,31 @@ def _aqi_band(v: float) -> dict | None:
     for hi, label, color in _AQI_BANDS:
         if v <= hi:
             return {"label": label, "color": color}
+    return None
+
+
+# WHO UV index categories.
+_UV_BANDS = [
+    (2, "Low", "#2fa36b"),
+    (5, "Moderate", "#c9a227"),
+    (7, "High", "#e8730c"),
+    (10, "Very high", "#d63b5b"),
+    (10 ** 9, "Extreme", "#8b5cf6"),
+]
+
+
+def _uv_band(v: float) -> dict | None:
+    for hi, label, color in _UV_BANDS:
+        if v <= hi:
+            return {"label": label, "color": color}
+    return None
+
+
+def _band_for(kind: str | None, value: float) -> dict | None:
+    if kind == "aqi":
+        return _aqi_band(value)
+    if kind == "uv":
+        return _uv_band(value)
     return None
 
 
@@ -125,7 +151,7 @@ def _trackers(conn: sqlite3.Connection, links: dict | None = None) -> list[dict]
                 "icon": spec.get("icon"),
                 "delta": delta,
                 "sub": sub,
-                "band": _aqi_band(latest) if spec.get("kind") == "aqi" else None,
+                "band": _band_for(spec.get("kind"), latest),
                 "spark": _spark(values),
                 "link": links.get(spec["name"]),
             }

@@ -16,7 +16,7 @@ import sqlite3
 import sys
 
 from .db import OUT_DIR, get_conn, init_db, load_config, parse_iso, source_map
-from .render import TRACKER_SPECS, _aqi_band, humanize_age, select_digest
+from .render import TRACKER_SPECS, _band_for, humanize_age, select_digest
 from .db import now_utc
 
 DEAD_FEED_THRESHOLD = 5
@@ -122,7 +122,7 @@ def _collect(conn: sqlite3.Connection) -> dict:
                 "n": len(vals),
                 "link": links.get(spec["name"]),
                 "delta": delta,
-                "band": _aqi_band(vals[-1]) if spec.get("kind") == "aqi" else None,
+                "band": _band_for(spec.get("kind"), vals[-1]),
             }
         )
 
