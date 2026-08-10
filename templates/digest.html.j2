@@ -118,7 +118,8 @@
   .iline:last-child { border-bottom:none; }
   .iline a, .iline .t { font-weight:550; font-size:.95rem; color:var(--fg); text-decoration:none; }
   .iline a:hover { color:var(--accent); text-decoration:underline; }
-  .iline .iline-meta { color:var(--muted); font-size:.8rem; margin-top:2px; }
+  .iline .iline-gist { font-size:.88rem; color:var(--fg); opacity:.82; margin-top:3px; }
+  .iline .iline-meta { color:var(--muted); font-size:.78rem; margin-top:3px; }
   .new-pill { font-size:.6rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
     color:#fff; background:var(--accent); border-radius:4px; padding:1px 5px; vertical-align:middle; }
 
@@ -205,8 +206,9 @@
   <div class="iline">
     {% if it.is_new %}<span class="new-pill">new</span> {% endif %}{% if it.url %}<a href="{{ it.url }}" target="_blank" rel="noopener">{{ it.title }}</a>
     {% else %}<span class="t">{{ it.title }}</span>{% endif %}
+    {% if it.summary %}<div class="iline-gist">{{ it.summary }}</div>{% endif %}
     <div class="iline-meta"><span class="badge {{ it.source_type }}">{{ it.source_type }}</span>
-      {{ it.source_id }} · {{ it.age }} ago{% if it.summary %} — {{ it.summary }}{% endif %}{% if it.siblings %} · also: {{ it.siblings | join(", ") }}{% endif %}</div>
+      {{ it.source_id }} · {{ it.age }} ago{% if it.siblings %} · also: {{ it.siblings | join(", ") }}{% endif %}</div>
   </div>
   {% endmacro %}
 
