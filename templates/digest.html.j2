@@ -164,7 +164,7 @@
       <div class="label">{% if t.link %}<a href="{{ t.link }}" target="_blank" rel="noopener" title="Open a larger time-window view">{{ t.label }} ↗</a>{% else %}{{ t.label }}{% endif %}</div>
       <div class="value-row">
         <span class="value">{% if t.icon %}{{ t.icon }} {% endif %}{{ t.value }}</span>
-        {% if t.delta %}<span class="delta {{ t.delta.dir }}" title="vs previous reading">{{ t.delta.arrow }} {{ t.delta.pct }}</span>{% endif %}
+        {% if t.delta and t.delta.dir != 'flat' %}<span class="delta {{ t.delta.dir }}" title="vs previous reading">{{ t.delta.arrow }} {{ t.delta.pct }}</span>{% endif %}
       </div>
       {% if t.band %}<div class="band"><span class="dot" style="background:{{ t.band.color }}"></span>{{ t.band.label }}</div>{% endif %}
       {% if t.sub %}<div class="tsub">{{ t.sub }}</div>{% endif %}

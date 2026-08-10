@@ -18,6 +18,18 @@ skipped entirely if `GEMINI_API_KEY` is unset (items then show raw snippets).
 Everything lives in one SQLite file (`data/digest.db`), committed back to the
 repo by the daily GitHub Action. The rendered page is `out/index.html`.
 
+**The page** leads with the day overview, then trackers (FX / weather / air
+quality — each with a day-over-day delta, the AQI air-quality category, a
+sparkline, and a `↗` to a larger-window view), then one **summary per section**
+(AWS · Data Engineering · AI · Newsletters) with inline `[n]` citation links to
+sources; the underlying headlines sit in a collapsible drawer. It has a
+light/dark toggle, a "generated Xh ago" freshness stamp, and jump-nav.
+
+**Enrichment** — some GitHub *release* tags carry no notes (e.g. Airflow provider
+releases). `src/enrich.py` fetches the project's official docs changelog for that
+version, uses it as the item body (so the summary is informative) and repoints
+the link there. Resolvers are a small registry; add more projects as needed.
+
 ## Quick start (local)
 
 ```bash
@@ -41,8 +53,11 @@ Each stage runs standalone and prints what it did:
 ./.venv/bin/python -m src.fetch_imap    # gmail newsletters
 ./.venv/bin/python -m src.fetch_metrics # fx / weather / aqi
 ./.venv/bin/python -m src.dedup         # cluster + print multi-member clusters
+./.venv/bin/python -m src.enrich        # fetch docs changelog for content-less items
 ./.venv/bin/python -m src.score         # score + print top items with reasons
+./.venv/bin/python -m src.summarize     # Gemini: overview + section summaries + gists
 ./.venv/bin/python -m src.render        # write out/index.html (no state change)
+./.venv/bin/python -m src.dashboard     # write out/dashboard.html (pipeline console)
 ./.venv/bin/python -m src.notify        # preview + send Telegram message
 ```
 
@@ -98,7 +113,13 @@ score = source_weight * (1 + keyword_score) * recency_factor
   clusters, then adjust. Lower = merges more aggressively.
 - **`max_items`** — hard cut on the news section. Newsletters ignore this (they
   always appear, in their own section).
-- **`section_order`** — order of tag sections in the HTML.
+- **`per_source_cap`** — max items any single source can contribute (before
+  `max_items`), so a chatty feed (e.g. Airflow's many provider releases) can't
+  crowd out low-volume sources you follow (a YouTube channel, a blog).
+- **`section_order`** — order of tag sections in the HTML (e.g. `[aws, dataeng, ai]`).
+- **`tracker_links`** — per-metric URL for the tracker's `↗` (larger-window view).
+- **`enrich`** — `thin_chars` / `max_per_run` for docs-changelog enrichment of
+  content-less GitHub release items (see below).
 
 Every item stores a human-readable `score_why` (e.g.
 `src:1.4 kw:+0.8 rec:0.64 [airflow(+0.8)]`) so you can see exactly why it
