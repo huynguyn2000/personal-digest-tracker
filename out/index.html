@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Morning Digest — 2026-08-11 01:19 +07</title>
+<title>Morning Digest — 2026-08-11 01:23 +07</title>
 <style>
   :root {
     --bg: #ffffff; --fg: #1a1a1a; --muted: #666; --card: #f4f4f5;
@@ -79,6 +79,9 @@
   .type { margin-bottom:8px; }
   h2.section .count { color:var(--muted); font-weight:400; font-size:.85rem; }
   .type-summary { font-size:.98rem; line-height:1.6; margin:2px 0 8px; }
+  .type-summary a { color:var(--accent); text-decoration:none; font-weight:600;
+    font-variant-numeric:tabular-nums; padding:0 1px; }
+  .type-summary a:hover { text-decoration:underline; }
   details.items-drawer { margin:2px 0 10px; }
   details.items-drawer > summary { cursor:pointer; color:var(--accent); font-size:.8rem;
     list-style:none; padding:2px 0; }
@@ -91,10 +94,6 @@
   .iline a, .iline .t { font-weight:550; font-size:.95rem; color:var(--fg); text-decoration:none; }
   .iline a:hover { color:var(--accent); text-decoration:underline; }
   .iline .iline-meta { color:var(--muted); font-size:.8rem; margin-top:2px; }
-  .refs { display:flex; flex-wrap:wrap; gap:6px 10px; align-items:baseline; margin:0 0 8px; }
-  .refs-label { font-size:.66rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
-  .refs a { font-size:.8rem; color:var(--accent); text-decoration:none; white-space:nowrap; }
-  .refs a:hover { text-decoration:underline; }
 
   .dead { margin-top:36px; background:var(--card); border:1px solid var(--border);
     border-radius:12px; padding:12px 14px; }
@@ -107,7 +106,7 @@
 <div class="wrap">
   <header>
     <h1>Morning Digest</h1>
-    <div class="sub">2026-08-11 01:19 +07 · 11 items · 0 newsletters</div>
+    <div class="sub">2026-08-11 01:23 +07 · 11 items · 0 newsletters</div>
   </header>
 
   
@@ -186,12 +185,7 @@
   
   <section class="type">
     <h2 class="section">dataeng <span class="count">· 4</span></h2>
-    <p class="type-summary">Apache Airflow ecosystem updates include provider releases for CNCF Kubernetes [1] and Google [2], as well as dependency constraints for Airflow 3.3.1rc1 [3]. Concurrently, Netflix detailed its gRPC execution API architecture for querying real-time distributed graph systems [4].</p>
-    
-    <div class="refs"><span class="refs-label">Sources</span>
-      <a href="https://github.com/apache/airflow/releases/tag/providers-cncf-kubernetes%2F10.21.0" target="_blank" rel="noopener" title="providers-cncf-kubernetes/10.21.0">[1] airflow-releases</a><a href="https://github.com/apache/airflow/releases/tag/providers-google%2F22.3.0" target="_blank" rel="noopener" title="providers-google/22.3.0">[2] airflow-releases</a><a href="https://github.com/apache/airflow/releases/tag/constraints-3.3.1rc1" target="_blank" rel="noopener" title="constraints-3.3.1rc1">[3] airflow-releases</a><a href="https://netflixtechblog.com/how-and-why-netflix-built-a-real-time-distributed-graph-part-3-querying-the-graph-with-grpc-0f3468349607" target="_blank" rel="noopener" title="How and Why Netflix Built a Real-Time Distributed Graph: Part 3 — Querying the graph with gRPC…">[4] netflix-tech</a>
-    </div>
-    
+    <p class="type-summary">Apache Airflow ecosystem updates include provider releases for CNCF Kubernetes <a href="https://github.com/apache/airflow/releases/tag/providers-cncf-kubernetes%2F10.21.0" target="_blank" rel="noopener" title="airflow-releases — providers-cncf-kubernetes/10.21.0">[1]</a> and Google <a href="https://github.com/apache/airflow/releases/tag/providers-google%2F22.3.0" target="_blank" rel="noopener" title="airflow-releases — providers-google/22.3.0">[2]</a>, as well as dependency constraints for Airflow 3.3.1rc1 <a href="https://github.com/apache/airflow/releases/tag/constraints-3.3.1rc1" target="_blank" rel="noopener" title="airflow-releases — constraints-3.3.1rc1">[3]</a>. Concurrently, Netflix detailed its gRPC execution API architecture for querying real-time distributed graph systems <a href="https://netflixtechblog.com/how-and-why-netflix-built-a-real-time-distributed-graph-part-3-querying-the-graph-with-grpc-0f3468349607" target="_blank" rel="noopener" title="netflix-tech — How and Why Netflix Built a Real-Time Distributed Graph: Part 3 — Querying the graph with gRPC…">[4]</a>.</p>
     
     <details class="items-drawer">
       <summary>4 items</summary>
@@ -232,12 +226,7 @@
   
   <section class="type">
     <h2 class="section">ai <span class="count">· 7</span></h2>
-    <p class="type-summary">Anthropic defaulted Claude Code to Auto mode [1] while background details emerged regarding Claude model releases and past export controls [2]. On the open-source front, Meta debuted Muse Glimmer for local agentic multimodal AI [3], and NVIDIA introduced Magpie TTS for low-latency voice agents [4]. Additional developments focus on scalable knowledge distillation [5], AI ethics security risks in broken API authorizations [6], and game prototyping workflows [7].</p>
-    
-    <div class="refs"><span class="refs-label">Sources</span>
-      <a href="https://simonwillison.net/2026/Aug/8/auto-mode" target="_blank" rel="noopener" title="Auto mode is now the default in Claude Code for Pro, Max, and Team plans">[1] simonwillison</a><a href="https://simonwillison.net/2026/Aug/9/claude-opus-5-system-prompt" target="_blank" rel="noopener" title="Quoting Claude Opus 5 system prompt">[2] simonwillison</a><a href="https://huggingface.co/blog/muse-glimmer" target="_blank" rel="noopener" title="Meta is back with Muse Glimmer: local, agentic, multimodal, and open source">[3] huggingface-blog</a><a href="https://huggingface.co/blog/nvidia/magpie-tts-multilingual-voice-agents" target="_blank" rel="noopener" title="Build Low-Latency Multilingual Voice Agents: Open Weights &amp; Full Deployment Control with NVIDIA Magpie TTS">[4] huggingface-blog</a><a href="https://huggingface.co/blog/MultiverseComputingCAI/efficient-knowledge-distillation" target="_blank" rel="noopener" title="Making Knowledge Distillation Cheap Enough to Run at Scale">[5] huggingface-blog</a><a href="https://simonwillison.net/2026/Aug/10/openclaw" target="_blank" rel="noopener" title="Quoting OpenClaw">[6] simonwillison</a><a href="https://youtube.com/watch?v=yF_su3zJSUQ" target="_blank" rel="noopener" title="Để wayfinder chỉ đường dẫn lối!">[7] tubakhuym-yt</a>
-    </div>
-    
+    <p class="type-summary">Anthropic defaulted Claude Code to Auto mode <a href="https://simonwillison.net/2026/Aug/8/auto-mode" target="_blank" rel="noopener" title="simonwillison — Auto mode is now the default in Claude Code for Pro, Max, and Team plans">[1]</a> while background details emerged regarding Claude model releases and past export controls <a href="https://simonwillison.net/2026/Aug/9/claude-opus-5-system-prompt" target="_blank" rel="noopener" title="simonwillison — Quoting Claude Opus 5 system prompt">[2]</a>. On the open-source front, Meta debuted Muse Glimmer for local agentic multimodal AI <a href="https://huggingface.co/blog/muse-glimmer" target="_blank" rel="noopener" title="huggingface-blog — Meta is back with Muse Glimmer: local, agentic, multimodal, and open source">[3]</a>, and NVIDIA introduced Magpie TTS for low-latency voice agents <a href="https://huggingface.co/blog/nvidia/magpie-tts-multilingual-voice-agents" target="_blank" rel="noopener" title="huggingface-blog — Build Low-Latency Multilingual Voice Agents: Open Weights &amp; Full Deployment Control with NVIDIA Magpie TTS">[4]</a>. Additional developments focus on scalable knowledge distillation <a href="https://huggingface.co/blog/MultiverseComputingCAI/efficient-knowledge-distillation" target="_blank" rel="noopener" title="huggingface-blog — Making Knowledge Distillation Cheap Enough to Run at Scale">[5]</a>, AI ethics security risks in broken API authorizations <a href="https://simonwillison.net/2026/Aug/10/openclaw" target="_blank" rel="noopener" title="simonwillison — Quoting OpenClaw">[6]</a>, and game prototyping workflows <a href="https://youtube.com/watch?v=yF_su3zJSUQ" target="_blank" rel="noopener" title="tubakhuym-yt — Để wayfinder chỉ đường dẫn lối!">[7]</a>.</p>
     
     <details class="items-drawer">
       <summary>7 items</summary>

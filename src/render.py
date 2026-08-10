@@ -8,11 +8,13 @@ the configured timezone only here, at render time.
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+from markupsafe import Markup, escape
 
 from .db import (
     OUT_DIR,
@@ -96,6 +98,32 @@ def _dead_feeds(conn: sqlite3.Connection) -> list[dict]:
         (DEAD_FEED_THRESHOLD,),
     ).fetchall()
     return [dict(r) for r in rows]
+
+
+_CITE_RE = re.compile(r"\[(\d+)\]")
+
+
+def _linkify_summary(text: str | None, refs: list[dict]):
+    """Turn inline [n] citation markers into links to the referenced source.
+
+    Returns a safe Markup fragment. Markers with no matching ref stay as plain
+    text.
+    """
+    if not text:
+        return None
+    ref_by_n = {r["n"]: r for r in refs}
+    esc = str(escape(text))  # escape the model text; [ and ] are left intact
+
+    def repl(m):
+        r = ref_by_n.get(int(m.group(1)))
+        if not r:
+            return m.group(0)
+        url = escape(r["url"])
+        tip = escape(f'{r["source_id"]} — {r["title"]}')
+        return (f'<a href="{url}" target="_blank" rel="noopener" '
+                f'title="{tip}">[{m.group(1)}]</a>')
+
+    return Markup(_CITE_RE.sub(repl, esc))
 
 
 def _section_for(tags: list[str], order: list[str]) -> str:
@@ -224,8 +252,10 @@ def select_digest(conn: sqlite3.Connection) -> dict:
         return text, refs
 
     for sec in ordered_sections:
-        sec["summary"], sec["refs"] = _summary_and_refs(sec["tag"])
-    newsletter_summary, newsletter_refs = _summary_and_refs("newsletter")
+        text, refs = _summary_and_refs(sec["tag"])
+        sec["summary_html"] = _linkify_summary(text, refs)
+    _nl_text, _nl_refs = _summary_and_refs("newsletter")
+    newsletter_summary_html = _linkify_summary(_nl_text, _nl_refs)
 
     rendered_ids = [r["id"] for r in top_news] + [r["id"] for r in newsletters]
 
@@ -242,8 +272,7 @@ def select_digest(conn: sqlite3.Connection) -> dict:
         "trackers": _trackers(conn, cfg.get("tracker_links", {})),
         "sections": ordered_sections,
         "newsletters": newsletter_views,
-        "newsletter_summary": newsletter_summary,
-        "newsletter_refs": newsletter_refs,
+        "newsletter_summary_html": newsletter_summary_html,
         "dead_feeds": _dead_feeds(conn),
         "rendered_ids": rendered_ids,
         "top5": top5,
