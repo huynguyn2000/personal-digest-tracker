@@ -16,7 +16,7 @@ import sqlite3
 import sys
 
 from .db import OUT_DIR, get_conn, init_db, load_config, parse_iso, source_map
-from .render import TRACKER_SPECS, humanize_age, select_digest
+from .render import TRACKER_SPECS, _aqi_band, humanize_age, select_digest
 from .db import now_utc
 
 DEAD_FEED_THRESHOLD = 5
@@ -103,6 +103,12 @@ def _collect(conn: sqlite3.Connection) -> dict:
         if not rows:
             continue
         vals = [r["value"] for r in rows]
+        delta = None
+        if len(vals) >= 2 and vals[-2]:
+            d = vals[-1] - vals[-2]
+            direction = "up" if d > 1e-9 else "down" if d < -1e-9 else "flat"
+            delta = {"pct": f"{abs(d) / abs(vals[-2]) * 100:.1f}%", "dir": direction,
+                     "arrow": {"up": "▲", "down": "▼", "flat": "·"}[direction]}
         metrics.append(
             {
                 "name": spec["name"],
@@ -111,6 +117,8 @@ def _collect(conn: sqlite3.Connection) -> dict:
                 "points": vals,
                 "n": len(vals),
                 "link": links.get(spec["name"]),
+                "delta": delta,
+                "band": _aqi_band(vals[-1]) if spec.get("kind") == "aqi" else None,
             }
         )
 
@@ -319,7 +327,10 @@ _INNER = r"""
 .tk .tk-top{display:flex;justify-content:space-between;align-items:baseline;}
 .tk .tk-label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
 .tk .tk-n{font-family:var(--mono);font-size:10px;color:var(--muted);}
-.tk .tk-value{font-size:24px;font-weight:700;margin:2px 0 8px;letter-spacing:-.01em;}
+.tk .tk-value{font-size:24px;font-weight:700;margin:2px 0 6px;letter-spacing:-.01em;}
+.tk .tk-delta{font-size:11px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums;}
+.tk .tk-band{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);margin:0 0 8px;}
+.tk .tk-band .tk-dot{width:8px;height:8px;border-radius:50%;flex:none;}
 .tk svg{display:block;width:100%;height:52px;overflow:visible;}
 
 /* tabs */
@@ -535,10 +546,13 @@ function drawTrackers(){
   if(!DATA.metrics.length){g.innerHTML='<div class="empty">No metrics yet — run fetch_metrics.</div>';return;}
   g.innerHTML=DATA.metrics.map(m=>{
     const lbl=m.link?`<a class="tk-link" href="${esc(m.link)}" target="_blank" rel="noopener" title="Larger time window">${esc(m.label)} ↗</a>`:esc(m.label);
+    const delta = (m.delta && m.delta.dir!=='flat') ? ` <span class="tk-delta">${m.delta.arrow}${esc(m.delta.pct)}</span>` : '';
+    const band = m.band ? `<div class="tk-band"><span class="tk-dot" style="background:${esc(m.band.color)}"></span>${esc(m.band.label)}</div>` : '';
     return `
     <div class="tk">
       <div class="tk-top"><span class="tk-label">${lbl}</span><span class="tk-n">${m.n} pt${m.n>1?"s":""}</span></div>
-      <div class="tk-value">${esc(m.latest)}</div>
+      <div class="tk-value">${esc(m.latest)}${delta}</div>
+      ${band}
       ${areaChart(m.points)}
     </div>`;}).join("");
 }
