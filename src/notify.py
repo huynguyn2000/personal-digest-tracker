@@ -39,17 +39,27 @@ def build_message(conn: sqlite3.Connection) -> str:
     tracker = _tracker_line(conn)
     if tracker:
         lines.append(html.escape(tracker))
+
+    if payload.get("overview"):
+        lines.append("")
+        lines.append(f"<i>{html.escape(payload['overview'])}</i>")
+
+    # top-level counts: total + per-section + newsletters
+    total = payload["counts"]["news"] + payload["counts"]["newsletters"]
+    parts = [f"{len(s['entries'])} {html.escape(s['tag'])}" for s in payload["sections"]]
+    nl = payload["counts"]["newsletters"]
+    if nl:
+        parts.append(f"{nl} newsletter" + ("s" if nl > 1 else ""))
     lines.append("")
+    lines.append(f"📊 <b>{total} items</b>" + (" — " + " · ".join(parts) if parts else ""))
 
     if not payload["top5"]:
         lines.append("<i>Nothing in the digest window today.</i>")
-    for i, it in enumerate(payload["top5"], 1):
+    for it in payload["top5"]:
         title = html.escape(it["title"])
-        if it["url"]:
-            lines.append(f'{i}. <a href="{html.escape(it["url"])}">{title}</a>'
-                         f' <i>({html.escape(it["source_id"])}, {it["age"]})</i>')
-        else:
-            lines.append(f'{i}. {title} <i>({html.escape(it["source_id"])}, {it["age"]})</i>')
+        head = f'<a href="{html.escape(it["url"])}">{title}</a>' if it["url"] else title
+        gist = f" — {html.escape(it['summary'])}" if it.get("summary") else ""
+        lines.append(f'▸ {head}{gist} <i>({html.escape(it["source_id"])}, {it["age"]})</i>')
 
     if pages_url:
         lines.append("")

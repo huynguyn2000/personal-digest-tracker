@@ -55,6 +55,12 @@ CREATE TABLE IF NOT EXISTS metrics (
   meta    TEXT,
   PRIMARY KEY (name, ts)
 );
+
+CREATE TABLE IF NOT EXISTS kv (
+  key    TEXT PRIMARY KEY,
+  value  TEXT,
+  ts     TEXT
+);
 """
 
 
@@ -73,8 +79,29 @@ def init_db(conn: sqlite3.Connection | None = None) -> sqlite3.Connection:
     if own:
         conn = get_conn()
     conn.executescript(SCHEMA)
+    _migrate(conn)
     conn.commit()
     return conn
+
+
+def _migrate(conn: sqlite3.Connection) -> None:
+    """Additive, idempotent schema migrations."""
+    cols = {r[1] for r in conn.execute("PRAGMA table_info(items)")}
+    if "summary" not in cols:
+        conn.execute("ALTER TABLE items ADD COLUMN summary TEXT")  # LLM one-liner
+
+
+def get_kv(conn: sqlite3.Connection, key: str, default: str | None = None) -> str | None:
+    row = conn.execute("SELECT value FROM kv WHERE key = ?", (key,)).fetchone()
+    return row["value"] if row else default
+
+
+def set_kv(conn: sqlite3.Connection, key: str, value: str) -> None:
+    conn.execute(
+        "INSERT INTO kv (key, value, ts) VALUES (?, ?, ?) "
+        "ON CONFLICT(key) DO UPDATE SET value = excluded.value, ts = excluded.ts",
+        (key, value, now_iso()),
+    )
 
 
 # --- config / feeds --------------------------------------------------------

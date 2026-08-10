@@ -8,8 +8,12 @@ pipeline**. See [PLAN.md](PLAN.md) for the full spec and hard constraints.
 ## How it works
 
 ```
-fetch (rss/imap/metrics) → dedup → score → render (HTML) → notify (Telegram) → mark digested
+fetch (rss/imap/metrics) → dedup → score → summarize (Gemini) → render (HTML) → notify (Telegram) → mark digested
 ```
+
+Ranking and dedup are strictly deterministic (no LLM). Gemini is used only to
+write a one-line **gist** per item and a short **day overview** — best-effort,
+skipped entirely if `GEMINI_API_KEY` is unset (items then show raw snippets).
 
 Everything lives in one SQLite file (`data/digest.db`), committed back to the
 repo by the daily GitHub Action. The rendered page is `out/index.html`.
@@ -108,6 +112,8 @@ surfaced. `python -m src.score` prints the top items with their reasons.
 | `GMAIL_APP_PASSWORD` | Gmail newsletters | requires 2FA on the account; generate an [app password](https://myaccount.google.com/apppasswords) |
 | `TELEGRAM_BOT_TOKEN` | Telegram message | from @BotFather |
 | `TELEGRAM_CHAT_ID` | Telegram message | your chat id (message the bot, then check `getUpdates`) |
+| `GEMINI_API_KEY` | LLM summaries | [Google AI Studio](https://aistudio.google.com/apikey). Optional — without it, items show raw snippets and there's no day overview |
+| `GEMINI_MODEL` | LLM summaries | optional; defaults to `gemini-2.0-flash` |
 | `PAGES_URL` | link in Telegram | the public URL of your GitHub Pages site (optional) |
 
 All are optional locally — stages without their env vars skip cleanly.

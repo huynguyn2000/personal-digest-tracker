@@ -59,8 +59,21 @@
   .badge.github{background:var(--badge-github);} .badge.imap{background:var(--badge-imap);}
   .age { color:var(--muted); font-size:.78rem; }
   .src { color:var(--muted); font-size:.78rem; }
-  .snippet { color:var(--muted); font-size:.9rem; margin-top:4px; }
+  .snippet { color:var(--muted); font-size:.9rem; margin-top:6px; }
   .also { color:var(--muted); font-size:.78rem; margin-top:4px; font-style:italic; }
+
+  .overview { background:var(--card); border:1px solid var(--border); border-left:3px solid var(--accent);
+    border-radius:10px; padding:12px 14px; margin-bottom:24px; font-size:.95rem; line-height:1.55; }
+  .overview .ov-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+    display:block; margin-bottom:4px; }
+  .gist { font-size:.92rem; margin-top:4px; color:var(--fg); }
+  .tracker .label a { color:var(--muted); text-decoration:none; }
+  .tracker .label a:hover { color:var(--accent); }
+  details.more { margin-top:5px; }
+  details.more > summary { cursor:pointer; color:var(--accent); font-size:.78rem; list-style:none; }
+  details.more > summary::-webkit-details-marker { display:none; }
+  details.more > summary::before { content:"▸ details"; }
+  details.more[open] > summary::before { content:"▾ less"; }
 
   .dead { margin-top:36px; background:var(--card); border:1px solid var(--border);
     border-radius:12px; padding:12px 14px; }
@@ -76,11 +89,17 @@
     <div class="sub">{{ generated_local }} · {{ counts.news }} items · {{ counts.newsletters }} newsletters</div>
   </header>
 
+  {% if overview %}
+  <div class="overview">
+    <span class="ov-label">Today</span>{{ overview }}
+  </div>
+  {% endif %}
+
   {% if trackers %}
   <div class="trackers">
     {% for t in trackers %}
     <div class="tracker">
-      <div class="label">{{ t.label }}</div>
+      <div class="label">{% if t.link %}<a href="{{ t.link }}" target="_blank" rel="noopener" title="Larger time window">{{ t.label }} ↗</a>{% else %}{{ t.label }}{% endif %}</div>
       <div class="value">{{ t.value }}</div>
       {% if t.spark %}
       <svg viewBox="0 0 110 26" preserveAspectRatio="none" aria-hidden="true">
@@ -105,7 +124,12 @@
       <span class="age">· {{ it.age }} ago</span>
       <span class="src">· {{ it.source_id }}</span>
     </div>
-    {% if it.snippet %}<div class="snippet">{{ it.snippet }}</div>{% endif %}
+    {% if it.summary %}
+      <div class="gist">{{ it.summary }}</div>
+      {% if it.snippet %}<details class="more"><summary></summary><div class="snippet">{{ it.snippet }}</div></details>{% endif %}
+    {% elif it.snippet %}
+      <div class="snippet">{{ it.snippet }}</div>
+    {% endif %}
     {% if it.siblings %}<div class="also">also covered by: {{ it.siblings | join(", ") }}</div>{% endif %}
   </div>
   {% endmacro %}

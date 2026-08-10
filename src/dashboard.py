@@ -25,6 +25,7 @@ DEAD_FEED_THRESHOLD = 5
 def _collect(conn: sqlite3.Connection) -> dict:
     cfg = load_config()
     dcfg = cfg["digest"]
+    links = cfg.get("tracker_links", {})
     srcmap = source_map()
     now = now_utc()
 
@@ -85,6 +86,7 @@ def _collect(conn: sqlite3.Connection) -> dict:
                 "published_at": r["published_at"],
                 "score": round(r["score"], 3) if r["score"] is not None else None,
                 "score_why": r["score_why"] or "",
+                "summary": (r["summary"] if "summary" in r.keys() else None),
                 "state": r["state"],
                 "is_primary": bool(r["is_primary"]),
                 "cluster_size": cluster_size.get(r["cluster_id"], 1),
@@ -108,6 +110,7 @@ def _collect(conn: sqlite3.Connection) -> dict:
                 "latest": fmt(vals[-1]),
                 "points": vals,
                 "n": len(vals),
+                "link": links.get(name),
             }
         )
 
@@ -408,6 +411,20 @@ _INNER = r"""
 .knob .k-l{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
 .knob .k-v{font-family:var(--mono);font-size:20px;font-weight:700;margin-top:3px;}
 
+/* collapsible pipeline internals */
+.internals{margin-bottom:22px;}
+.internals > summary{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);cursor:pointer;padding:8px 0;list-style:none;}
+.internals > summary::-webkit-details-marker{display:none;}
+.internals > summary::before{content:"▸ ";}
+.internals[open] > summary::before{content:"▾ ";}
+.internals > summary:hover{color:var(--text);}
+.internals .pipeline{margin-top:8px;}
+.tk-link{color:var(--muted);text-decoration:none;}
+.tk-link:hover{color:var(--accent-ink);}
+.r-gist{font-size:13px;margin-top:4px;color:var(--text);}
+.ov{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);
+  border-radius:10px;padding:12px 14px;margin:4px 0 18px;font-size:14px;line-height:1.55;}
 .empty{color:var(--muted);font-size:13px;padding:24px;text-align:center;border:1px dashed var(--border);border-radius:10px;}
 footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);
   font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
@@ -431,10 +448,13 @@ footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);
       <button class="theme" id="themeBtn" title="Toggle light / dark" aria-label="Toggle theme">◐</button>
     </header>
 
-    <section class="pipeline" id="pipeline" aria-label="Pipeline stages"></section>
-    <section class="cards" id="summary"></section>
+    <details class="internals">
+      <summary>Pipeline internals</summary>
+      <section class="pipeline" id="pipeline" aria-label="Pipeline stages"></section>
+      <section class="cards" id="summary"></section>
+    </details>
 
-    <div class="sec-head"><h2>Trackers</h2><span class="hint">history &middot; hand-rolled SVG, no chart lib</span></div>
+    <div class="sec-head"><h2>Trackers</h2><span class="hint">history &middot; hand-rolled SVG, no chart lib &middot; ↗ opens a larger window</span></div>
     <section class="tracker-grid" id="trackers"></section>
 
     <nav class="tabs" id="tabs" role="tablist"></nav>
@@ -513,12 +533,14 @@ function drawSummary(){
 function drawTrackers(){
   const g=$("#trackers");
   if(!DATA.metrics.length){g.innerHTML='<div class="empty">No metrics yet — run fetch_metrics.</div>';return;}
-  g.innerHTML=DATA.metrics.map(m=>`
+  g.innerHTML=DATA.metrics.map(m=>{
+    const lbl=m.link?`<a class="tk-link" href="${esc(m.link)}" target="_blank" rel="noopener" title="Larger time window">${esc(m.label)} ↗</a>`:esc(m.label);
+    return `
     <div class="tk">
-      <div class="tk-top"><span class="tk-label">${esc(m.label)}</span><span class="tk-n">${m.n} pt${m.n>1?"s":""}</span></div>
+      <div class="tk-top"><span class="tk-label">${lbl}</span><span class="tk-n">${m.n} pt${m.n>1?"s":""}</span></div>
       <div class="tk-value">${esc(m.latest)}</div>
       ${areaChart(m.points)}
-    </div>`).join("");
+    </div>`;}).join("");
 }
 
 /* ---- tabs ---- */
@@ -586,6 +608,7 @@ function renderRows(){
       <div>
         <div class="r-title">${titleHtml}</div>
         <div class="r-meta"><span class="badge ${i.type}">${esc(i.type)}</span><span>${esc(i.source_id)}</span><span>${esc(i.age)} ago</span>${i.is_primary?"":'<span>· sibling</span>'}</div>
+        ${i.summary?`<div class="r-gist">${esc(i.summary)}</div>`:""}
         ${i.score_why?`<div class="r-why">${esc(i.score_why)}</div>`:""}
         ${i.snippet?`<div class="r-snip">${esc(i.snippet)}</div>`:""}
       </div>
@@ -619,6 +642,7 @@ function panelSources(){
 function panelDigest(){
   const d=DATA.digest;
   let html="";
+  if(d.overview){html+=`<div class="ov">${esc(d.overview)}</div>`;}
   html+=`<div class="sec-head" style="margin-top:4px"><h2>What ships this run</h2><span class="hint">${d.counts.news} items · ${d.counts.newsletters} newsletters</span></div>`;
   if(d.trackers&&d.trackers.length){
     html+='<div class="tracker-grid" style="margin-bottom:24px">'+d.trackers.map(t=>`

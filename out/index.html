@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Morning Digest — 2026-08-09 01:45 +07</title>
+<title>Morning Digest — 2026-08-11 00:28 +07</title>
 <style>
   :root {
     --bg: #ffffff; --fg: #1a1a1a; --muted: #666; --card: #f4f4f5;
@@ -59,8 +59,21 @@
   .badge.github{background:var(--badge-github);} .badge.imap{background:var(--badge-imap);}
   .age { color:var(--muted); font-size:.78rem; }
   .src { color:var(--muted); font-size:.78rem; }
-  .snippet { color:var(--muted); font-size:.9rem; margin-top:4px; }
+  .snippet { color:var(--muted); font-size:.9rem; margin-top:6px; }
   .also { color:var(--muted); font-size:.78rem; margin-top:4px; font-style:italic; }
+
+  .overview { background:var(--card); border:1px solid var(--border); border-left:3px solid var(--accent);
+    border-radius:10px; padding:12px 14px; margin-bottom:24px; font-size:.95rem; line-height:1.55; }
+  .overview .ov-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+    display:block; margin-bottom:4px; }
+  .gist { font-size:.92rem; margin-top:4px; color:var(--fg); }
+  .tracker .label a { color:var(--muted); text-decoration:none; }
+  .tracker .label a:hover { color:var(--accent); }
+  details.more { margin-top:5px; }
+  details.more > summary { cursor:pointer; color:var(--accent); font-size:.78rem; list-style:none; }
+  details.more > summary::-webkit-details-marker { display:none; }
+  details.more > summary::before { content:"▸ details"; }
+  details.more[open] > summary::before { content:"▾ less"; }
 
   .dead { margin-top:36px; background:var(--card); border:1px solid var(--border);
     border-radius:12px; padding:12px 14px; }
@@ -73,62 +86,68 @@
 <div class="wrap">
   <header>
     <h1>Morning Digest</h1>
-    <div class="sub">2026-08-09 01:45 +07 · 12 items · 0 newsletters</div>
+    <div class="sub">2026-08-11 00:28 +07 · 12 items · 0 newsletters</div>
   </header>
+
+  
+  <div class="overview">
+    <span class="ov-label">Today</span>Today&#39;s updates highlight rapid advancements in open AI models and developer tooling alongside ongoing ecosystem maintenance in data orchestration platforms. Key announcements include Meta&#39;s Muse Glimmer release, Anthropic setting Auto mode as default in Claude Code, and routine provider updates across Apache Airflow.
+  </div>
+  
 
   
   <div class="trackers">
     
     <div class="tracker">
-      <div class="label">USD/VND</div>
-      <div class="value">26,030</div>
+      <div class="label"><a href="https://www.google.com/finance/quote/USD-VND" target="_blank" rel="noopener" title="Larger time window">USD/VND ↗</a></div>
+      <div class="value">25,970</div>
       
       <svg viewBox="0 0 110 26" preserveAspectRatio="none" aria-hidden="true">
-        <polyline points="3.0,23.0 29.0,23.0 55.0,23.0 81.0,23.0 107.0,23.0" fill="none" stroke="var(--spark)" stroke-width="1.5"
+        <polyline points="3.0,3.0 23.8,3.0 44.6,3.0 65.4,3.0 86.2,3.0 107.0,23.0" fill="none" stroke="var(--spark)" stroke-width="1.5"
                   stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       
     </div>
     
     <div class="tracker">
-      <div class="label">CNY/VND</div>
-      <div class="value">3,826</div>
+      <div class="label"><a href="https://www.google.com/finance/quote/CNY-VND" target="_blank" rel="noopener" title="Larger time window">CNY/VND ↗</a></div>
+      <div class="value">3,818</div>
       
       <svg viewBox="0 0 110 26" preserveAspectRatio="none" aria-hidden="true">
-        <polyline points="3.0,23.0 29.0,23.0 55.0,23.0 81.0,23.0 107.0,23.0" fill="none" stroke="var(--spark)" stroke-width="1.5"
+        <polyline points="3.0,3.0 23.8,3.0 44.6,3.0 65.4,3.0 86.2,3.0 107.0,23.0" fill="none" stroke="var(--spark)" stroke-width="1.5"
                   stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       
     </div>
     
     <div class="tracker">
-      <div class="label">Temp</div>
-      <div class="value">32°C</div>
+      <div class="label"><a href="https://www.windy.com/?10.823,106.630,8" target="_blank" rel="noopener" title="Larger time window">Temp ↗</a></div>
+      <div class="value">26°C</div>
       
       <svg viewBox="0 0 110 26" preserveAspectRatio="none" aria-hidden="true">
-        <polyline points="3.0,23.0 29.0,19.2 55.0,19.2 81.0,8.0 107.0,3.0" fill="none" stroke="var(--spark)" stroke-width="1.5"
+        <polyline points="3.0,8.5 23.8,7.5 44.6,7.5 65.4,4.4 86.2,3.0 107.0,23.0" fill="none" stroke="var(--spark)" stroke-width="1.5"
                   stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       
     </div>
     
     <div class="tracker">
-      <div class="label">Rain</div>
-      <div class="value">94%</div>
+      <div class="label"><a href="https://www.windy.com/?rain,10.823,106.630,8" target="_blank" rel="noopener" title="Larger time window">Rain ↗</a></div>
+      <div class="value">88%</div>
       
       <svg viewBox="0 0 110 26" preserveAspectRatio="none" aria-hidden="true">
-        <polyline points="3.0,23.0 29.0,23.0 55.0,23.0 81.0,23.0 107.0,23.0" fill="none" stroke="var(--spark)" stroke-width="1.5"
+        <polyline points="3.0,3.0 23.8,3.0 44.6,3.0 65.4,3.0 86.2,3.0 107.0,23.0" fill="none" stroke="var(--spark)" stroke-width="1.5"
                   stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       
     </div>
     
     <div class="tracker">
-      <div class="label">AQI</div>
-      <div class="value">106</div>
+      <div class="label"><a href="https://aqicn.org/city/vietnam/ho-chi-minh-city/" target="_blank" rel="noopener" title="Larger time window">AQI ↗</a></div>
+      <div class="value">74</div>
       
       <svg viewBox="0 0 110 26" preserveAspectRatio="none" aria-hidden="true">
-        <polyline points="3.0,23.0 29.0,23.0 55.0,23.0 81.0,23.0 107.0,23.0" fill="none" stroke="var(--spark)" stroke-width="1.5"
+        <polyline points="3.0,3.0 23.8,3.0 44.6,3.0 65.4,3.0 86.2,3.0 107.0,23.0" fill="none" stroke="var(--spark)" stroke-width="1.5"
                   stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       
@@ -146,142 +165,63 @@
     <div class="top">
       <span class="badge github">github</span>
       
+      <a class="title" href="https://github.com/apache/airflow/releases/tag/providers-cncf-kubernetes%2F10.21.0" target="_blank" rel="noopener">providers-cncf-kubernetes/10.21.0</a>
+      
+      <span class="age">· 1h ago</span>
+      <span class="src">· airflow-releases</span>
+    </div>
+    
+      <div class="gist">CNCF Kubernetes Airflow provider updated to 10.21.0 for improved orchestration integration</div>
+      <details class="more"><summary></summary><div class="snippet">Release 2026-08-08 of providers</div></details>
+    
+    
+  </div>
+  
+  <div class="item">
+    <div class="top">
+      <span class="badge github">github</span>
+      
+      <a class="title" href="https://github.com/apache/airflow/releases/tag/providers-google%2F22.3.0" target="_blank" rel="noopener">providers-google/22.3.0</a>
+      
+      <span class="age">· 1h ago</span>
+      <span class="src">· airflow-releases</span>
+    </div>
+    
+      <div class="gist">Google Airflow provider released v22.3.0 with updated ecosystem integrations</div>
+      <details class="more"><summary></summary><div class="snippet">Release 2026-08-08 of providers</div></details>
+    
+    
+  </div>
+  
+  <div class="item">
+    <div class="top">
+      <span class="badge github">github</span>
+      
+      <a class="title" href="https://github.com/apache/airflow/releases/tag/constraints-3.3.1rc1" target="_blank" rel="noopener">constraints-3.3.1rc1</a>
+      
+      <span class="age">· 1d ago</span>
+      <span class="src">· airflow-releases</span>
+    </div>
+    
+      <div class="gist">Apache Airflow published 3.3.1rc1 package constraints ensuring reproducible builds</div>
+      <details class="more"><summary></summary><div class="snippet">Constraints for Apache Airflow 3.3.1rc1</div></details>
+    
+    
+  </div>
+  
+  <div class="item">
+    <div class="top">
+      <span class="badge github">github</span>
+      
       <a class="title" href="https://github.com/apache/airflow/releases/tag/providers-trino%2F6.6.1" target="_blank" rel="noopener">providers-trino/6.6.1</a>
       
-      <span class="age">· 11h ago</span>
+      <span class="age">· 2d ago</span>
       <span class="src">· airflow-releases</span>
     </div>
-    <div class="snippet">Release 2026-08-06 of providers</div>
     
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge github">github</span>
-      
-      <a class="title" href="https://github.com/apache/airflow/releases/tag/task-sdk%2F1.3.1rc1" target="_blank" rel="noopener">task-sdk/1.3.1rc1</a>
-      
-      <span class="age">· 1d ago</span>
-      <span class="src">· airflow-releases</span>
-    </div>
-    <div class="snippet">Airflow Task SDK 1.3.1rc1</div>
+      <div class="gist">Trino Airflow provider patch release 6.6.1 improves query engine orchestration</div>
+      <details class="more"><summary></summary><div class="snippet">Release 2026-08-06 of providers</div></details>
     
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge github">github</span>
-      
-      <a class="title" href="https://github.com/apache/airflow/releases/tag/3.3.1rc1" target="_blank" rel="noopener">3.3.1rc1</a>
-      
-      <span class="age">· 1d ago</span>
-      <span class="src">· airflow-releases</span>
-    </div>
-    <div class="snippet">Apache Airflow 3.3.1rc1</div>
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge github">github</span>
-      
-      <a class="title" href="https://github.com/apache/airflow/releases/tag/providers-yandex%2F4.5.1" target="_blank" rel="noopener">providers-yandex/4.5.1</a>
-      
-      <span class="age">· 11h ago</span>
-      <span class="src">· airflow-releases</span>
-    </div>
-    <div class="snippet">Release 2026-08-06 of providers</div>
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge github">github</span>
-      
-      <a class="title" href="https://github.com/apache/airflow/releases/tag/providers-weaviate%2F3.4.1" target="_blank" rel="noopener">providers-weaviate/3.4.1</a>
-      
-      <span class="age">· 11h ago</span>
-      <span class="src">· airflow-releases</span>
-    </div>
-    <div class="snippet">Release 2026-08-06 of providers</div>
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge github">github</span>
-      
-      <a class="title" href="https://github.com/apache/airflow/releases/tag/providers-teradata%2F3.6.2" target="_blank" rel="noopener">providers-teradata/3.6.2</a>
-      
-      <span class="age">· 11h ago</span>
-      <span class="src">· airflow-releases</span>
-    </div>
-    <div class="snippet">Release 2026-08-06 of providers</div>
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge github">github</span>
-      
-      <a class="title" href="https://github.com/apache/airflow/releases/tag/providers-telegram%2F4.9.6" target="_blank" rel="noopener">providers-telegram/4.9.6</a>
-      
-      <span class="age">· 11h ago</span>
-      <span class="src">· airflow-releases</span>
-    </div>
-    <div class="snippet">Release 2026-08-06 of providers</div>
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge github">github</span>
-      
-      <a class="title" href="https://github.com/apache/airflow/releases/tag/providers-standard%2F1.17.0" target="_blank" rel="noopener">providers-standard/1.17.0</a>
-      
-      <span class="age">· 11h ago</span>
-      <span class="src">· airflow-releases</span>
-    </div>
-    <div class="snippet">Release 2026-08-06 of providers</div>
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge github">github</span>
-      
-      <a class="title" href="https://github.com/apache/airflow/releases/tag/providers-ssh%2F6.0.1" target="_blank" rel="noopener">providers-ssh/6.0.1</a>
-      
-      <span class="age">· 11h ago</span>
-      <span class="src">· airflow-releases</span>
-    </div>
-    <div class="snippet">Release 2026-08-06 of providers</div>
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge github">github</span>
-      
-      <a class="title" href="https://github.com/apache/airflow/releases/tag/providers-snowflake%2F6.16.0" target="_blank" rel="noopener">providers-snowflake/6.16.0</a>
-      
-      <span class="age">· 11h ago</span>
-      <span class="src">· airflow-releases</span>
-    </div>
-    <div class="snippet">Release 2026-08-06 of providers</div>
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge github">github</span>
-      
-      <a class="title" href="https://github.com/apache/airflow/releases/tag/providers-smtp%2F3.0.3" target="_blank" rel="noopener">providers-smtp/3.0.3</a>
-      
-      <span class="age">· 11h ago</span>
-      <span class="src">· airflow-releases</span>
-    </div>
-    <div class="snippet">Release 2026-08-06 of providers</div>
     
   </div>
   
@@ -292,12 +232,127 @@
     <div class="top">
       <span class="badge rss">rss</span>
       
-      <a class="title" href="https://simonwillison.net/2026/Aug/7/moonlight-mayhem" target="_blank" rel="noopener">Moonlight &amp; Mayhem (Raccoon Heist by Codex + GPT-5.6 Sol Ultra)</a>
+      <a class="title" href="https://simonwillison.net/2026/Aug/9/claude-opus-5-system-prompt" target="_blank" rel="noopener">Quoting Claude Opus 5 system prompt</a>
       
-      <span class="age">· 23h ago</span>
+      <span class="age">· 17h ago</span>
       <span class="src">· simonwillison</span>
     </div>
-    <div class="snippet">Moonlight &amp; Mayhem (Raccoon Heist by Codex + GPT-5.6 Sol Ultra) On Wednesday I wrote about One-shotting a Raccoon Heist game using Claude Fable 5 , where I had Claude Fable 5 build a full working game…</div>
+    
+      <div class="gist">Claude Opus 5 prompt leaks detail model access timeline and export control impacts</div>
+      <details class="more"><summary></summary><div class="snippet">Claude Fable 5 and Claude Mythos 5 were first released on June 9, 2026. On June 12, 2026, Anthropic suspended access to both models to comply with U.S. Department of Commerce export controls; the Depa…</div></details>
+    
+    
+  </div>
+  
+  <div class="item">
+    <div class="top">
+      <span class="badge rss">rss</span>
+      
+      <a class="title" href="https://huggingface.co/blog/nvidia/magpie-tts-multilingual-voice-agents" target="_blank" rel="noopener">Build Low-Latency Multilingual Voice Agents: Open Weights &amp; Full Deployment Control with NVIDIA Magpie TTS</a>
+      
+      <span class="age">· 1h ago</span>
+      <span class="src">· huggingface-blog</span>
+    </div>
+    
+      <div class="gist">NVIDIA released open-weights Magpie TTS for self-hosted low-latency voice AI</div>
+      
+    
+    
+  </div>
+  
+  <div class="item">
+    <div class="top">
+      <span class="badge rss">rss</span>
+      
+      <a class="title" href="https://simonwillison.net/2026/Aug/8/auto-mode" target="_blank" rel="noopener">Auto mode is now the default in Claude Code for Pro, Max, and Team plans</a>
+      
+      <span class="age">· 1d ago</span>
+      <span class="src">· simonwillison</span>
+    </div>
+    
+      <div class="gist">Anthropic sets Auto mode as default in Claude Code for paid plans to streamline workflows</div>
+      <details class="more"><summary></summary><div class="snippet">Auto mode is now the default in Claude Code for Pro, Max, and Team plans Anthropic are really confident in Claude Code&#39;s auto mode , to the point that they are making it the default setting for new se…</div></details>
+    
+    
+  </div>
+  
+  <div class="item">
+    <div class="top">
+      <span class="badge rss">rss</span>
+      
+      <a class="title" href="https://huggingface.co/blog/muse-glimmer" target="_blank" rel="noopener">Meta is back with Muse Glimmer: local, agentic, multimodal, and open source</a>
+      
+      <span class="age">· 17h ago</span>
+      <span class="src">· huggingface-blog</span>
+    </div>
+    
+      <div class="gist">Meta released Muse Glimmer, an open-source local agentic multimodal model family</div>
+      
+    
+    
+  </div>
+  
+  <div class="item">
+    <div class="top">
+      <span class="badge rss">rss</span>
+      
+      <a class="title" href="https://huggingface.co/blog/MultiverseComputingCAI/efficient-knowledge-distillation" target="_blank" rel="noopener">Making Knowledge Distillation Cheap Enough to Run at Scale</a>
+      
+      <span class="age">· 7h ago</span>
+      <span class="src">· huggingface-blog</span>
+    </div>
+    
+      <div class="gist">New techniques cut knowledge distillation costs to enable scalable smaller model training</div>
+      
+    
+    
+  </div>
+  
+  <div class="item">
+    <div class="top">
+      <span class="badge rss">rss</span>
+      
+      <a class="title" href="https://simonwillison.net/2026/Aug/10/openclaw" target="_blank" rel="noopener">Quoting OpenClaw</a>
+      
+      <span class="age">· 15h ago</span>
+      <span class="src">· simonwillison</span>
+    </div>
+    
+      <div class="gist">AI agent exploit highlights missing API authorization checks in public booking web apps</div>
+      <details class="more"><summary></summary><div class="snippet">The API has zero authorisations checks on cancelling other people&#39;s reservations … I tested this with the person in waitlist position #1 — and it actually went through. So you&#39;ve moved from #4 to #3 a…</div></details>
+    
+    
+  </div>
+  
+  <div class="item">
+    <div class="top">
+      <span class="badge rss">rss</span>
+      
+      <a class="title" href="https://simonwillison.net/2026/Aug/9/github-models-is-now-retired" target="_blank" rel="noopener">GitHub Models is now retired</a>
+      
+      <span class="age">· 18h ago</span>
+      <span class="src">· simonwillison</span>
+    </div>
+    
+      <div class="gist">GitHub permanently retired GitHub Models playground service breaking dependent CI workflows</div>
+      <details class="more"><summary></summary><div class="snippet">GitHub Models is now retired I missed this news until today, when the GitHub Actions run for my simonw/research repository failed with this error message: GitHub Models is temporarily unavailable as p…</div></details>
+    
+    
+  </div>
+  
+  <div class="item">
+    <div class="top">
+      <span class="badge rss">rss</span>
+      
+      <a class="title" href="https://simonwillison.net/2026/Aug/9/sqlite-text-history-prototype" target="_blank" rel="noopener">SQLite compressed text-history prototypes</a>
+      
+      <span class="age">· 19h ago</span>
+      <span class="src">· simonwillison</span>
+    </div>
+    
+      <div class="gist">Prototyping SQLite zstd text compression for efficient database revision history storage</div>
+      <details class="more"><summary></summary><div class="snippet">Research: SQLite compressed text-history prototypes I&#39;m perennially interested in options for storing revision histories in relational databases. While out on a dog walk I had a new idea: how about ta…</div></details>
+    
     
   </div>
   

@@ -18,6 +18,7 @@ from .db import (
     OUT_DIR,
     ROOT,
     get_conn,
+    get_kv,
     init_db,
     load_config,
     now_utc,
@@ -65,7 +66,8 @@ def sparkline_points(values: list[float], w: int = 110, h: int = 26, pad: int = 
     return " ".join(pts)
 
 
-def _trackers(conn: sqlite3.Connection) -> list[dict]:
+def _trackers(conn: sqlite3.Connection, links: dict | None = None) -> list[dict]:
+    links = links or {}
     cutoff = now_utc().timestamp() - 30 * 86400
     out = []
     for name, label, fmt in TRACKER_SPECS:
@@ -81,6 +83,7 @@ def _trackers(conn: sqlite3.Connection) -> list[dict]:
                 "label": label,
                 "value": fmt(values[-1]),
                 "spark": sparkline_points(values),
+                "link": links.get(name),
             }
         )
     return out
@@ -116,12 +119,15 @@ def _siblings(conn: sqlite3.Connection, item) -> list[str]:
 def _item_view(conn, r, now, srcmap) -> dict:
     src = srcmap.get(r["source_id"], {})
     snippet = (r["raw_text"] or "").strip()
+    keys = r.keys()
     return {
+        "id": r["id"],
         "title": r["title"],
         "url": r["url"],
         "source_id": r["source_id"],
         "source_type": r["source_type"],
         "age": humanize_age(r["published_at"], now),
+        "summary": (r["summary"] if "summary" in keys else None),
         "snippet": snippet[:200] + ("…" if len(snippet) > 200 else ""),
         "siblings": _siblings(conn, r),
         "score": r["score"] or 0.0,
@@ -189,7 +195,8 @@ def select_digest(conn: sqlite3.Connection) -> dict:
 
     return {
         "generated_local": now_local.strftime("%Y-%m-%d %H:%M %Z"),
-        "trackers": _trackers(conn),
+        "overview": get_kv(conn, "overview"),
+        "trackers": _trackers(conn, cfg.get("tracker_links", {})),
         "sections": ordered_sections,
         "newsletters": newsletter_views,
         "dead_feeds": _dead_feeds(conn),

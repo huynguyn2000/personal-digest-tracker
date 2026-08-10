@@ -8,7 +8,17 @@ from __future__ import annotations
 
 import sys
 
-from . import dashboard, dedup, fetch_imap, fetch_metrics, fetch_rss, notify, render, score
+from . import (
+    dashboard,
+    dedup,
+    fetch_imap,
+    fetch_metrics,
+    fetch_rss,
+    notify,
+    render,
+    score,
+    summarize,
+)
 from .db import init_db
 
 
@@ -35,6 +45,9 @@ def main() -> int:
     # --- process (core) ---
     _stage("dedup", lambda: dedup.run(conn), fatal=True)
     _stage("score", lambda: score.run(conn), fatal=True)
+
+    # --- summarize (best-effort; Gemini) ---
+    _stage("summarize", lambda: summarize.run(conn), fatal=False)
 
     print("\n== render ==")
     payload = render.run(conn)
