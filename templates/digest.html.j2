@@ -91,6 +91,10 @@
   .iline a, .iline .t { font-weight:550; font-size:.95rem; color:var(--fg); text-decoration:none; }
   .iline a:hover { color:var(--accent); text-decoration:underline; }
   .iline .iline-meta { color:var(--muted); font-size:.8rem; margin-top:2px; }
+  .refs { display:flex; flex-wrap:wrap; gap:6px 10px; align-items:baseline; margin:0 0 8px; }
+  .refs-label { font-size:.66rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+  .refs a { font-size:.8rem; color:var(--accent); text-decoration:none; white-space:nowrap; }
+  .refs a:hover { text-decoration:underline; }
 
   .dead { margin-top:36px; background:var(--card); border:1px solid var(--border);
     border-radius:12px; padding:12px 14px; }
@@ -160,10 +164,15 @@
   </div>
   {% endmacro %}
 
-  {% macro type_block(tag, summary, entries) %}
+  {% macro type_block(tag, summary, refs, entries) %}
   <section class="type">
     <h2 class="section">{{ tag }} <span class="count">· {{ entries | length }}</span></h2>
     {% if summary %}<p class="type-summary">{{ summary }}</p>{% endif %}
+    {% if refs %}
+    <div class="refs"><span class="refs-label">Sources</span>
+      {% for r in refs %}<a href="{{ r.url }}" target="_blank" rel="noopener" title="{{ r.title }}">[{{ r.n }}] {{ r.source_id }}</a>{% endfor %}
+    </div>
+    {% endif %}
     {% if entries %}
     <details class="items-drawer"{% if not summary %} open{% endif %}>
       <summary>{{ entries | length }} item{{ 's' if entries | length != 1 }}</summary>
@@ -175,8 +184,8 @@
   </section>
   {% endmacro %}
 
-  {% for section in sections %}{{ type_block(section.tag, section.summary, section.entries) }}{% endfor %}
-  {% if newsletters %}{{ type_block('newsletters', newsletter_summary, newsletters) }}{% endif %}
+  {% for section in sections %}{{ type_block(section.tag, section.summary, section.refs, section.entries) }}{% endfor %}
+  {% if newsletters %}{{ type_block('newsletters', newsletter_summary, newsletter_refs, newsletters) }}{% endif %}
 
   {% if not sections and not newsletters %}
   <p style="color:var(--muted)">Nothing in the digest window. Feeds may be quiet, or run the fetchers.</p>

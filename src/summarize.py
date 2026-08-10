@@ -35,8 +35,12 @@ _SCHEMA = {
             "type": "array",
             "items": {
                 "type": "object",
-                "properties": {"tag": {"type": "string"}, "summary": {"type": "string"}},
-                "required": ["tag", "summary"],
+                "properties": {
+                    "tag": {"type": "string"},
+                    "summary": {"type": "string"},
+                    "refs": {"type": "array", "items": {"type": "string"}},
+                },
+                "required": ["tag", "summary", "refs"],
             },
         },
         "gists": {
@@ -92,9 +96,13 @@ def _build_prompt(grouped: list[dict], max_chars: int) -> str:
         "",
         "Return JSON matching the schema:",
         "- overview: 2 sentences on the day's themes across ALL sections.",
-        "- sections: for EACH section tag below, a 2-4 sentence 'summary' that "
-        "synthesizes what happened in that category — call out the notable items "
-        "and what they mean, don't just relist titles.",
+        "- sections: for EACH section tag below, an object with:",
+        "    * summary: 2-4 sentences synthesizing what happened in that category "
+        "(what the items mean, don't just relist titles). Cite sources inline with "
+        "bracketed numbers [1], [2], … where [1] is the first id in 'refs', [2] the "
+        "second, and so on.",
+        "    * refs: the item ids the summary actually draws from, in the SAME order "
+        "as the [n] markers used in the summary text.",
         f"- gists: for EACH item id, a one-line gist (max {max_chars} chars).",
         "",
     ]
@@ -171,9 +179,9 @@ def run(conn: sqlite3.Connection, force: bool = False) -> dict:
             conn.execute("UPDATE items SET summary = ? WHERE id = ?", (gist[: max_chars * 2], iid))
             updated += 1
 
-    # per-section summaries
+    # per-section summaries + the sources (item ids) each one cites
     sec_summaries = {
-        s["tag"]: s["summary"].strip()
+        s["tag"]: {"summary": s["summary"].strip(), "refs": s.get("refs", [])}
         for s in result.get("sections", [])
         if s.get("tag") and s.get("summary")
     }

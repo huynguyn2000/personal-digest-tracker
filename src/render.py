@@ -179,19 +179,41 @@ def select_digest(conn: sqlite3.Connection) -> dict:
     seen = set()
     for sec in order:
         if sec in sections:
-            ordered_sections.append(
-                {"tag": sec, "entries": sections[sec], "summary": sec_summaries.get(sec)}
-            )
+            ordered_sections.append({"tag": sec, "entries": sections[sec]})
             seen.add(sec)
     for sec in sorted(k for k in sections if k not in seen):
-        ordered_sections.append(
-            {"tag": sec, "entries": sections[sec], "summary": sec_summaries.get(sec)}
-        )
+        ordered_sections.append({"tag": sec, "entries": sections[sec]})
 
     newsletter_views = [
         _item_view(conn, r, now, srcmap)
         for r in sorted(newsletters, key=lambda x: x["published_at"], reverse=True)
     ]
+
+    # Attach each section's LLM summary + its cited sources (as numbered links).
+    id_map = {
+        v["id"]: v
+        for sec in ordered_sections for v in sec["entries"]
+    }
+    id_map.update({v["id"]: v for v in newsletter_views})
+
+    def _summary_and_refs(tag):
+        raw = sec_summaries.get(tag)
+        if isinstance(raw, dict):
+            text, ref_ids = raw.get("summary"), raw.get("refs", [])
+        else:  # legacy: plain string, no refs
+            text, ref_ids = raw, []
+        refs, n = [], 1
+        for rid in ref_ids:
+            v = id_map.get(rid)
+            if v:
+                refs.append({"n": n, "source_id": v["source_id"], "url": v["url"],
+                             "title": v["title"]})
+                n += 1
+        return text, refs
+
+    for sec in ordered_sections:
+        sec["summary"], sec["refs"] = _summary_and_refs(sec["tag"])
+    newsletter_summary, newsletter_refs = _summary_and_refs("newsletter")
 
     rendered_ids = [r["id"] for r in top_news] + [r["id"] for r in newsletters]
 
@@ -208,7 +230,8 @@ def select_digest(conn: sqlite3.Connection) -> dict:
         "trackers": _trackers(conn, cfg.get("tracker_links", {})),
         "sections": ordered_sections,
         "newsletters": newsletter_views,
-        "newsletter_summary": sec_summaries.get("newsletter"),
+        "newsletter_summary": newsletter_summary,
+        "newsletter_refs": newsletter_refs,
         "dead_feeds": _dead_feeds(conn),
         "rendered_ids": rendered_ids,
         "top5": top5,
