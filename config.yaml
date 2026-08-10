@@ -25,6 +25,17 @@ keywords:
   "context engineering": 0.6
   agent: 0.3
   vietnam: 0.8
+  # AWS cloud
+  aws: 0.8
+  bedrock: 0.7
+  sagemaker: 0.6
+  redshift: 0.8
+  athena: 0.6
+  glue: 0.6
+  "s3": 0.5
+  lambda: 0.5
+  dynamodb: 0.5
+  eks: 0.5
 
 negative_keywords:
   "top 10": -1.0
@@ -70,4 +81,4 @@ digest:
   render_window_days: 4
   keyword_score_cap: 3.0
   # Section ordering in the HTML. Tags not listed fall into "other".
-  section_order: [dataeng, ai]
+  section_order: [aws, dataeng, ai]

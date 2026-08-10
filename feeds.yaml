@@ -67,6 +67,25 @@ sources:
     tags: [ai]
     weight: 0.9
 
+  # --- aws cloud ----------------------------------------------------------
+  - id: aws-news
+    type: rss
+    url: https://aws.amazon.com/blogs/aws/feed/
+    tags: [aws]
+    weight: 1.2
+
+  - id: aws-whats-new
+    type: rss
+    url: https://aws.amazon.com/about-aws/whats-new/recent/feed/
+    tags: [aws, releases]
+    weight: 1.0
+
+  - id: aws-big-data
+    type: rss
+    url: https://aws.amazon.com/blogs/big-data/feed/
+    tags: [aws, dataeng]
+    weight: 1.1
+
   # --- newsletters (Gmail) ------------------------------------------------
   # Requires GMAIL_USER + GMAIL_APP_PASSWORD env vars (needs 2FA + app password).
   # 'label' is the Gmail label; nested labels use '/'.
