@@ -11,6 +11,7 @@ import sys
 from . import (
     dashboard,
     dedup,
+    enrich,
     fetch_imap,
     fetch_metrics,
     fetch_rss,
@@ -44,6 +45,8 @@ def main() -> int:
 
     # --- process (core) ---
     _stage("dedup", lambda: dedup.run(conn), fatal=True)
+    # enrich content-less items (docs changelog) before scoring + summarizing
+    _stage("enrich", lambda: enrich.run(conn), fatal=False)
     _stage("score", lambda: score.run(conn), fatal=True)
 
     # --- summarize (best-effort; Gemini) ---

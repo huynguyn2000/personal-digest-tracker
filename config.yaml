@@ -41,6 +41,12 @@ summarize:
   model: gemini-flash-latest
   max_gist_chars: 140
 
+# Enrich content-less items (e.g. GitHub release tags with no notes) by fetching
+# their official docs changelog, so summaries + links carry real insight.
+enrich:
+  thin_chars: 200     # items whose body is shorter than this are candidates
+  max_per_run: 12     # cap fetches per run (bounds latency)
+
 # External pages for a larger time-window view of each tracker.
 tracker_links:
   usd_vnd: https://www.google.com/finance/quote/USD-VND
