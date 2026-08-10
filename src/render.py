@@ -161,6 +161,18 @@ def select_digest(conn: sqlite3.Connection) -> dict:
     newsletters = [r for r in candidates if is_newsletter(r)]
     news = [r for r in candidates if not is_newsletter(r)]
 
+    # per-source cap (candidates are already score-sorted) so one high-volume
+    # source can't crowd out low-volume ones you follow
+    cap = int(dcfg.get("per_source_cap", 0) or 0)
+    if cap:
+        counts: dict[str, int] = {}
+        capped = []
+        for r in news:
+            counts[r["source_id"]] = counts.get(r["source_id"], 0) + 1
+            if counts[r["source_id"]] <= cap:
+                capped.append(r)
+        news = capped
+
     # hard cut for scored news; newsletters get a floor (always included)
     top_news = news[: int(dcfg["max_items"])]
 

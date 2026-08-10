@@ -51,6 +51,11 @@ tracker_links:
 
 digest:
   max_items: 12
+  # Cap how many items any single source contributes to the digest, applied
+  # before max_items. Keeps a high-volume source (e.g. airflow's many release
+  # RCs) from crowding out low-volume ones you follow (a YouTube channel, a
+  # blog). 0 disables.
+  per_source_cap: 3
   half_life_hours: 36
   window_hours: 48
   dedup_threshold: 0.6
