@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Morning Digest — 2026-08-11 01:42 +07</title>
+<title>Morning Digest — 2026-08-11 01:44 +07</title>
 <style>
   :root {
     --bg: #ffffff; --fg: #1a1a1a; --muted: #666; --card: #f4f4f5;
@@ -33,8 +33,21 @@
     font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
   .wrap { max-width: 720px; margin: 0 auto; padding: 20px 16px 64px; }
-  header h1 { font-size: 1.3rem; margin: 0 0 2px; }
-  header .sub { color: var(--muted); font-size: .85rem; margin-bottom: 18px; }
+  .topbar { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+  header h1 { font-size: 1.3rem; margin: 0 0 2px; text-wrap:balance; }
+  header .sub { color: var(--muted); font-size: .85rem; }
+  header .sub .fresh::before { content:"· "; }
+  .theme-btn { background:var(--card); border:1px solid var(--border); color:var(--fg);
+    width:36px; height:36px; border-radius:9px; font-size:16px; cursor:pointer; flex:none; line-height:1; }
+  .theme-btn:hover { border-color:var(--accent); }
+  .jump { display:flex; flex-wrap:wrap; gap:6px; margin:14px 0 20px; }
+  .jump a { font-size:.75rem; text-decoration:none; color:var(--muted); background:var(--card);
+    border:1px solid var(--border); border-radius:999px; padding:3px 10px; }
+  .jump a:hover { color:var(--accent); border-color:var(--accent); }
+  :focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+  html { scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } * { transition:none!important; } }
+  .type { scroll-margin-top:12px; }
 
   .trackers { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:26px; }
   .tracker {
@@ -112,10 +125,23 @@
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <h1>Morning Digest</h1>
-    <div class="sub">2026-08-11 01:42 +07 · 12 items · 0 newsletters</div>
+  <header class="topbar">
+    <div>
+      <h1>Morning Digest</h1>
+      <div class="sub">2026-08-11 01:44 +07 · 12 items · 0 newsletters<span class="fresh" id="fresh" data-generated="2026-08-10T18:44:50+00:00"></span></div>
+    </div>
+    <button class="theme-btn" id="themeBtn" title="Toggle light / dark" aria-label="Toggle theme">◐</button>
   </header>
+
+  
+  
+  
+  
+  <nav class="jump">
+    <a href="#trackers">trackers</a>
+    <a href="#sec-aws">aws</a><a href="#sec-dataeng">dataeng</a><a href="#sec-ai">ai</a>
+  </nav>
+  
 
   
   <div class="overview">
@@ -124,7 +150,7 @@
   
 
   
-  <div class="trackers">
+  <div class="trackers" id="trackers">
     
     <div class="tracker">
       <div class="label"><a href="https://www.google.com/finance/quote/USD-VND" target="_blank" rel="noopener" title="Open a larger time-window view">USD/VND ↗</a></div>
@@ -216,7 +242,7 @@
   
 
   
-  <section class="type">
+  <section class="type" id="sec-aws">
     <h2 class="section">aws <span class="count">· 4</span></h2>
     <p class="type-summary">AWS Elastic Disaster Recovery now preserves UEFI boot mode for Linux servers during failover, eliminating post-recovery configuration steps <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/aws-drs-linux-uefi" target="_blank" rel="noopener" title="aws-whats-new — AWS Elastic Disaster Recovery now preserves UEFI boot mode for Linux servers">[1]</a>. Additionally, the weekly AWS roundup highlights community gatherings alongside Bedrock web search capabilities <a href="https://aws.amazon.com/blogs/aws/aws-weekly-roundup-aws-heroes-summit-web-search-on-amazon-bedrock-dogwood-kiro-crew-and-more-august-10-2026" target="_blank" rel="noopener" title="aws-news — AWS Weekly Roundup: AWS Heroes Summit, Web Search on Amazon Bedrock, Dogwood, Kiro Crew, and more (August 10, 2026)">[2]</a>.</p>
     
@@ -257,7 +283,7 @@
     
   </section>
   
-  <section class="type">
+  <section class="type" id="sec-dataeng">
     <h2 class="section">dataeng <span class="count">· 3</span></h2>
     <p class="type-summary">Apache Airflow ecosystem updates bring scoped multi-team secret support to Google Cloud providers <a href="https://airflow.apache.org/docs/apache-airflow-providers-google/22.3.0/changelog.html" target="_blank" rel="noopener" title="airflow-releases — providers-google/22.3.0">[1]</a> and new pod deletion grace periods to Kubernetes providers <a href="https://airflow.apache.org/docs/apache-airflow-providers-cncf-kubernetes/10.21.0/changelog.html" target="_blank" rel="noopener" title="airflow-releases — providers-cncf-kubernetes/10.21.0">[2]</a>, alongside new release constraints <a href="https://github.com/apache/airflow/releases/tag/constraints-3.3.1rc1" target="_blank" rel="noopener" title="airflow-releases — constraints-3.3.1rc1">[3]</a>. Meanwhile, AWS users can optimize Kinesis streaming costs using a Bedrock-powered agent <a href="https://aws.amazon.com/blogs/big-data/ai-powered-cost-optimization-agent-for-amazon-kinesis-data-streams" target="_blank" rel="noopener" title="aws-big-data — AI-powered cost optimization agent for Amazon Kinesis Data Streams">[4]</a> and tune OpenSearch clusters for large-scale telemetry analytics <a href="https://aws.amazon.com/blogs/big-data/how-a-team-at-epic-games-tuned-amazon-opensearch-service-for-fortnite-analytics" target="_blank" rel="noopener" title="aws-big-data — How a team at Epic Games tuned Amazon OpenSearch Service for Fortnite analytics">[5]</a>.</p>
     
@@ -291,7 +317,7 @@
     
   </section>
   
-  <section class="type">
+  <section class="type" id="sec-ai">
     <h2 class="section">ai <span class="count">· 5</span></h2>
     <p class="type-summary">Anthropic is setting Auto mode as default in Claude Code <a href="https://simonwillison.net/2026/Aug/8/auto-mode" target="_blank" rel="noopener" title="simonwillison — Auto mode is now the default in Claude Code for Pro, Max, and Team plans">[1]</a> while system prompt details surface around historical Claude model export compliance <a href="https://simonwillison.net/2026/Aug/9/claude-opus-5-system-prompt" target="_blank" rel="noopener" title="simonwillison — Quoting Claude Opus 5 system prompt">[2]</a>. In open-source voice and multimodal AI, NVIDIA introduced Magpie TTS <a href="https://huggingface.co/blog/nvidia/magpie-tts-multilingual-voice-agents" target="_blank" rel="noopener" title="huggingface-blog — Build Low-Latency Multilingual Voice Agents: Open Weights &amp; Full Deployment Control with NVIDIA Magpie TTS">[3]</a> while Meta announced Muse Glimmer for local agentic workflows <a href="https://huggingface.co/blog/muse-glimmer" target="_blank" rel="noopener" title="huggingface-blog — Meta is back with Muse Glimmer: local, agentic, multimodal, and open source">[4]</a>. Finally, new approaches aim to lower costs for performing knowledge distillation at scale <a href="https://huggingface.co/blog/MultiverseComputingCAI/efficient-knowledge-distillation" target="_blank" rel="noopener" title="huggingface-blog — Making Knowledge Distillation Cheap Enough to Run at Scale">[5]</a>.</p>
     
@@ -345,7 +371,30 @@
 
   
 
-  <footer>Deterministic digest · no LLM in the loop · generated by personal-digest-tracker</footer>
+  <footer>Deterministic ranking &amp; dedup · summaries by Gemini · personal-digest-tracker</footer>
 </div>
+<script>
+(function () {
+  var root = document.documentElement;
+  function pref() { return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; }
+  try { var s = localStorage.getItem("pdt-theme"); if (s) root.setAttribute("data-theme", s); } catch (e) {}
+  var btn = document.getElementById("themeBtn");
+  if (btn) btn.addEventListener("click", function () {
+    var next = (root.getAttribute("data-theme") || pref()) === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("pdt-theme", next); } catch (e) {}
+  });
+  var f = document.getElementById("fresh");
+  if (f) {
+    var g = Date.parse(f.getAttribute("data-generated"));
+    if (!isNaN(g)) {
+      var mins = Math.max(0, Math.round((Date.now() - g) / 60000));
+      var t = mins < 1 ? "just now" : mins < 60 ? mins + "m ago"
+            : mins < 1440 ? Math.round(mins / 60) + "h ago" : Math.round(mins / 1440) + "d ago";
+      f.textContent = "generated " + t;
+    }
+  }
+})();
+</script>
 </body>
 </html>
