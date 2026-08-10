@@ -107,12 +107,24 @@ def _trackers(conn: sqlite3.Connection, links: dict | None = None) -> list[dict]
             arrow = {"up": "▲", "down": "▼", "flat": "·"}[direction]
             delta = {"pct": f"{abs(d) / abs(values[-2]) * 100:.1f}%",
                      "dir": direction, "arrow": arrow}
+        sub = None
+        if spec["name"] == "hcmc_temp":
+            hi = conn.execute(
+                "SELECT value FROM metrics WHERE name='hcmc_temp_hi' ORDER BY ts DESC LIMIT 1"
+            ).fetchone()
+            lo = conn.execute(
+                "SELECT value FROM metrics WHERE name='hcmc_temp_lo' ORDER BY ts DESC LIMIT 1"
+            ).fetchone()
+            if hi and lo:
+                sub = f"H {hi['value']:.0f}° · L {lo['value']:.0f}°"
+
         out.append(
             {
                 "label": spec["label"],
                 "value": spec["fmt"](latest),
                 "icon": spec.get("icon"),
                 "delta": delta,
+                "sub": sub,
                 "band": _aqi_band(latest) if spec.get("kind") == "aqi" else None,
                 "spark": _spark(values),
                 "link": links.get(spec["name"]),
@@ -185,6 +197,7 @@ def _item_view(conn, r, now, srcmap) -> dict:
         "source_id": r["source_id"],
         "source_type": r["source_type"],
         "age": humanize_age(r["published_at"], now),
+        "is_new": (now.timestamp() - parse_iso(r["published_at"]).timestamp()) < 86400,
         "summary": (r["summary"] if "summary" in keys else None),
         "snippet": snippet[:200] + ("…" if len(snippet) > 200 else ""),
         "siblings": _siblings(conn, r),
