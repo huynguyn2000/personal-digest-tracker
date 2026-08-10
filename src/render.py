@@ -30,15 +30,15 @@ from .db import (
 
 # Trackers to display, in order. Each: name, label, fmt; optional icon/kind.
 TRACKER_SPECS = [
-    {"name": "usd_vnd", "label": "USD/VND", "fmt": lambda v: f"{v:,.0f}"},
-    {"name": "cny_vnd", "label": "CNY/VND", "fmt": lambda v: f"{v:,.0f}"},
-    {"name": "hcmc_temp", "label": "Temp", "fmt": lambda v: f"{v:.0f}°C", "icon": "🌡"},
-    {"name": "hcmc_rain_prob", "label": "Rain", "fmt": lambda v: f"{v:.0f}%", "icon": "🌧"},
-    {"name": "hcmc_aqi", "label": "AQI", "fmt": lambda v: f"{v:.0f}", "kind": "aqi"},
-    {"name": "hcmc_uv", "label": "UV", "fmt": lambda v: f"{v:.0f}", "kind": "uv", "icon": "☀️"},
-    {"name": "sjc_gold_buy", "label": "Gold buy", "fmt": lambda v: f"{v:,.0f}"},
-    {"name": "sjc_gold_sell", "label": "Gold sell", "fmt": lambda v: f"{v:,.0f}"},
-    {"name": "sjc_gold_spread", "label": "Gold spread", "fmt": lambda v: f"{v:,.0f}"},
+    {"name": "usd_vnd", "label": "USD/VND", "fmt": lambda v: f"{v:,.0f}", "group": "Markets"},
+    {"name": "cny_vnd", "label": "CNY/VND", "fmt": lambda v: f"{v:,.0f}", "group": "Markets"},
+    {"name": "sjc_gold_buy", "label": "Gold buy", "fmt": lambda v: f"{v:,.0f}", "group": "Markets"},
+    {"name": "sjc_gold_sell", "label": "Gold sell", "fmt": lambda v: f"{v:,.0f}", "group": "Markets"},
+    {"name": "sjc_gold_spread", "label": "Gold spread", "fmt": lambda v: f"{v:,.0f}", "group": "Markets"},
+    {"name": "hcmc_temp", "label": "Temp", "fmt": lambda v: f"{v:.0f}°C", "icon": "🌡", "group": "Environment"},
+    {"name": "hcmc_rain_prob", "label": "Rain", "fmt": lambda v: f"{v:.0f}%", "icon": "🌧", "group": "Environment"},
+    {"name": "hcmc_aqi", "label": "AQI", "fmt": lambda v: f"{v:.0f}", "kind": "aqi", "group": "Environment"},
+    {"name": "hcmc_uv", "label": "UV", "fmt": lambda v: f"{v:.0f}", "kind": "uv", "icon": "☀️", "group": "Environment"},
 ]
 DEAD_FEED_THRESHOLD = 5
 
@@ -154,6 +154,7 @@ def _trackers(conn: sqlite3.Connection, links: dict | None = None) -> list[dict]
                 "band": _band_for(spec.get("kind"), latest),
                 "spark": _spark(values),
                 "link": links.get(spec["name"]),
+                "group": spec.get("group", "Other"),
             }
         )
     return out

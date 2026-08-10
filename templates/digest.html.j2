@@ -52,7 +52,10 @@
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } * { transition:none!important; } }
   .type { scroll-margin-top:12px; }
 
-  .trackers { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:26px; }
+  #trackers { margin-bottom:26px; }
+  .tgroup-label { font-size:.66rem; text-transform:uppercase; letter-spacing:.09em; color:var(--muted); margin:0 0 8px; }
+  #trackers .trackers + .tgroup-label { margin-top:16px; }
+  .trackers { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:0; }
   .tracker {
     flex:1 1 140px; background:var(--card); border:1px solid var(--border);
     border-radius:12px; padding:10px 12px;
@@ -157,9 +160,7 @@
   </div>
   {% endif %}
 
-  {% if trackers %}
-  <div class="trackers" id="trackers">
-    {% for t in trackers %}
+  {% macro tracker_card(t) %}
     <div class="tracker">
       <div class="label">{% if t.link %}<a href="{{ t.link }}" target="_blank" rel="noopener" title="Open a larger time-window view">{{ t.label }} ↗</a>{% else %}{{ t.label }}{% endif %}</div>
       <div class="value-row">
@@ -176,6 +177,16 @@
       </svg>
       {% endif %}
     </div>
+  {% endmacro %}
+
+  {% if trackers %}
+  <div id="trackers">
+    {% for gname in ['Markets', 'Environment', 'Other'] %}
+    {% set gt = trackers | selectattr('group', 'equalto', gname) | list %}
+    {% if gt %}
+    <div class="tgroup-label">{{ gname }}</div>
+    <div class="trackers">{% for t in gt %}{{ tracker_card(t) }}{% endfor %}</div>
+    {% endif %}
     {% endfor %}
   </div>
   {% endif %}
