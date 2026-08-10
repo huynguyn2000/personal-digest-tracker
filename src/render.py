@@ -170,14 +170,23 @@ def select_digest(conn: sqlite3.Connection) -> dict:
         sec = _section_for(srcmap.get(r["source_id"], {}).get("tags", []), order)
         sections.setdefault(sec, []).append(_item_view(conn, r, now, srcmap))
 
+    try:
+        sec_summaries = json.loads(get_kv(conn, "section_summaries") or "{}")
+    except (ValueError, TypeError):
+        sec_summaries = {}
+
     ordered_sections = []
     seen = set()
     for sec in order:
         if sec in sections:
-            ordered_sections.append({"tag": sec, "entries": sections[sec]})
+            ordered_sections.append(
+                {"tag": sec, "entries": sections[sec], "summary": sec_summaries.get(sec)}
+            )
             seen.add(sec)
     for sec in sorted(k for k in sections if k not in seen):
-        ordered_sections.append({"tag": sec, "entries": sections[sec]})
+        ordered_sections.append(
+            {"tag": sec, "entries": sections[sec], "summary": sec_summaries.get(sec)}
+        )
 
     newsletter_views = [
         _item_view(conn, r, now, srcmap)
@@ -199,6 +208,7 @@ def select_digest(conn: sqlite3.Connection) -> dict:
         "trackers": _trackers(conn, cfg.get("tracker_links", {})),
         "sections": ordered_sections,
         "newsletters": newsletter_views,
+        "newsletter_summary": sec_summaries.get("newsletter"),
         "dead_feeds": _dead_feeds(conn),
         "rendered_ids": rendered_ids,
         "top5": top5,

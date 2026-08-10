@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Morning Digest — 2026-08-11 00:28 +07</title>
+<title>Morning Digest — 2026-08-11 00:58 +07</title>
 <style>
   :root {
     --bg: #ffffff; --fg: #1a1a1a; --muted: #666; --card: #f4f4f5;
@@ -75,6 +75,23 @@
   details.more > summary::before { content:"▸ details"; }
   details.more[open] > summary::before { content:"▾ less"; }
 
+  /* per-type summary blocks */
+  .type { margin-bottom:8px; }
+  h2.section .count { color:var(--muted); font-weight:400; font-size:.85rem; }
+  .type-summary { font-size:.98rem; line-height:1.6; margin:2px 0 8px; }
+  details.items-drawer { margin:2px 0 10px; }
+  details.items-drawer > summary { cursor:pointer; color:var(--accent); font-size:.8rem;
+    list-style:none; padding:2px 0; }
+  details.items-drawer > summary::-webkit-details-marker { display:none; }
+  details.items-drawer > summary::before { content:"▸ "; }
+  details.items-drawer[open] > summary::before { content:"▾ "; }
+  .drawer-body { border-left:2px solid var(--border); padding-left:12px; margin-top:6px; }
+  .iline { padding:7px 0; border-bottom:1px solid var(--border); }
+  .iline:last-child { border-bottom:none; }
+  .iline a, .iline .t { font-weight:550; font-size:.95rem; color:var(--fg); text-decoration:none; }
+  .iline a:hover { color:var(--accent); text-decoration:underline; }
+  .iline .iline-meta { color:var(--muted); font-size:.8rem; margin-top:2px; }
+
   .dead { margin-top:36px; background:var(--card); border:1px solid var(--border);
     border-radius:12px; padding:12px 14px; }
   .dead h2 { font-size:.8rem; text-transform:uppercase; color:#dc2626; margin:0 0 8px; }
@@ -86,12 +103,12 @@
 <div class="wrap">
   <header>
     <h1>Morning Digest</h1>
-    <div class="sub">2026-08-11 00:28 +07 · 12 items · 0 newsletters</div>
+    <div class="sub">2026-08-11 00:58 +07 · 12 items · 0 newsletters</div>
   </header>
 
   
   <div class="overview">
-    <span class="ov-label">Today</span>Today&#39;s updates highlight rapid advancements in open AI models and developer tooling alongside ongoing ecosystem maintenance in data orchestration platforms. Key announcements include Meta&#39;s Muse Glimmer release, Anthropic setting Auto mode as default in Claude Code, and routine provider updates across Apache Airflow.
+    <span class="ov-label">Today</span>Data engineering updates focus on routine Airflow provider releases and dependency constraint management. Concurrently, the AI sector sees significant updates in open-source voice and multimodal models alongside shifts in platform features like Claude Code defaults and GitHub Models retirement.
   </div>
   
 
@@ -159,205 +176,120 @@
   
 
   
-  <h2 class="section">dataeng</h2>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge github">github</span>
-      
-      <a class="title" href="https://github.com/apache/airflow/releases/tag/providers-cncf-kubernetes%2F10.21.0" target="_blank" rel="noopener">providers-cncf-kubernetes/10.21.0</a>
-      
-      <span class="age">· 1h ago</span>
-      <span class="src">· airflow-releases</span>
-    </div>
-    
-      <div class="gist">CNCF Kubernetes Airflow provider updated to 10.21.0 for improved orchestration integration</div>
-      <details class="more"><summary></summary><div class="snippet">Release 2026-08-08 of providers</div></details>
-    
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge github">github</span>
-      
-      <a class="title" href="https://github.com/apache/airflow/releases/tag/providers-google%2F22.3.0" target="_blank" rel="noopener">providers-google/22.3.0</a>
-      
-      <span class="age">· 1h ago</span>
-      <span class="src">· airflow-releases</span>
-    </div>
-    
-      <div class="gist">Google Airflow provider released v22.3.0 with updated ecosystem integrations</div>
-      <details class="more"><summary></summary><div class="snippet">Release 2026-08-08 of providers</div></details>
-    
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge github">github</span>
-      
-      <a class="title" href="https://github.com/apache/airflow/releases/tag/constraints-3.3.1rc1" target="_blank" rel="noopener">constraints-3.3.1rc1</a>
-      
-      <span class="age">· 1d ago</span>
-      <span class="src">· airflow-releases</span>
-    </div>
-    
-      <div class="gist">Apache Airflow published 3.3.1rc1 package constraints ensuring reproducible builds</div>
-      <details class="more"><summary></summary><div class="snippet">Constraints for Apache Airflow 3.3.1rc1</div></details>
-    
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge github">github</span>
-      
-      <a class="title" href="https://github.com/apache/airflow/releases/tag/providers-trino%2F6.6.1" target="_blank" rel="noopener">providers-trino/6.6.1</a>
-      
-      <span class="age">· 2d ago</span>
-      <span class="src">· airflow-releases</span>
-    </div>
-    
-      <div class="gist">Trino Airflow provider patch release 6.6.1 improves query engine orchestration</div>
-      <details class="more"><summary></summary><div class="snippet">Release 2026-08-06 of providers</div></details>
-    
-    
-  </div>
-  
-  
-  <h2 class="section">ai</h2>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge rss">rss</span>
-      
-      <a class="title" href="https://simonwillison.net/2026/Aug/9/claude-opus-5-system-prompt" target="_blank" rel="noopener">Quoting Claude Opus 5 system prompt</a>
-      
-      <span class="age">· 17h ago</span>
-      <span class="src">· simonwillison</span>
-    </div>
-    
-      <div class="gist">Claude Opus 5 prompt leaks detail model access timeline and export control impacts</div>
-      <details class="more"><summary></summary><div class="snippet">Claude Fable 5 and Claude Mythos 5 were first released on June 9, 2026. On June 12, 2026, Anthropic suspended access to both models to comply with U.S. Department of Commerce export controls; the Depa…</div></details>
-    
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge rss">rss</span>
-      
-      <a class="title" href="https://huggingface.co/blog/nvidia/magpie-tts-multilingual-voice-agents" target="_blank" rel="noopener">Build Low-Latency Multilingual Voice Agents: Open Weights &amp; Full Deployment Control with NVIDIA Magpie TTS</a>
-      
-      <span class="age">· 1h ago</span>
-      <span class="src">· huggingface-blog</span>
-    </div>
-    
-      <div class="gist">NVIDIA released open-weights Magpie TTS for self-hosted low-latency voice AI</div>
-      
-    
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge rss">rss</span>
-      
-      <a class="title" href="https://simonwillison.net/2026/Aug/8/auto-mode" target="_blank" rel="noopener">Auto mode is now the default in Claude Code for Pro, Max, and Team plans</a>
-      
-      <span class="age">· 1d ago</span>
-      <span class="src">· simonwillison</span>
-    </div>
-    
-      <div class="gist">Anthropic sets Auto mode as default in Claude Code for paid plans to streamline workflows</div>
-      <details class="more"><summary></summary><div class="snippet">Auto mode is now the default in Claude Code for Pro, Max, and Team plans Anthropic are really confident in Claude Code&#39;s auto mode , to the point that they are making it the default setting for new se…</div></details>
-    
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge rss">rss</span>
-      
-      <a class="title" href="https://huggingface.co/blog/muse-glimmer" target="_blank" rel="noopener">Meta is back with Muse Glimmer: local, agentic, multimodal, and open source</a>
-      
-      <span class="age">· 17h ago</span>
-      <span class="src">· huggingface-blog</span>
-    </div>
-    
-      <div class="gist">Meta released Muse Glimmer, an open-source local agentic multimodal model family</div>
-      
-    
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge rss">rss</span>
-      
-      <a class="title" href="https://huggingface.co/blog/MultiverseComputingCAI/efficient-knowledge-distillation" target="_blank" rel="noopener">Making Knowledge Distillation Cheap Enough to Run at Scale</a>
-      
-      <span class="age">· 7h ago</span>
-      <span class="src">· huggingface-blog</span>
-    </div>
-    
-      <div class="gist">New techniques cut knowledge distillation costs to enable scalable smaller model training</div>
-      
-    
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge rss">rss</span>
-      
-      <a class="title" href="https://simonwillison.net/2026/Aug/10/openclaw" target="_blank" rel="noopener">Quoting OpenClaw</a>
-      
-      <span class="age">· 15h ago</span>
-      <span class="src">· simonwillison</span>
-    </div>
-    
-      <div class="gist">AI agent exploit highlights missing API authorization checks in public booking web apps</div>
-      <details class="more"><summary></summary><div class="snippet">The API has zero authorisations checks on cancelling other people&#39;s reservations … I tested this with the person in waitlist position #1 — and it actually went through. So you&#39;ve moved from #4 to #3 a…</div></details>
-    
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge rss">rss</span>
-      
-      <a class="title" href="https://simonwillison.net/2026/Aug/9/github-models-is-now-retired" target="_blank" rel="noopener">GitHub Models is now retired</a>
-      
-      <span class="age">· 18h ago</span>
-      <span class="src">· simonwillison</span>
-    </div>
-    
-      <div class="gist">GitHub permanently retired GitHub Models playground service breaking dependent CI workflows</div>
-      <details class="more"><summary></summary><div class="snippet">GitHub Models is now retired I missed this news until today, when the GitHub Actions run for my simonw/research repository failed with this error message: GitHub Models is temporarily unavailable as p…</div></details>
-    
-    
-  </div>
-  
-  <div class="item">
-    <div class="top">
-      <span class="badge rss">rss</span>
-      
-      <a class="title" href="https://simonwillison.net/2026/Aug/9/sqlite-text-history-prototype" target="_blank" rel="noopener">SQLite compressed text-history prototypes</a>
-      
-      <span class="age">· 19h ago</span>
-      <span class="src">· simonwillison</span>
-    </div>
-    
-      <div class="gist">Prototyping SQLite zstd text compression for efficient database revision history storage</div>
-      <details class="more"><summary></summary><div class="snippet">Research: SQLite compressed text-history prototypes I&#39;m perennially interested in options for storing revision histories in relational databases. While out on a dog walk I had a new idea: how about ta…</div></details>
-    
-    
-  </div>
-  
+
   
 
+  
+  <section class="type">
+    <h2 class="section">dataeng <span class="count">· 4</span></h2>
+    <p class="type-summary">Apache Airflow published maintenance releases across several key integration providers, including Google, Trino, and CNCF Kubernetes packages. Additionally, constraint definitions for Airflow 3.3.1rc1 were released to stabilize python dependency trees. These updates maintain compatibility and reliable execution for core orchestrations.</p>
+    
+    <details class="items-drawer">
+      <summary>4 items</summary>
+      <div class="drawer-body">
+        
+  <div class="iline">
+    <a href="https://github.com/apache/airflow/releases/tag/providers-cncf-kubernetes%2F10.21.0" target="_blank" rel="noopener">providers-cncf-kubernetes/10.21.0</a>
+    
+    <div class="iline-meta"><span class="badge github">github</span>
+      airflow-releases · 2h ago — Apache Airflow CNCF Kubernetes provider package version 10.21.0 released.</div>
+  </div>
+  
+  <div class="iline">
+    <a href="https://github.com/apache/airflow/releases/tag/providers-google%2F22.3.0" target="_blank" rel="noopener">providers-google/22.3.0</a>
+    
+    <div class="iline-meta"><span class="badge github">github</span>
+      airflow-releases · 2h ago — Apache Airflow Google provider package version 22.3.0 released.</div>
+  </div>
+  
+  <div class="iline">
+    <a href="https://github.com/apache/airflow/releases/tag/constraints-3.3.1rc1" target="_blank" rel="noopener">constraints-3.3.1rc1</a>
+    
+    <div class="iline-meta"><span class="badge github">github</span>
+      airflow-releases · 1d ago — Apache Airflow publishes constraint definitions for release candidate 3.3.1rc1.</div>
+  </div>
+  
+  <div class="iline">
+    <a href="https://github.com/apache/airflow/releases/tag/providers-trino%2F6.6.1" target="_blank" rel="noopener">providers-trino/6.6.1</a>
+    
+    <div class="iline-meta"><span class="badge github">github</span>
+      airflow-releases · 2d ago — Apache Airflow Trino provider package version 6.6.1 released.</div>
+  </div>
+  
+      </div>
+    </details>
+    
+  </section>
+  
+  <section class="type">
+    <h2 class="section">ai <span class="count">· 8</span></h2>
+    <p class="type-summary">AI tools and models continue rapid operational changes, led by Anthropic setting Auto mode as the default for paid Claude Code tiers and Meta introducing Muse Glimmer for local agentic workflows. Infrastructure landscape shifts occurred with the retirement of GitHub Models breaking automated pipelines, while NVIDIA expanded voice stack capabilities with open-weights Magpie TTS. Meanwhile, updates in research explore low-cost knowledge distillation and compressed text history prototypes in SQLite.</p>
+    
+    <details class="items-drawer">
+      <summary>8 items</summary>
+      <div class="drawer-body">
+        
+  <div class="iline">
+    <a href="https://simonwillison.net/2026/Aug/9/claude-opus-5-system-prompt" target="_blank" rel="noopener">Quoting Claude Opus 5 system prompt</a>
+    
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      simonwillison · 18h ago — Details emerge regarding Claude 5 prompt history and export control suspensions.</div>
+  </div>
+  
+  <div class="iline">
+    <a href="https://huggingface.co/blog/nvidia/magpie-tts-multilingual-voice-agents" target="_blank" rel="noopener">Build Low-Latency Multilingual Voice Agents: Open Weights &amp; Full Deployment Control with NVIDIA Magpie TTS</a>
+    
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      huggingface-blog · 1h ago — NVIDIA introduces open-weight Magpie TTS for low-latency multilingual voice agents.</div>
+  </div>
+  
+  <div class="iline">
+    <a href="https://simonwillison.net/2026/Aug/8/auto-mode" target="_blank" rel="noopener">Auto mode is now the default in Claude Code for Pro, Max, and Team plans</a>
+    
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      simonwillison · 1d ago — Anthropic makes Auto mode the default setting across paid Claude Code plans.</div>
+  </div>
+  
+  <div class="iline">
+    <a href="https://huggingface.co/blog/muse-glimmer" target="_blank" rel="noopener">Meta is back with Muse Glimmer: local, agentic, multimodal, and open source</a>
+    
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      huggingface-blog · 17h ago — Meta releases Muse Glimmer, an open-source, local agentic multimodal model.</div>
+  </div>
+  
+  <div class="iline">
+    <a href="https://huggingface.co/blog/MultiverseComputingCAI/efficient-knowledge-distillation" target="_blank" rel="noopener">Making Knowledge Distillation Cheap Enough to Run at Scale</a>
+    
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      huggingface-blog · 7h ago — New approach lowers costs to run knowledge distillation at scale.</div>
+  </div>
+  
+  <div class="iline">
+    <a href="https://simonwillison.net/2026/Aug/10/openclaw" target="_blank" rel="noopener">Quoting OpenClaw</a>
+    
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      simonwillison · 15h ago — OpenClaw testing exposes lack of authorization checks in web service APIs.</div>
+  </div>
+  
+  <div class="iline">
+    <a href="https://simonwillison.net/2026/Aug/9/github-models-is-now-retired" target="_blank" rel="noopener">GitHub Models is now retired</a>
+    
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      simonwillison · 19h ago — GitHub officially retires GitHub Models feature, breaking workflow integrations.</div>
+  </div>
+  
+  <div class="iline">
+    <a href="https://simonwillison.net/2026/Aug/9/sqlite-text-history-prototype" target="_blank" rel="noopener">SQLite compressed text-history prototypes</a>
+    
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      simonwillison · 19h ago — Prototyping compressed JSON array text-history storage inside SQLite.</div>
+  </div>
+  
+      </div>
+    </details>
+    
+  </section>
+  
   
 
   
