@@ -20,6 +20,7 @@ from .render import TRACKER_SPECS, _aqi_band, humanize_age, select_digest
 from .db import now_utc
 
 DEAD_FEED_THRESHOLD = 5
+EMBED_ITEM_CAP = 500  # cap items embedded in the explorer to keep the file lean
 
 
 def _collect(conn: sqlite3.Connection) -> dict:
@@ -72,8 +73,11 @@ def _collect(conn: sqlite3.Connection) -> dict:
             "SELECT cluster_id, COUNT(*) n FROM items WHERE state='new' GROUP BY cluster_id"
         )
     }
+    total_items = conn.execute("SELECT COUNT(*) FROM items").fetchone()[0]
     items = []
-    for r in conn.execute("SELECT * FROM items ORDER BY score DESC").fetchall():
+    for r in conn.execute(
+        "SELECT * FROM items ORDER BY score DESC LIMIT ?", (EMBED_ITEM_CAP,)
+    ).fetchall():
         snippet = (r["raw_text"] or "").strip()
         items.append(
             {
@@ -163,14 +167,17 @@ def _collect(conn: sqlite3.Connection) -> dict:
 
     n_ok = sum(1 for s in sources if s["status"] == "ok")
     n_dead = sum(1 for s in sources if s["status"] == "dead")
-    n_new = sum(1 for i in items if i["state"] == "new")
-    n_dig = sum(1 for i in items if i["state"] == "digested")
-    n_scored = sum(1 for i in items if i["score"] is not None)
+    counts_by_state = dict(
+        conn.execute("SELECT state, COUNT(*) FROM items GROUP BY state").fetchall()
+    )
+    n_new = counts_by_state.get("new", 0)
+    n_dig = counts_by_state.get("digested", 0)
+    n_scored = conn.execute("SELECT COUNT(*) FROM items WHERE score IS NOT NULL").fetchone()[0]
     n_merged = len(multi)
     digest_count = digest["counts"]["news"] + digest["counts"]["newsletters"]
 
     pipeline = [
-        {"key": "fetch", "label": "Fetch", "value": len(items),
+        {"key": "fetch", "label": "Fetch", "value": total_items,
          "sub": f"{n_ok}/{len(sources)} feeds ok"},
         {"key": "dedup", "label": "Dedup", "value": len(cluster_size),
          "sub": f"{n_merged} merged"},
@@ -183,7 +190,7 @@ def _collect(conn: sqlite3.Connection) -> dict:
     ]
 
     summary = {
-        "items_total": len(items),
+        "items_total": total_items,
         "sources_total": len(sources),
         "sources_ok": n_ok,
         "sources_dead": n_dead,
@@ -632,7 +639,11 @@ function renderRows(){
       </div>
     </div>`;
   }).join("");
-  if(list.length>300)rows.insertAdjacentHTML("beforeend",`<div class="empty">showing first 300 of ${list.length}</div>`);
+  let foot="";
+  if(list.length>300) foot="showing first 300 of "+list.length+" filtered";
+  if(DATA.items.length < (DATA.summary.items_total||DATA.items.length))
+    foot += (foot?" · ":"")+"explorer holds the top "+DATA.items.length+" of "+DATA.summary.items_total+" items by score";
+  if(foot) rows.insertAdjacentHTML("beforeend",`<div class="empty">${foot}</div>`);
 }
 
 /* ---- sources ---- */
