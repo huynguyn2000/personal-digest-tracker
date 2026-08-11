@@ -81,4 +81,4 @@ digest:
   render_window_days: 4
   keyword_score_cap: 3.0
   # Section ordering in the HTML. Tags not listed fall into "other".
-  section_order: [aws, dataeng, ai]
+  section_order: [watching, aws, dataeng, ai]

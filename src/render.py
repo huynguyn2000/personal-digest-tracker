@@ -274,6 +274,24 @@ def select_digest(conn: sqlite3.Connection) -> dict:
     # hard cut for scored news; newsletters get a floor (always included)
     top_news = news[: int(dcfg["max_items"])]
 
+    # floor for "pinned" sources you follow on purpose (YouTube channels, or any
+    # source with `pin: true`): always surface their latest in-window items, even
+    # if their score fell below the max_items cut.
+    def is_pinned(r) -> bool:
+        src = srcmap.get(r["source_id"], {})
+        return bool(src.get("pin")) or src.get("type") == "youtube"
+
+    top_ids = {r["id"] for r in top_news}
+    pin_count: dict[str, int] = {}
+    for r in sorted(news, key=lambda x: x["published_at"], reverse=True):
+        if r["id"] in top_ids or not is_pinned(r):
+            continue
+        if pin_count.get(r["source_id"], 0) >= 2:
+            continue
+        pin_count[r["source_id"]] = pin_count.get(r["source_id"], 0) + 1
+        top_news.append(r)
+        top_ids.add(r["id"])
+
     # group into sections
     sections: dict[str, list] = {}
     for r in top_news:

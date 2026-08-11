@@ -99,8 +99,9 @@ sources:
   - id: tubakhuym-yt              # @TùBàKhuỳm — Vietnamese AI / agents
     type: youtube
     channel_id: UCLDxPaAsHbsLPMms6i4fMdw
-    tags: [ai]
+    tags: [watching, ai]
     weight: 1.0
+    pin: true                     # always surface the latest video
 
   # TODO: add more channels. Paste a channel URL and it can be resolved to a
   # channel_id (the UCxxxxxxxxxxxxxxxxxxxxxx string) from the page source.
