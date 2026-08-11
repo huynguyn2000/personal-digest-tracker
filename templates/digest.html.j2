@@ -110,6 +110,11 @@
   .type-summary a { color:var(--accent); text-decoration:none; font-weight:600;
     font-variant-numeric:tabular-nums; padding:0 1px; }
   .type-summary a:hover { text-decoration:underline; }
+  .top-pick { font-size:.95rem; margin:2px 0 10px; line-height:1.5; }
+  .top-pick .star { color:#e8a53d; }
+  .top-pick a { color:var(--fg); font-weight:650; text-decoration:none; }
+  .top-pick a:hover { color:var(--accent); text-decoration:underline; }
+  .top-pick .tp-gist { color:var(--muted); }
   details.items-drawer { margin:2px 0 10px; }
   details.items-drawer > summary { cursor:pointer; color:var(--accent); font-size:.8rem;
     list-style:none; padding:2px 0; }
@@ -227,10 +232,13 @@
   </div>
   {% endmacro %}
 
-  {% macro type_block(display, tag, summary_html, entries) %}
+  {% macro type_block(display, tag, summary_html, top_pick, entries) %}
   <section class="type" id="sec-{{ tag }}">
     <h2 class="section">{{ display }} <span class="count">· {{ entries | length }}</span></h2>
     {% if summary_html %}<p class="type-summary">{{ summary_html }}</p>{% endif %}
+    {% if top_pick %}
+    <div class="top-pick"><span class="star" title="Top pick">★</span> {% if top_pick.url %}<a href="{{ top_pick.url }}" target="_blank" rel="noopener">{{ top_pick.title }}</a>{% else %}{{ top_pick.title }}{% endif %}{% if top_pick.summary %} <span class="tp-gist">— {{ top_pick.summary }}</span>{% endif %}</div>
+    {% endif %}
     {% if entries %}
     <details class="items-drawer"{% if not summary_html %} open{% endif %}>
       <summary>{{ entries | length }} item{{ 's' if entries | length != 1 }}</summary>
@@ -242,8 +250,8 @@
   </section>
   {% endmacro %}
 
-  {% for section in sections %}{{ type_block(SECTION_NAMES.get(section.tag, section.tag), section.tag, section.summary_html, section.entries) }}{% endfor %}
-  {% if newsletters %}{{ type_block('Newsletters', 'newsletters', newsletter_summary_html, newsletters) }}{% endif %}
+  {% for section in sections %}{{ type_block(SECTION_NAMES.get(section.tag, section.tag), section.tag, section.summary_html, section.top_pick, section.entries) }}{% endfor %}
+  {% if newsletters %}{{ type_block('Newsletters', 'newsletters', newsletter_summary_html, none, newsletters) }}{% endif %}
 
   {% if not sections and not newsletters %}
   <p style="color:var(--muted)">Nothing in the digest window. Feeds may be quiet, or run the fetchers.</p>

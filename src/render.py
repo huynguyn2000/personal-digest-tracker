@@ -328,9 +328,9 @@ def select_digest(conn: sqlite3.Connection) -> dict:
     def _summary_and_refs(tag):
         raw = sec_summaries.get(tag)
         if isinstance(raw, dict):
-            text, ref_ids = raw.get("summary"), raw.get("refs", [])
+            text, ref_ids, tp = raw.get("summary"), raw.get("refs", []), raw.get("top_pick")
         else:  # legacy: plain string, no refs
-            text, ref_ids = raw, []
+            text, ref_ids, tp = raw, [], None
         refs, n = [], 1
         for rid in ref_ids:
             v = id_map.get(rid)
@@ -338,12 +338,13 @@ def select_digest(conn: sqlite3.Connection) -> dict:
                 refs.append({"n": n, "source_id": v["source_id"], "url": v["url"],
                              "title": v["title"]})
                 n += 1
-        return text, refs
+        return text, refs, tp
 
     for sec in ordered_sections:
-        text, refs = _summary_and_refs(sec["tag"])
+        text, refs, tp = _summary_and_refs(sec["tag"])
         sec["summary_html"] = _linkify_summary(text, refs)
-    _nl_text, _nl_refs = _summary_and_refs("newsletter")
+        sec["top_pick"] = id_map.get(tp) if tp else None
+    _nl_text, _nl_refs, _ = _summary_and_refs("newsletter")
     newsletter_summary_html = _linkify_summary(_nl_text, _nl_refs)
 
     rendered_ids = [r["id"] for r in top_news] + [r["id"] for r in newsletters]

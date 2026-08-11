@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Morning Digest — 2026-08-11 23:30 +07</title>
+<title>Morning Digest — 2026-08-11 23:32 +07</title>
 <meta name="description" content="Your morning digest — AWS, data engineering & AI news, deduped and summarized, with FX / weather / air-quality trackers.">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><text x="1" y="14" font-size="14">📰</text></svg>'>
@@ -110,6 +110,11 @@
   .type-summary a { color:var(--accent); text-decoration:none; font-weight:600;
     font-variant-numeric:tabular-nums; padding:0 1px; }
   .type-summary a:hover { text-decoration:underline; }
+  .top-pick { font-size:.95rem; margin:2px 0 10px; line-height:1.5; }
+  .top-pick .star { color:#e8a53d; }
+  .top-pick a { color:var(--fg); font-weight:650; text-decoration:none; }
+  .top-pick a:hover { color:var(--accent); text-decoration:underline; }
+  .top-pick .tp-gist { color:var(--muted); }
   details.items-drawer { margin:2px 0 10px; }
   details.items-drawer > summary { cursor:pointer; color:var(--accent); font-size:.8rem;
     list-style:none; padding:2px 0; }
@@ -142,7 +147,7 @@
   <header class="topbar">
     <div>
       <h1>Morning Digest</h1>
-      <div class="sub">2026-08-11 23:30 +07 · 12 items · 0 newsletters<span class="fresh" id="fresh" data-generated="2026-08-11T16:30:05+00:00"></span></div>
+      <div class="sub">2026-08-11 23:32 +07 · 10 items · 0 newsletters<span class="fresh" id="fresh" data-generated="2026-08-11T16:32:23+00:00"></span></div>
       <div class="unseen-note" id="unseenNote" hidden></div>
     </div>
     <button class="theme-btn" id="themeBtn" title="Toggle light / dark" aria-label="Toggle theme">◐</button>
@@ -154,13 +159,13 @@
   
   <nav class="jump" aria-label="Jump to section">
     <a href="#trackers">Trackers</a>
-    <a href="#sec-watching">📺 Watching</a><a href="#sec-aws">AWS</a><a href="#sec-dataeng">Data Engineering</a><a href="#sec-ai">AI</a>
+    <a href="#sec-aws">AWS</a><a href="#sec-dataeng">Data Engineering</a><a href="#sec-ai">AI</a>
   </nav>
   
 
   
   <div class="overview">
-    <span class="ov-label">Today · Tue 11 Aug</span>Today&#39;s updates focus on expanding foundation model availability across cloud services and optimizing data infrastructure. Key highlights include new open-weight model deployments on AWS SageMaker and maintenance releases for core data engineering tools like Apache Airflow.
+    <span class="ov-label">Today · Tue 11 Aug</span>AWS introduced new operational features for instance health, agent authentication, and graphics streaming. Meanwhile, data engineering tools saw routine patch updates across Airflow providers while AI developments spanned database history compression, LLM game creation, and incident timelines.
   </div>
   
 
@@ -183,8 +188,8 @@
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 14.4,3.0 25.8,3.0 37.2,3.0 48.6,3.0 60.0,29.0 71.4,29.0 82.8,29.0 94.2,29.0 105.6,29.0 117.0,29.0 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 14.4,3.0 25.8,3.0 37.2,3.0 48.6,3.0 60.0,29.0 71.4,29.0 82.8,29.0 94.2,29.0 105.6,29.0 117.0,29.0" class="spark-line"/>
+        <polygon points="3,29 3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,29.0 65.2,29.0 75.5,29.0 85.9,29.0 96.3,29.0 106.6,29.0 117.0,29.0 117,29" class="spark-area"/>
+        <polyline points="3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,29.0 65.2,29.0 75.5,29.0 85.9,29.0 96.3,29.0 106.6,29.0 117.0,29.0" class="spark-line"/>
         <circle cx="117.0" cy="29.0" r="2.4" class="spark-dot"/>
       </svg>
       
@@ -200,8 +205,8 @@
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 14.4,3.0 25.8,3.0 37.2,3.0 48.6,3.0 60.0,29.0 71.4,29.0 82.8,29.0 94.2,29.0 105.6,29.0 117.0,29.0 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 14.4,3.0 25.8,3.0 37.2,3.0 48.6,3.0 60.0,29.0 71.4,29.0 82.8,29.0 94.2,29.0 105.6,29.0 117.0,29.0" class="spark-line"/>
+        <polygon points="3,29 3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,29.0 65.2,29.0 75.5,29.0 85.9,29.0 96.3,29.0 106.6,29.0 117.0,29.0 117,29" class="spark-area"/>
+        <polyline points="3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,29.0 65.2,29.0 75.5,29.0 85.9,29.0 96.3,29.0 106.6,29.0 117.0,29.0" class="spark-line"/>
         <circle cx="117.0" cy="29.0" r="2.4" class="spark-dot"/>
       </svg>
       
@@ -217,14 +222,14 @@
       <div class="label"><a href="https://www.windy.com/?10.823,106.630,8" target="_blank" rel="noopener" title="Open a larger time-window view">Temp ↗</a></div>
       <div class="value-row">
         <span class="value">🌡 26°C</span>
-        <span class="delta up" title="vs previous reading">▲ 6.0%</span>
+        
       </div>
       
       <div class="tsub">H 29° · L 25°</div>
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,9.1 14.4,8.0 25.8,8.0 37.2,4.5 48.6,3.0 60.0,25.2 71.4,28.6 82.8,29.0 94.2,29.0 105.6,29.0 117.0,23.3 117,29" class="spark-area"/>
-        <polyline points="3.0,9.1 14.4,8.0 25.8,8.0 37.2,4.5 48.6,3.0 60.0,25.2 71.4,28.6 82.8,29.0 94.2,29.0 105.6,29.0 117.0,23.3" class="spark-line"/>
+        <polygon points="3,29 3.0,9.1 13.4,8.0 23.7,8.0 34.1,4.5 44.5,3.0 54.8,25.2 65.2,28.6 75.5,29.0 85.9,29.0 96.3,29.0 106.6,23.3 117.0,23.3 117,29" class="spark-area"/>
+        <polyline points="3.0,9.1 13.4,8.0 23.7,8.0 34.1,4.5 44.5,3.0 54.8,25.2 65.2,28.6 75.5,29.0 85.9,29.0 96.3,29.0 106.6,23.3 117.0,23.3" class="spark-line"/>
         <circle cx="117.0" cy="23.3" r="2.4" class="spark-dot"/>
       </svg>
       
@@ -240,8 +245,8 @@
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 14.4,3.0 25.8,3.0 37.2,3.0 48.6,3.0 60.0,29.0 71.4,29.0 82.8,29.0 94.2,29.0 105.6,29.0 117.0,29.0 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 14.4,3.0 25.8,3.0 37.2,3.0 48.6,3.0 60.0,29.0 71.4,29.0 82.8,29.0 94.2,29.0 105.6,29.0 117.0,29.0" class="spark-line"/>
+        <polygon points="3,29 3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,29.0 65.2,29.0 75.5,29.0 85.9,29.0 96.3,29.0 106.6,29.0 117.0,29.0 117,29" class="spark-area"/>
+        <polyline points="3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,29.0 65.2,29.0 75.5,29.0 85.9,29.0 96.3,29.0 106.6,29.0 117.0,29.0" class="spark-line"/>
         <circle cx="117.0" cy="29.0" r="2.4" class="spark-dot"/>
       </svg>
       
@@ -251,14 +256,14 @@
       <div class="label"><a href="https://aqicn.org/city/vietnam/ho-chi-minh-city/" target="_blank" rel="noopener" title="Open a larger time-window view">AQI ↗</a></div>
       <div class="value-row">
         <span class="value">71</span>
-        <span class="delta down" title="vs previous reading">▼ 5.3%</span>
+        
       </div>
       <div class="band"><span class="dot" style="background:#c9a227"></span>Moderate</div>
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 14.4,3.0 25.8,3.0 37.2,3.0 48.6,3.0 60.0,26.8 71.4,26.0 82.8,26.0 94.2,26.0 105.6,26.0 117.0,29.0 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 14.4,3.0 25.8,3.0 37.2,3.0 48.6,3.0 60.0,26.8 71.4,26.0 82.8,26.0 94.2,26.0 105.6,26.0 117.0,29.0" class="spark-line"/>
+        <polygon points="3,29 3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,26.8 65.2,26.0 75.5,26.0 85.9,26.0 96.3,26.0 106.6,29.0 117.0,29.0 117,29" class="spark-area"/>
+        <polyline points="3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,26.8 65.2,26.0 75.5,26.0 85.9,26.0 96.3,26.0 106.6,29.0 117.0,29.0" class="spark-line"/>
         <circle cx="117.0" cy="29.0" r="2.4" class="spark-dot"/>
       </svg>
       
@@ -268,14 +273,14 @@
       <div class="label">UV</div>
       <div class="value-row">
         <span class="value">☀️ 9</span>
-        <span class="delta up" title="vs previous reading">▲ 13.3%</span>
+        
       </div>
       <div class="band"><span class="dot" style="background:#d63b5b"></span>Very high</div>
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,29.0 117.0,3.0 117,29" class="spark-area"/>
-        <polyline points="3.0,29.0 117.0,3.0" class="spark-line"/>
+        <polygon points="3,29 3.0,29.0 60.0,3.0 117.0,3.0 117,29" class="spark-area"/>
+        <polyline points="3.0,29.0 60.0,3.0 117.0,3.0" class="spark-line"/>
         <circle cx="117.0" cy="3.0" r="2.4" class="spark-dot"/>
       </svg>
       
@@ -296,57 +301,39 @@
   
 
   
-  <section class="type" id="sec-watching">
-    <h2 class="section">📺 Watching <span class="count">· 1</span></h2>
-    
-    
-    <details class="items-drawer" open>
-      <summary>1 item</summary>
-      <div class="drawer-body">
-        
-  <div class="iline" data-pub="2026-08-09T14:38:58+00:00">
-    <a href="https://youtube.com/watch?v=yF_su3zJSUQ" target="_blank" rel="noopener">Để wayfinder chỉ đường dẫn lối!</a>
-    
-    <div class="iline-gist">Discussion on using Matt Pocock&#39;s Wayfinder framework to turn vague game ideas into prototypes.</div>
-    <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 2d ago</div>
-  </div>
-  
-      </div>
-    </details>
-    
-  </section>
-  
   <section class="type" id="sec-aws">
     <h2 class="section">AWS <span class="count">· 3</span></h2>
-    <p class="type-summary">Amazon SageMaker JumpStart expanded its catalog with multiple open-weight models including GLM-5.2 FP8, Nemotron-Nano, FLUX.2, and Gemma-4 [1], [2], [3]. Optimization remains a key theme, featured in AI-powered cost reduction agents for Kinesis [4] and cluster tuning for Fortnite analytics in OpenSearch [5]. Additionally, AWS highlighted recent community events and Bedrock capabilities in its weekly roundup [6].</p>
+    <p class="type-summary">Amazon EC2 now includes application status checks to detect high-level service failures like unresponsive web servers or Docker issues <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-ec2-application-status-checks" target="_blank" rel="noopener" title="aws-whats-new — Amazon EC2 introduces application status checks">[1]</a>. AWS also expanded the Agent Toolkit to support Cognito integration directly into AI coding workflows <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/aws-auth-agent-skill" target="_blank" rel="noopener" title="aws-whats-new — Amazon Cognito now available as a skill in the Agent Toolkit for AWS">[2]</a>. Additionally, GameLift Streams introduced managed shader caching to optimize startup performance across streaming locations without code modifications <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/Amazon-GameLift-Streams-Shader-Caching" target="_blank" rel="noopener" title="aws-whats-new — Amazon GameLift Streams Now Offers Service-managed Shader Caching">[3]</a>.</p>
+    
+    <div class="top-pick"><span class="star" title="Top pick">★</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-ec2-application-status-checks" target="_blank" rel="noopener">Amazon EC2 introduces application status checks</a> <span class="tp-gist">— Amazon EC2 adds application status checks to detect application-level downtime.</span></div>
+    
     
     <details class="items-drawer">
       <summary>3 items</summary>
       <div class="drawer-body">
         
-  <div class="iline" data-pub="2026-08-10T23:02:00+00:00">
-    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-ec2-high-memory-u7i-south-america" target="_blank" rel="noopener">Amazon EC2 High Memory U7i instances now available in AWS South America (São Paulo) region</a>
+  <div class="iline" data-pub="2026-08-10T21:15:00+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/Amazon-GameLift-Streams-Shader-Caching" target="_blank" rel="noopener">Amazon GameLift Streams Now Offers Service-managed Shader Caching</a>
     
-    
+    <div class="iline-gist">Amazon GameLift Streams introduces service-managed shader caching across streaming locations.</div>
     <div class="iline-meta"><span class="badge rss">rss</span>
-      aws-whats-new · 17h ago</div>
+      aws-whats-new · 19h ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-08-10T15:51:00+00:00">
-    <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-opensearch-serverless-supports-10000-collections-per-collection-group" target="_blank" rel="noopener">Amazon OpenSearch Serverless now supports up to 10,000 collections per collection group</a>
+  <div class="iline" data-pub="2026-08-10T17:47:00+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-ec2-application-status-checks" target="_blank" rel="noopener">Amazon EC2 introduces application status checks</a>
     
-    
+    <div class="iline-gist">Amazon EC2 adds application status checks to detect application-level downtime.</div>
     <div class="iline-meta"><span class="badge rss">rss</span>
-      aws-whats-new · 1d ago</div>
+      aws-whats-new · 22h ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-08-10T13:00:00+00:00">
-    <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/aws-drs-linux-uefi" target="_blank" rel="noopener">AWS Elastic Disaster Recovery now preserves UEFI boot mode for Linux servers</a>
+  <div class="iline" data-pub="2026-08-07T18:00:48+00:00">
+    <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/aws-auth-agent-skill" target="_blank" rel="noopener">Amazon Cognito now available as a skill in the Agent Toolkit for AWS</a>
     
-    <div class="iline-gist">AWS DRS preserves UEFI boot mode for restored Linux instances.</div>
+    <div class="iline-gist">Amazon Cognito skill added to AWS Agent Toolkit to aid AI coding agents in auth setup.</div>
     <div class="iline-meta"><span class="badge rss">rss</span>
-      aws-whats-new · 1d ago</div>
+      aws-whats-new · 3d ago</div>
   </div>
   
       </div>
@@ -356,32 +343,35 @@
   
   <section class="type" id="sec-dataeng">
     <h2 class="section">Data Engineering <span class="count">· 3</span></h2>
-    <p class="type-summary">Apache Airflow updates include Kubernetes provider fixes to delay pod deletion [1] and Google provider fixes ensuring proper team-scoped secret resolution [2]. Python package constraints were also updated for Airflow 3.3.1rc1 [3].</p>
+    <p class="type-summary">Apache Airflow released minor bugfix updates for several ecosystem providers. The Yandex provider patch addresses team-scoped Lockbox secret name behavior <a href="https://airflow.apache.org/docs/apache-airflow-providers-yandex/4.5.1/changelog.html" target="_blank" rel="noopener" title="airflow-releases — providers-yandex/4.5.1">[1]</a>. Updates to the Weaviate provider fix input data validation prior to rendering <a href="https://airflow.apache.org/docs/apache-airflow-providers-weaviate/3.4.1/changelog.html" target="_blank" rel="noopener" title="airflow-releases — providers-weaviate/3.4.1">[2]</a>, while the Teradata provider resolves template field string initialization errors <a href="https://airflow.apache.org/docs/apache-airflow-providers-teradata/3.6.2/changelog.html" target="_blank" rel="noopener" title="airflow-releases — providers-teradata/3.6.2">[3]</a>.</p>
+    
+    <div class="top-pick"><span class="star" title="Top pick">★</span> <a href="https://airflow.apache.org/docs/apache-airflow-providers-weaviate/3.4.1/changelog.html" target="_blank" rel="noopener">providers-weaviate/3.4.1</a> <span class="tp-gist">— Airflow Weaviate provider 3.4.1 fixes operator input validation before rendering.</span></div>
+    
     
     <details class="items-drawer">
       <summary>3 items</summary>
       <div class="drawer-body">
         
-  <div class="iline" data-pub="2026-08-08T06:51:52+00:00">
-    <a href="https://airflow.apache.org/docs/apache-airflow-providers-trino/6.6.1/changelog.html" target="_blank" rel="noopener">providers-trino/6.6.1</a>
-    
-    <div class="iline-gist">Released Apache Airflow Trino provider v6.6.1.</div>
-    <div class="iline-meta"><span class="badge github">github</span>
-      airflow-releases · 3d ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-08-08T06:51:47+00:00">
-    <a href="https://airflow.apache.org/docs/apache-airflow-providers-snowflake/6.16.0/changelog.html" target="_blank" rel="noopener">providers-snowflake/6.16.0</a>
-    
-    
-    <div class="iline-meta"><span class="badge github">github</span>
-      airflow-releases · 3d ago</div>
-  </div>
-  
   <div class="iline" data-pub="2026-08-08T06:51:54+00:00">
     <a href="https://airflow.apache.org/docs/apache-airflow-providers-yandex/4.5.1/changelog.html" target="_blank" rel="noopener">providers-yandex/4.5.1</a>
     
+    <div class="iline-gist">Airflow Yandex provider 4.5.1 fixes team-scoped Lockbox secret name behavior.</div>
+    <div class="iline-meta"><span class="badge github">github</span>
+      airflow-releases · 3d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-08-08T06:51:53+00:00">
+    <a href="https://airflow.apache.org/docs/apache-airflow-providers-weaviate/3.4.1/changelog.html" target="_blank" rel="noopener">providers-weaviate/3.4.1</a>
     
+    <div class="iline-gist">Airflow Weaviate provider 3.4.1 fixes operator input validation before rendering.</div>
+    <div class="iline-meta"><span class="badge github">github</span>
+      airflow-releases · 3d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-08-08T06:51:51+00:00">
+    <a href="https://airflow.apache.org/docs/apache-airflow-providers-teradata/3.6.2/changelog.html" target="_blank" rel="noopener">providers-teradata/3.6.2</a>
+    
+    <div class="iline-gist">Airflow Teradata provider 3.6.2 fixes template field initialization in BteqOperator.</div>
     <div class="iline-meta"><span class="badge github">github</span>
       airflow-releases · 3d ago</div>
   </div>
@@ -392,51 +382,46 @@
   </section>
   
   <section class="type" id="sec-ai">
-    <h2 class="section">AI <span class="count">· 5</span></h2>
-    <p class="type-summary">New open models and deployment options are expanding AI development, led by Meta&#39;s Apache 2.0-licensed 30B Muse Glimmer model [1] and NVIDIA Magpie TTS for voice agents [2]. Meanwhile, system prompt details surfaced regarding export control suspensions for Anthropic&#39;s Claude models [3].</p>
+    <h2 class="section">AI <span class="count">· 4</span></h2>
+    <p class="type-summary">Discussions around AI systems highlighted an operational timeline of OpenAI&#39;s accidental request surge against Hugging Face <a href="https://simonwillison.net/2026/Aug/8/now-we-have-a-timeline-of-the-openai-accidental-attack-against-h" target="_blank" rel="noopener" title="simonwillison — Now we have a timeline of the OpenAI accidental attack against Hugging Face">[1]</a>. Developers explored single-prompt game generation using combined LLM toolchains <a href="https://simonwillison.net/2026/Aug/7/moonlight-mayhem" target="_blank" rel="noopener" title="simonwillison — Moonlight &amp; Mayhem (Raccoon Heist by Codex + GPT-5.6 Sol Ultra)">[2]</a> and evaluated AI tutoring behavior in pedagogical settings <a href="https://huggingface.co/blog/allenai/tutormoments" target="_blank" rel="noopener" title="huggingface-blog — TutorMoments: Do AI tutors know when to help and when to hold back?">[3]</a>. Experiments in SQLite database storage also examined compressed JSON arrays for revision histories <a href="https://simonwillison.net/2026/Aug/9/sqlite-text-history-prototype" target="_blank" rel="noopener" title="simonwillison — SQLite compressed text-history prototypes">[4]</a>.</p>
+    
+    <div class="top-pick"><span class="star" title="Top pick">★</span> <a href="https://simonwillison.net/2026/Aug/8/now-we-have-a-timeline-of-the-openai-accidental-attack-against-h" target="_blank" rel="noopener">Now we have a timeline of the OpenAI accidental attack against Hugging Face</a> <span class="tp-gist">— Analysis of the timeline surrounding OpenAI&#39;s accidental traffic spike on Hugging Face.</span></div>
+    
     
     <details class="items-drawer">
-      <summary>5 items</summary>
+      <summary>4 items</summary>
       <div class="drawer-body">
         
-  <div class="iline" data-pub="2026-08-08T22:36:03+00:00">
-    <a href="https://simonwillison.net/2026/Aug/8/auto-mode" target="_blank" rel="noopener">Auto mode is now the default in Claude Code for Pro, Max, and Team plans</a>
+  <div class="iline" data-pub="2026-08-09T22:05:00+00:00">
+    <a href="https://simonwillison.net/2026/Aug/9/sqlite-text-history-prototype" target="_blank" rel="noopener">SQLite compressed text-history prototypes</a>
     
-    <div class="iline-gist">Claude Code makes Auto mode the default setting across paid plans.</div>
-    <div class="iline-meta"><span class="badge rss">rss</span>
-      simonwillison · 2d ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-08-10T00:00:00+00:00">
-    <a href="https://huggingface.co/blog/muse-glimmer" target="_blank" rel="noopener">Meta is back with Muse Glimmer: local, agentic, multimodal, and open source</a>
-    
-    <div class="iline-gist">Meta introduces Muse Glimmer, an open-source local agentic model.</div>
-    <div class="iline-meta"><span class="badge rss">rss</span>
-      huggingface-blog · 1d ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-08-10T10:05:36+00:00">
-    <a href="https://huggingface.co/blog/MultiverseComputingCAI/efficient-knowledge-distillation" target="_blank" rel="noopener">Making Knowledge Distillation Cheap Enough to Run at Scale</a>
-    
-    <div class="iline-gist">Research explores cost reduction techniques for knowledge distillation at scale.</div>
-    <div class="iline-meta"><span class="badge rss">rss</span>
-      huggingface-blog · 1d ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-08-10T02:05:16+00:00">
-    <a href="https://simonwillison.net/2026/Aug/10/openclaw" target="_blank" rel="noopener">Quoting OpenClaw</a>
-    
-    <div class="iline-gist">OpenClaw demonstrates missing API authorization controls in reservation systems.</div>
+    <div class="iline-gist">A prototype exploring compressed JSON arrays in SQLite for storing database revision histories.</div>
     <div class="iline-meta"><span class="badge rss">rss</span>
       simonwillison · 1d ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-08-09T22:48:05+00:00">
-    <a href="https://simonwillison.net/2026/Aug/9/github-models-is-now-retired" target="_blank" rel="noopener">GitHub Models is now retired</a>
+  <div class="iline" data-pub="2026-08-07T19:18:09+00:00">
+    <a href="https://simonwillison.net/2026/Aug/7/moonlight-mayhem" target="_blank" rel="noopener">Moonlight &amp; Mayhem (Raccoon Heist by Codex + GPT-5.6 Sol Ultra)</a>
     
-    <div class="iline-gist">GitHub Models service has been retired, breaking existing workflow pipelines.</div>
+    <div class="iline-gist">Recreating a game using Codex and GPT-5.6 Sol Ultra following a prior Claude experiment.</div>
     <div class="iline-meta"><span class="badge rss">rss</span>
-      simonwillison · 1d ago</div>
+      simonwillison · 3d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-08-08T14:06:41+00:00">
+    <a href="https://simonwillison.net/2026/Aug/8/now-we-have-a-timeline-of-the-openai-accidental-attack-against-h" target="_blank" rel="noopener">Now we have a timeline of the OpenAI accidental attack against Hugging Face</a>
+    
+    <div class="iline-gist">Analysis of the timeline surrounding OpenAI&#39;s accidental traffic spike on Hugging Face.</div>
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      simonwillison · 3d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-08-07T17:53:32+00:00">
+    <a href="https://huggingface.co/blog/allenai/tutormoments" target="_blank" rel="noopener">TutorMoments: Do AI tutors know when to help and when to hold back?</a>
+    
+    <div class="iline-gist">TutorMoments study evaluates when AI tutors should provide intervention versus withholding assistance.</div>
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      huggingface-blog · 3d ago</div>
   </div>
   
       </div>

@@ -39,8 +39,9 @@ _SCHEMA = {
                     "tag": {"type": "string"},
                     "summary": {"type": "string"},
                     "refs": {"type": "array", "items": {"type": "string"}},
+                    "top_pick": {"type": "string"},
                 },
-                "required": ["tag", "summary", "refs"],
+                "required": ["tag", "summary", "refs", "top_pick"],
             },
         },
         "gists": {
@@ -103,6 +104,8 @@ def _build_prompt(grouped: list[dict], max_chars: int) -> str:
         "second, and so on.",
         "    * refs: the item ids the summary actually draws from, in the SAME order "
         "as the [n] markers used in the summary text.",
+        "    * top_pick: the id of the SINGLE most significant / must-read item in "
+        "that section.",
         f"- gists: for EACH item id, a one-line gist (max {max_chars} chars).",
         "",
     ]
@@ -181,7 +184,8 @@ def run(conn: sqlite3.Connection, force: bool = False) -> dict:
 
     # per-section summaries + the sources (item ids) each one cites
     sec_summaries = {
-        s["tag"]: {"summary": s["summary"].strip(), "refs": s.get("refs", [])}
+        s["tag"]: {"summary": s["summary"].strip(), "refs": s.get("refs", []),
+                   "top_pick": s.get("top_pick")}
         for s in result.get("sections", [])
         if s.get("tag") and s.get("summary")
     }
