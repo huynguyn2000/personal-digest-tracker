@@ -339,10 +339,17 @@ def select_digest(conn: sqlite3.Connection) -> dict:
         src = srcmap.get(r["source_id"], {})
         return bool(src.get("pin")) or src.get("type") == "youtube"
 
+    # Pinned sources surface their latest item within a wider window (weekly-
+    # posting channels shouldn't vanish between the 4-day render window).
     top_ids = {r["id"] for r in top_news}
+    pin_cutoff = now.timestamp() - float(dcfg.get("pin_window_days", 21)) * 86400
     pin_count: dict[str, int] = {}
-    for r in sorted(news, key=lambda x: x["published_at"], reverse=True):
+    for r in conn.execute(
+        "SELECT * FROM items WHERE state='new' AND is_primary=1 ORDER BY published_at DESC"
+    ).fetchall():
         if r["id"] in top_ids or not is_pinned(r):
+            continue
+        if parse_iso(r["published_at"]).timestamp() < pin_cutoff:
             continue
         if pin_count.get(r["source_id"], 0) >= 2:
             continue

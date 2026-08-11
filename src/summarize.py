@@ -63,8 +63,9 @@ def _call_gemini(model: str, key: str, prompt: str) -> dict:
         "generationConfig": {
             "temperature": 0.3,
             # Newer flash models spend "thinking" tokens from this same budget,
-            # so keep it well above the JSON we expect or the output truncates.
-            "maxOutputTokens": 8192,
+            # so keep it well above the JSON we expect or the output truncates
+            # (summary + refs + top_pick + a gist per item, across all sections).
+            "maxOutputTokens": 16384,
             "responseMimeType": "application/json",
             "responseSchema": _SCHEMA,
         },

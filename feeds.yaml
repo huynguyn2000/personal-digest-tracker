@@ -103,6 +103,13 @@ sources:
     weight: 1.0
     pin: true                     # always surface the latest video
 
+  - id: darshilparmar-yt          # @DarshilParmar — data engineering
+    type: youtube
+    channel_id: UCChmJrVa8kDg05JfCmxpLRw
+    tags: [watching, dataeng]
+    weight: 1.0
+    pin: true
+
   # TODO: add more channels. Paste a channel URL and it can be resolved to a
   # channel_id (the UCxxxxxxxxxxxxxxxxxxxxxx string) from the page source.
   # - id: some-yt-channel
