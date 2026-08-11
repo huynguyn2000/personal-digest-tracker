@@ -125,6 +125,9 @@
   .iline .iline-meta { color:var(--muted); font-size:.78rem; margin-top:3px; }
   .new-pill { font-size:.6rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
     color:#fff; background:var(--accent); border-radius:4px; padding:1px 5px; vertical-align:middle; }
+  .iline.unseen { border-left:2px solid var(--accent); margin-left:-14px; padding-left:12px; }
+  .unseen-note { display:inline-block; margin-top:6px; font-size:.72rem; font-weight:600; color:var(--accent);
+    background:var(--card); border:1px solid var(--border); border-radius:999px; padding:2px 10px; }
 
   .dead { margin-top:36px; background:var(--card); border:1px solid var(--border);
     border-radius:12px; padding:12px 14px; }
@@ -140,6 +143,7 @@
     <div>
       <h1>Morning Digest</h1>
       <div class="sub">{{ generated_local }} · {{ counts.news }} items · {{ counts.newsletters }} newsletters<span class="fresh" id="fresh" data-generated="{{ generated_iso }}"></span></div>
+      <div class="unseen-note" id="unseenNote" hidden></div>
     </div>
     <button class="theme-btn" id="themeBtn" title="Toggle light / dark" aria-label="Toggle theme">◐</button>
   </header>
@@ -214,7 +218,7 @@
   {% endmacro %}
 
   {% macro item_line(it) %}
-  <div class="iline">
+  <div class="iline" data-pub="{{ it.published_iso }}">
     {% if it.is_new %}<span class="new-pill">new</span> {% endif %}{% if it.url %}<a href="{{ it.url }}" target="_blank" rel="noopener">{{ it.title }}</a>
     {% else %}<span class="t">{{ it.title }}</span>{% endif %}
     {% if it.summary %}<div class="iline-gist">{{ it.summary }}</div>{% endif %}
@@ -278,6 +282,20 @@
       f.textContent = "generated " + t;
     }
   }
+  // new-since-your-last-visit
+  try {
+    var LV = parseInt(localStorage.getItem("pdt-last-visit") || "0", 10);
+    var unseen = 0;
+    if (LV > 0) {
+      document.querySelectorAll(".iline[data-pub]").forEach(function (el) {
+        var p = Date.parse(el.getAttribute("data-pub"));
+        if (!isNaN(p) && p > LV) { el.classList.add("unseen"); unseen++; }
+      });
+    }
+    var un = document.getElementById("unseenNote");
+    if (un && unseen > 0) { un.textContent = unseen + " new since your last visit"; un.hidden = false; }
+    localStorage.setItem("pdt-last-visit", String(Date.now()));
+  } catch (e) {}
 })();
 </script>
 </body>

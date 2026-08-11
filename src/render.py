@@ -224,6 +224,7 @@ def _item_view(conn, r, now, srcmap) -> dict:
         "source_id": r["source_id"],
         "source_type": r["source_type"],
         "age": humanize_age(r["published_at"], now),
+        "published_iso": r["published_at"],
         "is_new": (now.timestamp() - parse_iso(r["published_at"]).timestamp()) < 86400,
         "summary": (r["summary"] if "summary" in keys else None),
         "snippet": snippet[:200] + ("…" if len(snippet) > 200 else ""),
