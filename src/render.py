@@ -238,6 +238,9 @@ def _linkify_summary(text: str | None, refs: list[dict]):
 
 
 def _section_for(tags: list[str], order: list[str]) -> str:
+    # release feeds go to their own compact section, regardless of other tags.
+    if "releases" in tags:
+        return "releases"
     for t in order:
         if t in tags:
             return t
@@ -299,22 +302,34 @@ def select_digest(conn: sqlite3.Connection) -> dict:
             r["source_id"], {}
         ).get("tags", [])
 
-    newsletters = [r for r in candidates if is_newsletter(r)]
-    news = [r for r in candidates if not is_newsletter(r)]
+    def is_release(r) -> bool:
+        return "releases" in srcmap.get(r["source_id"], {}).get("tags", [])
 
-    # per-source cap (candidates are already score-sorted) so one high-volume
-    # source can't crowd out low-volume ones you follow
-    cap = int(dcfg.get("per_source_cap", 0) or 0)
-    if cap:
+    def per_source_cap(rows, cap):
+        # rows are already score-sorted; keep at most `cap` per source so one
+        # high-volume feed can't crowd out the rest.
+        if not cap:
+            return rows
         counts: dict[str, int] = {}
-        capped = []
-        for r in news:
+        out = []
+        for r in rows:
             counts[r["source_id"]] = counts.get(r["source_id"], 0) + 1
             if counts[r["source_id"]] <= cap:
-                capped.append(r)
-        news = capped
+                out.append(r)
+        return out
 
-    # hard cut for scored news; newsletters get a floor (always included)
+    cap = int(dcfg.get("per_source_cap", 0) or 0)
+    newsletters = [r for r in candidates if is_newsletter(r)]
+    # releases get their own compact section + budget (keeps Airflow's provider
+    # firehose out of Data Engineering / the max_items pool)
+    releases = per_source_cap(
+        [r for r in candidates if not is_newsletter(r) and is_release(r)], cap
+    )[: int(dcfg.get("release_max", 10))]
+    news = per_source_cap(
+        [r for r in candidates if not is_newsletter(r) and not is_release(r)], cap
+    )
+
+    # hard cut for articles/news; newsletters + releases have their own budgets
     top_news = news[: int(dcfg["max_items"])]
 
     # floor for "pinned" sources you follow on purpose (YouTube channels, or any
@@ -335,9 +350,9 @@ def select_digest(conn: sqlite3.Connection) -> dict:
         top_news.append(r)
         top_ids.add(r["id"])
 
-    # group into sections
+    # group into sections (articles + releases; newsletters render separately)
     sections: dict[str, list] = {}
-    for r in top_news:
+    for r in top_news + releases:
         sec = _section_for(srcmap.get(r["source_id"], {}).get("tags", []), order)
         sections.setdefault(sec, []).append(_item_view(conn, r, now, srcmap))
 
@@ -389,7 +404,11 @@ def select_digest(conn: sqlite3.Connection) -> dict:
     _nl_text, _nl_refs, _ = _summary_and_refs("newsletter")
     newsletter_summary_html = _linkify_summary(_nl_text, _nl_refs)
 
-    rendered_ids = [r["id"] for r in top_news] + [r["id"] for r in newsletters]
+    rendered_ids = (
+        [r["id"] for r in top_news]
+        + [r["id"] for r in releases]
+        + [r["id"] for r in newsletters]
+    )
 
     # top 5 across everything shown, by score, for the Telegram message
     shown = top_news + newsletters
@@ -410,7 +429,8 @@ def select_digest(conn: sqlite3.Connection) -> dict:
         "dead_feeds": _dead_feeds(conn),
         "rendered_ids": rendered_ids,
         "top5": top5,
-        "counts": {"news": len(top_news), "newsletters": len(newsletter_views)},
+        "counts": {"news": len(top_news), "releases": len(releases),
+                   "newsletters": len(newsletter_views)},
     }
 
 

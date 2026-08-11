@@ -68,6 +68,9 @@ tracker_links:
 
 digest:
   max_items: 12
+  # Release feeds (tag: releases) get their own compact "Releases" section with
+  # this separate budget, so version bumps don't crowd out articles/news.
+  release_max: 10
   # Cap how many items any single source contributes to the digest, applied
   # before max_items. Keeps a high-volume source (e.g. airflow's many release
   # RCs) from crowding out low-volume ones you follow (a YouTube channel, a
@@ -81,4 +84,4 @@ digest:
   render_window_days: 4
   keyword_score_cap: 3.0
   # Section ordering in the HTML. Tags not listed fall into "other".
-  section_order: [watching, aws, dataeng, ai]
+  section_order: [watching, aws, dataeng, ai, releases]

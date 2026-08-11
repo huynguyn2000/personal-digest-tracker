@@ -149,7 +149,7 @@
 </style>
 </head>
 <body>
-{% set SECTION_NAMES = {'watching': '📺 Watching', 'aws': 'AWS', 'dataeng': 'Data Engineering', 'ai': 'AI', 'newsletters': 'Newsletters', 'lakehouse': 'Lakehouse'} %}
+{% set SECTION_NAMES = {'watching': '📺 Watching', 'aws': 'AWS', 'dataeng': 'Data Engineering', 'ai': 'AI', 'releases': '📦 Releases', 'newsletters': 'Newsletters', 'lakehouse': 'Lakehouse'} %}
 <div class="wrap">
   <header class="topbar">
     <div>
@@ -258,7 +258,17 @@
   </section>
   {% endmacro %}
 
-  {% for section in sections %}{{ type_block(SECTION_NAMES.get(section.tag, section.tag), section.tag, section.summary_html, section.top_pick, section.entries) }}{% endfor %}
+  {% macro releases_block(display, tag, summary_html, entries) %}
+  <section class="type" id="sec-{{ tag }}">
+    <h2 class="section">{{ display }} <span class="count">· {{ entries | length }}</span></h2>
+    {% if summary_html %}<p class="type-summary">{{ summary_html }}</p>{% endif %}
+    {% if entries %}
+    <div class="drawer-body">{% for it in entries %}{{ item_line(it) }}{% endfor %}</div>
+    {% endif %}
+  </section>
+  {% endmacro %}
+
+  {% for section in sections %}{% if section.tag == 'releases' %}{{ releases_block(SECTION_NAMES.get(section.tag, section.tag), section.tag, section.summary_html, section.entries) }}{% else %}{{ type_block(SECTION_NAMES.get(section.tag, section.tag), section.tag, section.summary_html, section.top_pick, section.entries) }}{% endif %}{% endfor %}
   {% if newsletters %}{{ type_block('Newsletters', 'newsletters', newsletter_summary_html, none, newsletters) }}{% endif %}
 
   {% if not sections and not newsletters %}
