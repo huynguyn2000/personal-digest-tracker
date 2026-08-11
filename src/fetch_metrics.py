@@ -31,7 +31,7 @@ def weather_hcmc() -> list[tuple]:
         {
             "latitude": HCMC_LAT,
             "longitude": HCMC_LON,
-            "current": "temperature_2m,precipitation",
+            "current": "temperature_2m,precipitation,weather_code",
             "daily": "precipitation_probability_max,temperature_2m_max,temperature_2m_min,uv_index_max",
             "timezone": "Asia/Ho_Chi_Minh",
             "forecast_days": 1,
@@ -42,6 +42,8 @@ def weather_hcmc() -> list[tuple]:
     out = []
     if "temperature_2m" in cur:
         out.append(("hcmc_temp", float(cur["temperature_2m"]), {"unit": "C"}))
+    if cur.get("weather_code") is not None:
+        out.append(("hcmc_weathercode", float(cur["weather_code"]), {"scale": "wmo"}))
     probs = daily.get("precipitation_probability_max") or []
     if probs:
         out.append(("hcmc_rain_prob", float(probs[0]), {"unit": "%"}))

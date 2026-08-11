@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Morning Digest — 2026-08-11 23:32 +07</title>
+<title>Morning Digest — 2026-08-11 23:34 +07</title>
 <meta name="description" content="Your morning digest — AWS, data engineering & AI news, deduped and summarized, with FX / weather / air-quality trackers.">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><text x="1" y="14" font-size="14">📰</text></svg>'>
@@ -68,6 +68,8 @@
   .tracker .band { display:flex; align-items:center; gap:5px; font-size:.72rem; color:var(--muted); margin-top:5px; }
   .tracker .band .dot { width:8px; height:8px; border-radius:50%; flex:none; }
   .tracker .tsub { color:var(--muted); font-size:.72rem; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .tracker .tcond { color:var(--muted); font-size:.72rem; margin-top:4px; }
+  .tracker.alert { border-width:2px; padding:9px 11px; }
   .tracker svg.spark { display:block; margin-top:8px; width:100%; height:32px; overflow:visible; }
   .spark-area { fill:var(--accent); opacity:.14; }
   .spark-line { fill:none; stroke:var(--accent); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
@@ -147,7 +149,7 @@
   <header class="topbar">
     <div>
       <h1>Morning Digest</h1>
-      <div class="sub">2026-08-11 23:32 +07 · 10 items · 0 newsletters<span class="fresh" id="fresh" data-generated="2026-08-11T16:32:23+00:00"></span></div>
+      <div class="sub">2026-08-11 23:34 +07 · 10 items · 0 newsletters<span class="fresh" id="fresh" data-generated="2026-08-11T16:34:52+00:00"></span></div>
       <div class="unseen-note" id="unseenNote" hidden></div>
     </div>
     <button class="theme-btn" id="themeBtn" title="Toggle light / dark" aria-label="Toggle theme">◐</button>
@@ -181,15 +183,16 @@
     <div class="tracker">
       <div class="label"><a href="https://www.google.com/finance/quote/USD-VND" target="_blank" rel="noopener" title="Open a larger time-window view">USD/VND ↗</a></div>
       <div class="value-row">
-        <span class="value">25,970</span>
-        
+        <span class="value">25,940</span>
+        <span class="delta down" title="vs previous reading">▼ 0.1%</span>
       </div>
       
       
       
+      
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,29.0 65.2,29.0 75.5,29.0 85.9,29.0 96.3,29.0 106.6,29.0 117.0,29.0 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,29.0 65.2,29.0 75.5,29.0 85.9,29.0 96.3,29.0 106.6,29.0 117.0,29.0" class="spark-line"/>
+        <polygon points="3,29 3.0,3.0 12.5,3.0 22.0,3.0 31.5,3.0 41.0,3.0 50.5,20.3 60.0,20.3 69.5,20.3 79.0,20.3 88.5,20.3 98.0,20.3 107.5,20.3 117.0,29.0 117,29" class="spark-area"/>
+        <polyline points="3.0,3.0 12.5,3.0 22.0,3.0 31.5,3.0 41.0,3.0 50.5,20.3 60.0,20.3 69.5,20.3 79.0,20.3 88.5,20.3 98.0,20.3 107.5,20.3 117.0,29.0" class="spark-line"/>
         <circle cx="117.0" cy="29.0" r="2.4" class="spark-dot"/>
       </svg>
       
@@ -198,15 +201,16 @@
     <div class="tracker">
       <div class="label"><a href="https://www.google.com/finance/quote/CNY-VND" target="_blank" rel="noopener" title="Open a larger time-window view">CNY/VND ↗</a></div>
       <div class="value-row">
-        <span class="value">3,818</span>
-        
+        <span class="value">3,814</span>
+        <span class="delta down" title="vs previous reading">▼ 0.1%</span>
       </div>
       
       
       
+      
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,29.0 65.2,29.0 75.5,29.0 85.9,29.0 96.3,29.0 106.6,29.0 117.0,29.0 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,29.0 65.2,29.0 75.5,29.0 85.9,29.0 96.3,29.0 106.6,29.0 117.0,29.0" class="spark-line"/>
+        <polygon points="3,29 3.0,3.0 12.5,3.0 22.0,3.0 31.5,3.0 41.0,3.0 50.5,19.6 60.0,19.6 69.5,19.6 79.0,19.6 88.5,19.6 98.0,19.6 107.5,19.6 117.0,29.0 117,29" class="spark-area"/>
+        <polyline points="3.0,3.0 12.5,3.0 22.0,3.0 31.5,3.0 41.0,3.0 50.5,19.6 60.0,19.6 69.5,19.6 79.0,19.6 88.5,19.6 98.0,19.6 107.5,19.6 117.0,29.0" class="spark-line"/>
         <circle cx="117.0" cy="29.0" r="2.4" class="spark-dot"/>
       </svg>
       
@@ -222,32 +226,34 @@
       <div class="label"><a href="https://www.windy.com/?10.823,106.630,8" target="_blank" rel="noopener" title="Open a larger time-window view">Temp ↗</a></div>
       <div class="value-row">
         <span class="value">🌡 26°C</span>
-        
+        <span class="delta up" title="vs previous reading">▲ 0.4%</span>
       </div>
       
-      <div class="tsub">H 29° · L 25°</div>
+      <div class="tcond">☁️ Overcast</div>
+      <div class="tsub">H 31° · L 25°</div>
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,9.1 13.4,8.0 23.7,8.0 34.1,4.5 44.5,3.0 54.8,25.2 65.2,28.6 75.5,29.0 85.9,29.0 96.3,29.0 106.6,23.3 117.0,23.3 117,29" class="spark-area"/>
-        <polyline points="3.0,9.1 13.4,8.0 23.7,8.0 34.1,4.5 44.5,3.0 54.8,25.2 65.2,28.6 75.5,29.0 85.9,29.0 96.3,29.0 106.6,23.3 117.0,23.3" class="spark-line"/>
-        <circle cx="117.0" cy="23.3" r="2.4" class="spark-dot"/>
+        <polygon points="3,29 3.0,9.1 12.5,8.0 22.0,8.0 31.5,4.5 41.0,3.0 50.5,25.2 60.0,28.6 69.5,29.0 79.0,29.0 88.5,29.0 98.0,23.3 107.5,23.3 117.0,22.9 117,29" class="spark-area"/>
+        <polyline points="3.0,9.1 12.5,8.0 22.0,8.0 31.5,4.5 41.0,3.0 50.5,25.2 60.0,28.6 69.5,29.0 79.0,29.0 88.5,29.0 98.0,23.3 107.5,23.3 117.0,22.9" class="spark-line"/>
+        <circle cx="117.0" cy="22.9" r="2.4" class="spark-dot"/>
       </svg>
       
     </div>
   
-    <div class="tracker">
+    <div class="tracker alert" style="border-color:#3b82f6">
       <div class="label"><a href="https://www.windy.com/?rain,10.823,106.630,8" target="_blank" rel="noopener" title="Open a larger time-window view">Rain ↗</a></div>
       <div class="value-row">
-        <span class="value">🌧 88%</span>
-        
+        <span class="value">🌧 100%</span>
+        <span class="delta up" title="vs previous reading">▲ 13.6%</span>
       </div>
+      <div class="band"><span class="dot" style="background:#3b82f6"></span>Likely</div>
       
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,29.0 65.2,29.0 75.5,29.0 85.9,29.0 96.3,29.0 106.6,29.0 117.0,29.0 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,29.0 65.2,29.0 75.5,29.0 85.9,29.0 96.3,29.0 106.6,29.0 117.0,29.0" class="spark-line"/>
-        <circle cx="117.0" cy="29.0" r="2.4" class="spark-dot"/>
+        <polygon points="3,29 3.0,16.0 12.5,16.0 22.0,16.0 31.5,16.0 41.0,16.0 50.5,29.0 60.0,29.0 69.5,29.0 79.0,29.0 88.5,29.0 98.0,29.0 107.5,29.0 117.0,3.0 117,29" class="spark-area"/>
+        <polyline points="3.0,16.0 12.5,16.0 22.0,16.0 31.5,16.0 41.0,16.0 50.5,29.0 60.0,29.0 69.5,29.0 79.0,29.0 88.5,29.0 98.0,29.0 107.5,29.0 117.0,3.0" class="spark-line"/>
+        <circle cx="117.0" cy="3.0" r="2.4" class="spark-dot"/>
       </svg>
       
     </div>
@@ -255,33 +261,35 @@
     <div class="tracker">
       <div class="label"><a href="https://aqicn.org/city/vietnam/ho-chi-minh-city/" target="_blank" rel="noopener" title="Open a larger time-window view">AQI ↗</a></div>
       <div class="value-row">
-        <span class="value">71</span>
-        
+        <span class="value">73</span>
+        <span class="delta up" title="vs previous reading">▲ 2.8%</span>
       </div>
       <div class="band"><span class="dot" style="background:#c9a227"></span>Moderate</div>
       
       
+      
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,26.8 65.2,26.0 75.5,26.0 85.9,26.0 96.3,26.0 106.6,29.0 117.0,29.0 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 13.4,3.0 23.7,3.0 34.1,3.0 44.5,3.0 54.8,26.8 65.2,26.0 75.5,26.0 85.9,26.0 96.3,26.0 106.6,29.0 117.0,29.0" class="spark-line"/>
-        <circle cx="117.0" cy="29.0" r="2.4" class="spark-dot"/>
+        <polygon points="3,29 3.0,3.0 12.5,3.0 22.0,3.0 31.5,3.0 41.0,3.0 50.5,26.8 60.0,26.0 69.5,26.0 79.0,26.0 88.5,26.0 98.0,29.0 107.5,29.0 117.0,27.5 117,29" class="spark-area"/>
+        <polyline points="3.0,3.0 12.5,3.0 22.0,3.0 31.5,3.0 41.0,3.0 50.5,26.8 60.0,26.0 69.5,26.0 79.0,26.0 88.5,26.0 98.0,29.0 107.5,29.0 117.0,27.5" class="spark-line"/>
+        <circle cx="117.0" cy="27.5" r="2.4" class="spark-dot"/>
       </svg>
       
     </div>
   
-    <div class="tracker">
+    <div class="tracker alert" style="border-color:#d63b5b">
       <div class="label">UV</div>
       <div class="value-row">
         <span class="value">☀️ 9</span>
-        
+        <span class="delta down" title="vs previous reading">▼ 1.7%</span>
       </div>
       <div class="band"><span class="dot" style="background:#d63b5b"></span>Very high</div>
       
       
+      
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,29.0 60.0,3.0 117.0,3.0 117,29" class="spark-area"/>
-        <polyline points="3.0,29.0 60.0,3.0 117.0,3.0" class="spark-line"/>
-        <circle cx="117.0" cy="3.0" r="2.4" class="spark-dot"/>
+        <polygon points="3,29 3.0,29.0 41.0,3.0 79.0,3.0 117.0,6.7 117,29" class="spark-area"/>
+        <polyline points="3.0,29.0 41.0,3.0 79.0,3.0 117.0,6.7" class="spark-line"/>
+        <circle cx="117.0" cy="6.7" r="2.4" class="spark-dot"/>
       </svg>
       
     </div>

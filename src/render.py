@@ -85,6 +85,26 @@ def _band_for(kind: str | None, value: float) -> dict | None:
     return None
 
 
+# WMO weather codes -> (label, emoji).
+_WMO = {
+    0: ("Clear", "☀️"), 1: ("Mainly clear", "🌤"), 2: ("Partly cloudy", "⛅"),
+    3: ("Overcast", "☁️"), 45: ("Fog", "🌫"), 48: ("Rime fog", "🌫"),
+    51: ("Light drizzle", "🌦"), 53: ("Drizzle", "🌦"), 55: ("Heavy drizzle", "🌦"),
+    56: ("Freezing drizzle", "🌧"), 57: ("Freezing drizzle", "🌧"),
+    61: ("Light rain", "🌦"), 63: ("Rain", "🌧"), 65: ("Heavy rain", "🌧"),
+    66: ("Freezing rain", "🌧"), 67: ("Freezing rain", "🌧"),
+    71: ("Light snow", "🌨"), 73: ("Snow", "🌨"), 75: ("Heavy snow", "🌨"),
+    77: ("Snow grains", "🌨"), 80: ("Showers", "🌦"), 81: ("Showers", "🌧"),
+    82: ("Violent showers", "⛈"), 85: ("Snow showers", "🌨"), 86: ("Snow showers", "🌨"),
+    95: ("Thunderstorm", "⛈"), 96: ("Thunderstorm + hail", "⛈"), 99: ("Thunderstorm + hail", "⛈"),
+}
+
+
+def _wmo(code: int) -> dict:
+    label, icon = _WMO.get(code, ("—", ""))
+    return {"label": label, "icon": icon}
+
+
 def humanize_age(published_at: str, now: datetime) -> str:
     secs = max(0, (now.timestamp() - parse_iso(published_at).timestamp()))
     mins = secs / 60
@@ -133,8 +153,10 @@ def _trackers(conn: sqlite3.Connection, links: dict | None = None) -> list[dict]
             arrow = {"up": "▲", "down": "▼", "flat": "·"}[direction]
             delta = {"pct": f"{abs(d) / abs(values[-2]) * 100:.1f}%",
                      "dir": direction, "arrow": arrow}
+        name = spec["name"]
         sub = None
-        if spec["name"] == "hcmc_temp":
+        cond = None
+        if name == "hcmc_temp":
             hi = conn.execute(
                 "SELECT value FROM metrics WHERE name='hcmc_temp_hi' ORDER BY ts DESC LIMIT 1"
             ).fetchone()
@@ -143,6 +165,24 @@ def _trackers(conn: sqlite3.Connection, links: dict | None = None) -> list[dict]
             ).fetchone()
             if hi and lo:
                 sub = f"H {hi['value']:.0f}° · L {lo['value']:.0f}°"
+            wc = conn.execute(
+                "SELECT value FROM metrics WHERE name='hcmc_weathercode' ORDER BY ts DESC LIMIT 1"
+            ).fetchone()
+            if wc is not None:
+                cond = _wmo(int(wc["value"]))
+
+        band = _band_for(spec.get("kind"), latest)
+        if name == "hcmc_rain_prob" and latest >= 70:
+            band = {"label": "Likely", "color": "#3b82f6"}
+
+        # glanceable alert: emphasize the card only when it's actionable
+        alert = None
+        if name == "hcmc_aqi" and latest > 100:
+            alert = band["color"] if band else "#d63b5b"
+        elif name == "hcmc_uv" and latest >= 8:
+            alert = band["color"] if band else "#e8730c"
+        elif name == "hcmc_rain_prob" and latest >= 70:
+            alert = "#3b82f6"
 
         out.append(
             {
@@ -151,7 +191,9 @@ def _trackers(conn: sqlite3.Connection, links: dict | None = None) -> list[dict]
                 "icon": spec.get("icon"),
                 "delta": delta,
                 "sub": sub,
-                "band": _band_for(spec.get("kind"), latest),
+                "cond": cond,
+                "band": band,
+                "alert": alert,
                 "spark": _spark(values),
                 "link": links.get(spec["name"]),
                 "group": spec.get("group", "Other"),
