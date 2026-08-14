@@ -138,6 +138,7 @@
   .new-pill { font-size:.6rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
     color:#fff; background:var(--accent); border-radius:4px; padding:1px 5px; vertical-align:middle; }
   .iline.unseen { border-left:2px solid var(--accent); margin-left:-14px; padding-left:12px; }
+  .iline.watched { display:none; }
   .unseen-note { display:inline-block; margin-top:6px; font-size:.72rem; font-weight:600; color:var(--accent);
     background:var(--card); border:1px solid var(--border); border-radius:999px; padding:2px 10px; }
 
@@ -231,7 +232,7 @@
   {% endmacro %}
 
   {% macro item_line(it) %}
-  <div class="iline" data-pub="{{ it.published_iso }}">
+  <div class="iline" data-pub="{{ it.published_iso }}"{% if 'watching' in it.tags %} data-watching-id="{{ it.id }}"{% endif %}>
     {% if it.is_new %}<span class="new-pill">new</span> {% endif %}{% if it.url %}<a href="{{ it.url }}" target="_blank" rel="noopener">{{ it.title }}</a>
     {% else %}<span class="t">{{ it.title }}</span>{% endif %}
     {% if it.summary %}<div class="iline-gist">{{ it.summary }}</div>{% endif %}
@@ -321,6 +322,28 @@
     var un = document.getElementById("unseenNote");
     if (un && unseen > 0) { un.textContent = unseen + " new since your last visit"; un.hidden = false; }
     localStorage.setItem("pdt-last-visit", String(Date.now()));
+  } catch (e) {}
+  // Watching is intentionally a persistent queue. Opening a video marks only
+  // that entry watched in this browser; future daily renders keep other videos.
+  try {
+    var watchedKey = "pdt-watched-items";
+    var watched = JSON.parse(localStorage.getItem(watchedKey) || "[]");
+    watched = Array.isArray(watched) ? watched : [];
+    var watchedSet = {};
+    watched.forEach(function (id) { watchedSet[id] = true; });
+    document.querySelectorAll("[data-watching-id]").forEach(function (el) {
+      var id = el.getAttribute("data-watching-id");
+      if (watchedSet[id]) el.classList.add("watched");
+      var link = el.querySelector("a");
+      if (link) link.addEventListener("click", function () {
+        if (!watchedSet[id]) {
+          watchedSet[id] = true;
+          watched.push(id);
+          localStorage.setItem(watchedKey, JSON.stringify(watched));
+        }
+        el.classList.add("watched");
+      });
+    });
   } catch (e) {}
   // PWA: register the service worker (offline / installable)
   if ("serviceWorker" in navigator) {

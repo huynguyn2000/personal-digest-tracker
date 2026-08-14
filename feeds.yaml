@@ -13,11 +13,12 @@ defaults:
 
 sources:
   # --- data engineering ---------------------------------------------------
-  - id: airflow-releases
-    type: github
-    url: https://github.com/apache/airflow/releases.atom
-    tags: [dataeng, releases]
-    weight: 1.4
+  # Temporarily disabled: Airflow's release feed is unusually noisy right now.
+  # - id: airflow-releases
+  #   type: github
+  #   url: https://github.com/apache/airflow/releases.atom
+  #   tags: [dataeng, releases]
+  #   weight: 1.4
 
   - id: iceberg-releases
     type: github

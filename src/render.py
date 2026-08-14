@@ -305,6 +305,9 @@ def select_digest(conn: sqlite3.Connection) -> dict:
     def is_release(r) -> bool:
         return "releases" in srcmap.get(r["source_id"], {}).get("tags", [])
 
+    def is_watching(r) -> bool:
+        return "watching" in srcmap.get(r["source_id"], {}).get("tags", [])
+
     def per_source_cap(rows, cap):
         # rows are already score-sorted; keep at most `cap` per source so one
         # high-volume feed can't crowd out the rest.
@@ -320,13 +323,23 @@ def select_digest(conn: sqlite3.Connection) -> dict:
 
     cap = int(dcfg.get("per_source_cap", 0) or 0)
     newsletters = [r for r in candidates if is_newsletter(r)]
+    # Watching is a queue, not a daily-news window. Keep unclicked videos in
+    # the digest until the browser records that the user opened them.
+    watching = [
+        r
+        for r in conn.execute(
+            "SELECT * FROM items WHERE state='new' AND is_primary=1 "
+            "ORDER BY published_at DESC"
+        ).fetchall()
+        if is_watching(r)
+    ]
     # releases get their own compact section + budget (keeps Airflow's provider
     # firehose out of Data Engineering / the max_items pool)
     releases = per_source_cap(
-        [r for r in candidates if not is_newsletter(r) and is_release(r)], cap
+        [r for r in candidates if not is_newsletter(r) and not is_watching(r) and is_release(r)], cap
     )[: int(dcfg.get("release_max", 10))]
     news = per_source_cap(
-        [r for r in candidates if not is_newsletter(r) and not is_release(r)], cap
+        [r for r in candidates if not is_newsletter(r) and not is_watching(r) and not is_release(r)], cap
     )
 
     # hard cut for articles/news; newsletters + releases have their own budgets
@@ -347,7 +360,7 @@ def select_digest(conn: sqlite3.Connection) -> dict:
     for r in conn.execute(
         "SELECT * FROM items WHERE state='new' AND is_primary=1 ORDER BY published_at DESC"
     ).fetchall():
-        if r["id"] in top_ids or not is_pinned(r):
+        if r["id"] in top_ids or is_watching(r) or not is_pinned(r):
             continue
         if parse_iso(r["published_at"]).timestamp() < pin_cutoff:
             continue
@@ -359,7 +372,7 @@ def select_digest(conn: sqlite3.Connection) -> dict:
 
     # group into sections (articles + releases; newsletters render separately)
     sections: dict[str, list] = {}
-    for r in top_news + releases:
+    for r in watching + top_news + releases:
         sec = _section_for(srcmap.get(r["source_id"], {}).get("tags", []), order)
         sections.setdefault(sec, []).append(_item_view(conn, r, now, srcmap))
 
@@ -398,6 +411,15 @@ def select_digest(conn: sqlite3.Connection) -> dict:
         refs, n = [], 1
         for rid in ref_ids:
             v = id_map.get(rid)
+            # A cached summary can outlive the current render window. Resolve
+            # those citations from the database too, rather than leaving [n]
+            # as plain text when the cited entry is not visible today.
+            if not v:
+                row = conn.execute(
+                    "SELECT id, source_id, title, url FROM items WHERE id=?", (rid,)
+                ).fetchone()
+                if row:
+                    v = dict(row)
             if v:
                 refs.append({"n": n, "source_id": v["source_id"], "url": v["url"],
                              "title": v["title"]})

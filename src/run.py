@@ -58,7 +58,9 @@ def main() -> int:
     # --- notify (best-effort) ---
     _stage("notify", lambda: notify.run(conn), fatal=False)
 
-    # --- mark rendered items digested (idempotent; never resurrected) ---
+    # --- mark daily items digested (idempotent; never resurrected) ---
+    # Watching/YouTube items are deliberately excluded: the page treats them
+    # as a persistent queue and hides an item only after the user opens it.
     rendered_ids = payload.get("rendered_ids", [])
     if rendered_ids:
         conn.executemany(
@@ -66,7 +68,7 @@ def main() -> int:
             [(i,) for i in rendered_ids],
         )
         conn.commit()
-    print(f"\n== done == marked {len(rendered_ids)} items digested")
+    print(f"\n== done == marked {len(rendered_ids)} daily items digested")
 
     # --- dashboard (best-effort; reflects post-run state) ---
     _stage("dashboard", lambda: dashboard.run(conn), fatal=False)

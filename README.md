@@ -62,7 +62,9 @@ Each stage runs standalone and prints what it did:
 ```
 
 `render` and `notify` are side-effect-free (they don't mark items digested);
-only `python -m src.run` advances item state. So you can re-render freely.
+only `python -m src.run` advances daily-item state. Watching/YouTube entries
+remain in a browser-managed queue until their link is opened, so you can
+re-render freely without losing unwatched videos.
 
 ## Dashboard (pipeline console)
 
@@ -161,3 +163,5 @@ the repo, and uses `concurrency: digest` so runs never overlap and corrupt the D
 - Sparklines need ≥2 days of history before they draw.
 - Old un-rendered items linger as `state='new'`; harmless, they age out of the
   render window.
+- Watching/YouTube items intentionally do not age out: opening a video hides it
+  on future page visits in that browser.

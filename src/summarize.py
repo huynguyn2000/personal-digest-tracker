@@ -131,9 +131,12 @@ def run(conn: sqlite3.Connection, force: bool = False) -> dict:
     max_chars = int(scfg.get("max_gist_chars", 140))
 
     payload = select_digest(conn)
+    # Watching is a persistent, user-managed queue. Do not re-summarize it on
+    # every daily run; its entries remain unchanged until opened in the page.
+    summarizable_sections = [sec for sec in payload["sections"] if sec["tag"] != "watching"]
     grouped = [
         {"tag": sec["tag"], "items": [{"id": e["id"], "title": e["title"]} for e in sec["entries"]]}
-        for sec in payload["sections"]
+        for sec in summarizable_sections
     ]
     if payload["newsletters"]:
         grouped.append(
@@ -141,7 +144,7 @@ def run(conn: sqlite3.Connection, force: bool = False) -> dict:
              "items": [{"id": e["id"], "title": e["title"]} for e in payload["newsletters"]]}
         )
 
-    all_views = [e for sec in payload["sections"] for e in sec["entries"]] + payload["newsletters"]
+    all_views = [e for sec in summarizable_sections for e in sec["entries"]] + payload["newsletters"]
     seen, items = set(), []
     for v in all_views:
         if v["id"] not in seen:
