@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Morning Digest — 2026-08-14 08:52 +07</title>
+<title>Morning Digest — 2026-08-15 01:15 +07</title>
 <meta name="description" content="Your morning digest — AWS, data engineering & AI news, deduped and summarized, with FX / weather / air-quality trackers.">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><text x="1" y="14" font-size="14">📰</text></svg>'>
@@ -138,6 +138,7 @@
   .new-pill { font-size:.6rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
     color:#fff; background:var(--accent); border-radius:4px; padding:1px 5px; vertical-align:middle; }
   .iline.unseen { border-left:2px solid var(--accent); margin-left:-14px; padding-left:12px; }
+  .iline.watched { display:none; }
   .unseen-note { display:inline-block; margin-top:6px; font-size:.72rem; font-weight:600; color:var(--accent);
     background:var(--card); border:1px solid var(--border); border-radius:999px; padding:2px 10px; }
 
@@ -154,7 +155,7 @@
   <header class="topbar">
     <div>
       <h1>Morning Digest</h1>
-      <div class="sub">2026-08-14 08:52 +07 · 10 items · 0 newsletters<span class="fresh" id="fresh" data-generated="2026-08-14T01:52:07+00:00"></span></div>
+      <div class="sub">2026-08-15 01:15 +07 · 8 items · 0 newsletters<span class="fresh" id="fresh" data-generated="2026-08-14T18:15:15+00:00"></span></div>
       <div class="unseen-note" id="unseenNote" hidden></div>
     </div>
     <button class="theme-btn" id="themeBtn" title="Toggle light / dark" aria-label="Toggle theme">◐</button>
@@ -166,13 +167,13 @@
   
   <nav class="jump" aria-label="Jump to section">
     <a href="#trackers">Trackers</a>
-    <a href="#sec-aws">AWS</a><a href="#sec-dataeng">Data Engineering</a><a href="#sec-ai">AI</a><a href="#sec-releases">📦 Releases</a>
+    <a href="#sec-watching">📺 Watching</a><a href="#sec-aws">AWS</a><a href="#sec-dataeng">Data Engineering</a><a href="#sec-ai">AI</a><a href="#sec-releases">📦 Releases</a>
   </nav>
   
 
   
   <div class="overview">
-    <span class="ov-label">Today · Fri 14 Aug</span>Today&#39;s updates highlight major infrastructure scaling across enterprise data platforms and public cloud services. Meanwhile, open-source AI models and tooling continue to expand edge vision capabilities and pipeline automation.
+    <span class="ov-label">Today · Sat 15 Aug</span>Today&#39;s updates highlight major infrastructure scaling across enterprise data platforms and public cloud services. Meanwhile, open-source AI models and tooling continue to expand edge vision capabilities and pipeline automation.
   </div>
   
 
@@ -188,17 +189,17 @@
     <div class="tracker">
       <div class="label"><a href="https://www.google.com/finance/quote/USD-VND" target="_blank" rel="noopener" title="Open a larger time-window view">USD/VND ↗</a></div>
       <div class="value-row">
-        <span class="value">25,890</span>
-        <span class="delta up" title="vs previous reading">▲ 0.1%</span>
+        <span class="value">25,950</span>
+        <span class="delta up" title="vs previous reading">▲ 0.2%</span>
       </div>
       
       
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 10.6,3.0 18.2,3.0 25.8,3.0 33.4,3.0 41.0,12.8 48.6,12.8 56.2,12.8 63.8,12.8 71.4,12.8 79.0,12.8 86.6,12.8 94.2,17.6 101.8,17.6 109.4,29.0 117.0,25.8 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 10.6,3.0 18.2,3.0 25.8,3.0 33.4,3.0 41.0,12.8 48.6,12.8 56.2,12.8 63.8,12.8 71.4,12.8 79.0,12.8 86.6,12.8 94.2,17.6 101.8,17.6 109.4,29.0 117.0,25.8" class="spark-line"/>
-        <circle cx="117.0" cy="25.8" r="2.4" class="spark-dot"/>
+        <polygon points="3,29 3.0,3.0 10.1,3.0 17.2,3.0 24.4,3.0 31.5,3.0 38.6,12.8 45.8,12.8 52.9,12.8 60.0,12.8 67.1,12.8 74.2,12.8 81.4,12.8 88.5,17.6 95.6,17.6 102.8,29.0 109.9,25.8 117.0,16.0 117,29" class="spark-area"/>
+        <polyline points="3.0,3.0 10.1,3.0 17.2,3.0 24.4,3.0 31.5,3.0 38.6,12.8 45.8,12.8 52.9,12.8 60.0,12.8 67.1,12.8 74.2,12.8 81.4,12.8 88.5,17.6 95.6,17.6 102.8,29.0 109.9,25.8 117.0,16.0" class="spark-line"/>
+        <circle cx="117.0" cy="16.0" r="2.4" class="spark-dot"/>
       </svg>
       
     </div>
@@ -206,17 +207,17 @@
     <div class="tracker">
       <div class="label"><a href="https://www.google.com/finance/quote/CNY-VND" target="_blank" rel="noopener" title="Open a larger time-window view">CNY/VND ↗</a></div>
       <div class="value-row">
-        <span class="value">3,808</span>
-        <span class="delta up" title="vs previous reading">▲ 0.1%</span>
+        <span class="value">3,817</span>
+        <span class="delta up" title="vs previous reading">▲ 0.2%</span>
       </div>
       
       
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 10.6,3.0 18.2,3.0 25.8,3.0 33.4,3.0 41.0,12.3 48.6,12.3 56.2,12.3 63.8,12.3 71.4,12.3 79.0,12.3 86.6,12.3 94.2,17.6 101.8,17.8 109.4,29.0 117.0,25.1 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 10.6,3.0 18.2,3.0 25.8,3.0 33.4,3.0 41.0,12.3 48.6,12.3 56.2,12.3 63.8,12.3 71.4,12.3 79.0,12.3 86.6,12.3 94.2,17.6 101.8,17.8 109.4,29.0 117.0,25.1" class="spark-line"/>
-        <circle cx="117.0" cy="25.1" r="2.4" class="spark-dot"/>
+        <polygon points="3,29 3.0,3.0 10.1,3.0 17.2,3.0 24.4,3.0 31.5,3.0 38.6,12.3 45.8,12.3 52.9,12.3 60.0,12.3 67.1,12.3 74.2,12.3 81.4,12.3 88.5,17.6 95.6,17.8 102.8,29.0 109.9,25.1 117.0,13.6 117,29" class="spark-area"/>
+        <polyline points="3.0,3.0 10.1,3.0 17.2,3.0 24.4,3.0 31.5,3.0 38.6,12.3 45.8,12.3 52.9,12.3 60.0,12.3 67.1,12.3 74.2,12.3 81.4,12.3 88.5,17.6 95.6,17.8 102.8,29.0 109.9,25.1 117.0,13.6" class="spark-line"/>
+        <circle cx="117.0" cy="13.6" r="2.4" class="spark-dot"/>
       </svg>
       
     </div>
@@ -230,17 +231,17 @@
     <div class="tracker">
       <div class="label"><a href="https://www.windy.com/?10.823,106.630,8" target="_blank" rel="noopener" title="Open a larger time-window view">Temp ↗</a></div>
       <div class="value-row">
-        <span class="value">🌡 29°C</span>
-        <span class="delta down" title="vs previous reading">▼ 1.7%</span>
+        <span class="value">🌡 26°C</span>
+        <span class="delta down" title="vs previous reading">▼ 9.0%</span>
       </div>
       
-      <div class="tcond">☁️ Overcast</div>
-      <div class="tsub">H 33° · L 26°</div>
+      <div class="tcond">☀️ Clear</div>
+      <div class="tsub">H 31° · L 25°</div>
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,9.1 10.6,8.0 18.2,8.0 25.8,4.5 33.4,3.0 41.0,25.2 48.6,28.6 56.2,29.0 63.8,29.0 71.4,29.0 79.0,23.3 86.6,23.3 94.2,22.9 101.8,10.3 109.4,11.0 117.0,12.9 117,29" class="spark-area"/>
-        <polyline points="3.0,9.1 10.6,8.0 18.2,8.0 25.8,4.5 33.4,3.0 41.0,25.2 48.6,28.6 56.2,29.0 63.8,29.0 71.4,29.0 79.0,23.3 86.6,23.3 94.2,22.9 101.8,10.3 109.4,11.0 117.0,12.9" class="spark-line"/>
-        <circle cx="117.0" cy="12.9" r="2.4" class="spark-dot"/>
+        <polygon points="3,29 3.0,9.1 10.1,8.0 17.2,8.0 24.4,4.5 31.5,3.0 38.6,25.2 45.8,28.6 52.9,29.0 60.0,29.0 67.1,29.0 74.2,23.3 81.4,23.3 88.5,22.9 95.6,10.3 102.8,11.0 109.9,12.9 117.0,22.9 117,29" class="spark-area"/>
+        <polyline points="3.0,9.1 10.1,8.0 17.2,8.0 24.4,4.5 31.5,3.0 38.6,25.2 45.8,28.6 52.9,29.0 60.0,29.0 67.1,29.0 74.2,23.3 81.4,23.3 88.5,22.9 95.6,10.3 102.8,11.0 109.9,12.9 117.0,22.9" class="spark-line"/>
+        <circle cx="117.0" cy="22.9" r="2.4" class="spark-dot"/>
       </svg>
       
     </div>
@@ -249,15 +250,15 @@
       <div class="label"><a href="https://www.windy.com/?rain,10.823,106.630,8" target="_blank" rel="noopener" title="Open a larger time-window view">Rain ↗</a></div>
       <div class="value-row">
         <span class="value">🌧 100%</span>
-        <span class="delta up" title="vs previous reading">▲ 4.2%</span>
+        
       </div>
       <div class="band"><span class="dot" style="background:#3b82f6"></span>Likely</div>
       
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,6.1 10.6,6.1 18.2,6.1 25.8,6.1 33.4,6.1 41.0,9.2 48.6,9.2 56.2,9.2 63.8,9.2 71.4,9.2 79.0,9.2 86.6,9.2 94.2,3.0 101.8,29.0 109.4,5.1 117.0,3.0 117,29" class="spark-area"/>
-        <polyline points="3.0,6.1 10.6,6.1 18.2,6.1 25.8,6.1 33.4,6.1 41.0,9.2 48.6,9.2 56.2,9.2 63.8,9.2 71.4,9.2 79.0,9.2 86.6,9.2 94.2,3.0 101.8,29.0 109.4,5.1 117.0,3.0" class="spark-line"/>
+        <polygon points="3,29 3.0,6.1 10.1,6.1 17.2,6.1 24.4,6.1 31.5,6.1 38.6,9.2 45.8,9.2 52.9,9.2 60.0,9.2 67.1,9.2 74.2,9.2 81.4,9.2 88.5,3.0 95.6,29.0 102.8,5.1 109.9,3.0 117.0,3.0 117,29" class="spark-area"/>
+        <polyline points="3.0,6.1 10.1,6.1 17.2,6.1 24.4,6.1 31.5,6.1 38.6,9.2 45.8,9.2 52.9,9.2 60.0,9.2 67.1,9.2 74.2,9.2 81.4,9.2 88.5,3.0 95.6,29.0 102.8,5.1 109.9,3.0 117.0,3.0" class="spark-line"/>
         <circle cx="117.0" cy="3.0" r="2.4" class="spark-dot"/>
       </svg>
       
@@ -266,38 +267,38 @@
     <div class="tracker">
       <div class="label"><a href="https://aqicn.org/city/vietnam/ho-chi-minh-city/" target="_blank" rel="noopener" title="Open a larger time-window view">AQI ↗</a></div>
       <div class="value-row">
-        <span class="value">73</span>
-        <span class="delta down" title="vs previous reading">▼ 6.4%</span>
+        <span class="value">69</span>
+        <span class="delta down" title="vs previous reading">▼ 5.5%</span>
       </div>
       <div class="band"><span class="dot" style="background:#c9a227"></span>Moderate</div>
       
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 10.6,3.0 18.2,3.0 25.8,3.0 33.4,3.0 41.0,26.8 48.6,26.0 56.2,26.0 63.8,26.0 71.4,26.0 79.0,29.0 86.6,29.0 94.2,27.5 101.8,24.5 109.4,23.8 117.0,27.5 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 10.6,3.0 18.2,3.0 25.8,3.0 33.4,3.0 41.0,26.8 48.6,26.0 56.2,26.0 63.8,26.0 71.4,26.0 79.0,29.0 86.6,29.0 94.2,27.5 101.8,24.5 109.4,23.8 117.0,27.5" class="spark-line"/>
-        <circle cx="117.0" cy="27.5" r="2.4" class="spark-dot"/>
-      </svg>
-      
-    </div>
-  
-    <div class="tracker">
-      <div class="label">UV</div>
-      <div class="value-row">
-        <span class="value">☀️ 6</span>
-        <span class="delta down" title="vs previous reading">▼ 29.9%</span>
-      </div>
-      <div class="band"><span class="dot" style="background:#e8730c"></span>High</div>
-      
-      
-      
-      <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,12.6 22.0,3.0 41.0,3.0 60.0,4.4 79.0,3.5 98.0,5.3 117.0,29.0 117,29" class="spark-area"/>
-        <polyline points="3.0,12.6 22.0,3.0 41.0,3.0 60.0,4.4 79.0,3.5 98.0,5.3 117.0,29.0" class="spark-line"/>
+        <polygon points="3,29 3.0,3.0 10.1,3.0 17.2,3.0 24.4,3.0 31.5,3.0 38.6,25.5 45.8,24.8 52.9,24.8 60.0,24.8 67.1,24.8 74.2,27.6 81.4,27.6 88.5,26.2 95.6,23.4 102.8,22.7 109.9,26.2 117.0,29.0 117,29" class="spark-area"/>
+        <polyline points="3.0,3.0 10.1,3.0 17.2,3.0 24.4,3.0 31.5,3.0 38.6,25.5 45.8,24.8 52.9,24.8 60.0,24.8 67.1,24.8 74.2,27.6 81.4,27.6 88.5,26.2 95.6,23.4 102.8,22.7 109.9,26.2 117.0,29.0" class="spark-line"/>
         <circle cx="117.0" cy="29.0" r="2.4" class="spark-dot"/>
       </svg>
       
     </div>
+  
+    <div class="tracker alert" style="border-color:#d63b5b">
+      <div class="label">UV</div>
+      <div class="value-row">
+        <span class="value">☀️ 8</span>
+        <span class="delta up" title="vs previous reading">▲ 32.8%</span>
+      </div>
+      <div class="band"><span class="dot" style="background:#d63b5b"></span>Very high</div>
+      
+      
+      
+      <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
+        <polygon points="3,29 3.0,12.6 19.3,3.0 35.6,3.0 51.9,4.4 68.1,3.5 84.4,5.3 100.7,29.0 117.0,10.8 117,29" class="spark-area"/>
+        <polyline points="3.0,12.6 19.3,3.0 35.6,3.0 51.9,4.4 68.1,3.5 84.4,5.3 100.7,29.0 117.0,10.8" class="spark-line"/>
+        <circle cx="117.0" cy="10.8" r="2.4" class="spark-dot"/>
+      </svg>
+      
+    </div>
   </div>
     
     
@@ -315,22 +316,156 @@
 
   
 
+  
+  <section class="type" id="sec-watching">
+    <h2 class="section">📺 Watching <span class="count">· 14</span></h2>
+    
+    
+    
+    <details class="items-drawer" open>
+      <summary>14 items</summary>
+      <div class="drawer-body">
+        
+  <div class="iline" data-pub="2026-07-17T12:45:31+00:00" data-watching-id="ab284ff8fb04005fed6d14e15c2568bee036f06bd3feb23d81de074fdb7ad442">
+    <a href="https://youtube.com/watch?v=7exybqhdvFo" target="_blank" rel="noopener">Herdr đã thay đổi Multi Agents workflow của tôi!</a>
+    
+    
+    <div class="iline-meta"><span class="badge youtube">youtube</span>
+      tubakhuym-yt · 28d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-06-13T09:33:48+00:00" data-watching-id="151e02b5e002045c893157db50b509d29fcf3cac01850a19165e7625fdf58741">
+    <a href="https://youtube.com/watch?v=36DQo1808sk" target="_blank" rel="noopener">MiniMax M3 vừa ra mắt có thực sự mạnh như lời đồn?</a>
+    
+    
+    <div class="iline-meta"><span class="badge youtube">youtube</span>
+      tubakhuym-yt · 62d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-06-02T14:23:05+00:00" data-watching-id="57559b197428d0bb8b0b8fca2f4db3f8d837690de55da8365ce49f216484c686">
+    <a href="https://youtube.com/watch?v=AQvGCADuQgw" target="_blank" rel="noopener">Phần 2 - Hoàn thiện MVP cho Web App được build với Repository Harness.</a>
+    
+    
+    <div class="iline-meta"><span class="badge youtube">youtube</span>
+      tubakhuym-yt · 73d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-05-30T02:56:07+00:00" data-watching-id="34f7a893bfbd94705b4bf97dd14d990505e1bb69b91d1ac5bb1b2ac23644ff38">
+    <a href="https://youtube.com/watch?v=gQLhchHmRKs" target="_blank" rel="noopener">Bắt đầu Harness Engineering từ đâu? Từ đây!!</a>
+    
+    
+    <div class="iline-meta"><span class="badge youtube">youtube</span>
+      tubakhuym-yt · 76d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-05-19T14:17:40+00:00" data-watching-id="f654756ea5358902bf47d59a578b5ec802ec4980aa60380fc7f205cd71c18482">
+    <a href="https://youtube.com/watch?v=efxiuDAIVlw" target="_blank" rel="noopener">Tips sử dụng Goal Mode của Codex hiệu quả hơn.</a>
+    
+    
+    <div class="iline-meta"><span class="badge youtube">youtube</span>
+      tubakhuym-yt · 87d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-05-13T15:01:46+00:00" data-watching-id="d0297fc55a8aae29115653ea1bf78a72e8e0a86f013c32b45cad642ec7390351">
+    <a href="https://youtube.com/watch?v=SloXHfkYk34" target="_blank" rel="noopener">Chia sẻ về bộ khung Harness Engineering cho chính repository của bạn.</a>
+    
+    
+    <div class="iline-meta"><span class="badge youtube">youtube</span>
+      tubakhuym-yt · 93d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-04-30T04:20:29+00:00" data-watching-id="db88c9869844c2e0819918e8d6adc70ff9d82a0ae2fd1e301556ba17959f7350">
+    <a href="https://youtube.com/watch?v=zygsgz2k6zI" target="_blank" rel="noopener">Có thể bạn chưa biết về Codex.</a>
+    
+    
+    <div class="iline-meta"><span class="badge youtube">youtube</span>
+      tubakhuym-yt · 106d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-04-19T02:52:09+00:00" data-watching-id="0b8f461c3826aa3653de8ff43b78f89ff8a73f1e2ca5e6b2e3f3f59e2cb61614">
+    <a href="https://youtube.com/watch?v=Yv7WcJes03g" target="_blank" rel="noopener">Nếu chỉ được chọn một gói Token cho AI.</a>
+    
+    
+    <div class="iline-meta"><span class="badge youtube">youtube</span>
+      tubakhuym-yt · 117d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-04-15T06:20:58+00:00" data-watching-id="946d6e04521a95068fba83c5226d2dc3a965ed233e663b6dcfb48a7789727f81">
+    <a href="https://youtube.com/watch?v=qFuMl_-Xm9Y" target="_blank" rel="noopener">Thiết lập các công cụ cơ bản cho Openclaw.</a>
+    
+    
+    <div class="iline-meta"><span class="badge youtube">youtube</span>
+      tubakhuym-yt · 121d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-04-07T05:09:36+00:00" data-watching-id="c37b6c961f75fe50d764f04f1ffb286ed774c603b8bf258345de01a38c6b7408">
+    <a href="https://youtube.com/watch?v=LalLR78sLFY" target="_blank" rel="noopener">Mang GLM 5.1 - MiniMax 2.7 và Kimi 2.5 (fireworks) lên bàn cân!</a>
+    
+    
+    <div class="iline-meta"><span class="badge youtube">youtube</span>
+      tubakhuym-yt · 129d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-03-28T05:42:21+00:00" data-watching-id="34f3092666aab1ed5c8219e4abd9b1a96038b38917a79059786fe97f460f5d91">
+    <a href="https://youtube.com/watch?v=IiHXXr_coeU" target="_blank" rel="noopener">Openclaw - Càng chat càng đốt token.</a>
+    
+    
+    <div class="iline-meta"><span class="badge youtube">youtube</span>
+      tubakhuym-yt · 139d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-03-17T00:56:38+00:00" data-watching-id="37f3f746eecb6a05162d2e920f86de432015a46cd1bdb25886b4a28c5e7f86ea">
+    <a href="https://youtube.com/watch?v=V7i4fTRFZD0" target="_blank" rel="noopener">Nhốt OpenClaw vào MacOS Virtual Machine với Lume.</a>
+    
+    
+    <div class="iline-meta"><span class="badge youtube">youtube</span>
+      tubakhuym-yt · 150d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-03-11T05:06:11+00:00" data-watching-id="a256f12d7a6632e5fbd2ed7ced050c8bd2ba4716b7dda9b652507091ef8367d6">
+    <a href="https://youtube.com/watch?v=P8SuIyIZ4o0" target="_blank" rel="noopener">Flywheel Toolkit+: UBS, CASS, CASS Memory, DCG, SLB</a>
+    
+    
+    <div class="iline-meta"><span class="badge youtube">youtube</span>
+      tubakhuym-yt · 156d ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-02-27T13:02:12+00:00" data-watching-id="5d43417e89409d9273e67d238ba77a90da86a8a3bf4e036752ffbbf8ea3d7e10">
+    <a href="https://youtube.com/watch?v=cGDdr-6ALpc" target="_blank" rel="noopener">Minimal Agent Flywheel</a>
+    
+    
+    <div class="iline-meta"><span class="badge youtube">youtube</span>
+      tubakhuym-yt · 168d ago</div>
+  </div>
+  
+      </div>
+    </details>
+    
+  </section>
   
   <section class="type" id="sec-aws">
-    <h2 class="section">AWS <span class="count">· 1</span></h2>
-    <p class="type-summary">Epic Games optimized its Amazon OpenSearch Service cluster for Fortnite analytics through shard rebalancing, instance right-sizing, and Graviton upgrades [1]. These architectural adjustments directly improved query latency and throughput under high analytical load.</p>
+    <h2 class="section">AWS <span class="count">· 2</span></h2>
+    <p class="type-summary">Epic Games optimized its Amazon OpenSearch Service cluster for Fortnite analytics through shard rebalancing, instance right-sizing, and Graviton upgrades <a href="https://aws.amazon.com/blogs/big-data/how-a-team-at-epic-games-tuned-amazon-opensearch-service-for-fortnite-analytics" target="_blank" rel="noopener" title="aws-big-data — How a team at Epic Games tuned Amazon OpenSearch Service for Fortnite analytics">[1]</a>. These architectural adjustments directly improved query latency and throughput under high analytical load.</p>
     
     
     <details class="items-drawer">
-      <summary>1 item</summary>
+      <summary>2 items</summary>
       <div class="drawer-body">
         
-  <div class="iline" data-pub="2026-08-13T15:50:30+00:00">
-    <span class="new-pill">new</span> <a href="https://aws.amazon.com/blogs/big-data/how-appfolio-transformed-its-data-streaming-architecture-with-amazon-msk-express-brokers" target="_blank" rel="noopener">How AppFolio transformed its data streaming architecture with Amazon MSK Express brokers</a>
+  <div class="iline" data-pub="2026-08-14T14:32:13+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/blogs/big-data/trace-cascading-decision-failures-with-a-blame-graph-on-amazon-opensearch-service" target="_blank" rel="noopener">Trace cascading decision failures with a blame graph on Amazon OpenSearch Service</a>
     
     
     <div class="iline-meta"><span class="badge rss">rss</span>
-      aws-big-data · 10h ago</div>
+      aws-big-data · 3h ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-08-14T14:40:11+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/blogs/big-data/how-autodesk-migrated-2-3-billion-documents-to-amazon-opensearch-service-using-migration-assistant-and-intelligent-routing" target="_blank" rel="noopener">How Autodesk migrated 2.3 billion documents to Amazon OpenSearch Service using Migration Assistant and intelligent routing</a>
+    
+    
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      aws-big-data · 3h ago</div>
   </div>
   
       </div>
@@ -340,35 +475,35 @@
   
   <section class="type" id="sec-dataeng">
     <h2 class="section">Data Engineering <span class="count">· 3</span></h2>
-    <p class="type-summary">Databricks details its architecture for delivering network configurations across tens of millions of serverless VMs daily [1]. Transport and logistics networks are also modernizing their core platforms, with Amtrak establishing a new intelligence backbone [2] and a major freight railroad accelerating pipeline creation using Genie Code [3].</p>
+    <p class="type-summary">Databricks details its architecture for delivering network configurations across tens of millions of serverless VMs daily <a href="https://databricks.com/blog/databricks-network-configuration-delivery-tens-millions-serverless-vms" target="_blank" rel="noopener" title="databricks-blog — Databricks Network Configuration delivery to Tens of Millions of Serverless VMs">[1]</a>. Transport and logistics networks are also modernizing their core platforms, with Amtrak establishing a new intelligence backbone <a href="https://databricks.com/blog/how-amtrak-building-data-backbone-its-largest-transformation-over-50-years" target="_blank" rel="noopener" title="databricks-blog — How Amtrak is building the data backbone for its largest transformation in over 50 years">[2]</a> and a major freight railroad accelerating pipeline creation using Genie Code <a href="https://databricks.com/blog/how-major-freight-railroad-scaled-pipeline-creation-genie-code" target="_blank" rel="noopener" title="databricks-blog — How a major freight railroad scaled pipeline creation with Genie Code">[3]</a>.</p>
     
     
     <details class="items-drawer">
       <summary>3 items</summary>
       <div class="drawer-body">
         
-  <div class="iline" data-pub="2026-08-13T21:00:00+00:00">
-    <span class="new-pill">new</span> <a href="https://databricks.com/blog/how-scottish-water-made-its-capital-investment-data-conversational-databricks-genie" target="_blank" rel="noopener">How Scottish Water Made Its Capital Investment Data Conversational With Databricks Genie</a>
+  <div class="iline" data-pub="2026-08-12T13:00:00+00:00">
+    <a href="https://databricks.com/blog/future-data-analytics-why-ai-rewriting-analysts-job-description" target="_blank" rel="noopener">The Future of Data Analytics: Why AI is rewriting the Analyst’s Job Description</a>
     
     
     <div class="iline-meta"><span class="badge rss">rss</span>
-      databricks-blog · 4h ago</div>
+      databricks-blog · 2d ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-08-13T19:35:16+00:00">
-    <span class="new-pill">new</span> <a href="https://databricks.com/blog/ai-hallucinations" target="_blank" rel="noopener">What are AI Hallucinations?</a>
+  <div class="iline" data-pub="2026-08-10T23:08:50+00:00">
+    <a href="https://databricks.com/blog/how-ground-genie-agents-both-structured-data-and-documents-without-losing-governance" target="_blank" rel="noopener">How to ground Genie Agents in both structured data and documents without losing governance</a>
     
-    
+    <div class="iline-gist">Architecture pattern for grounding Genie Agents in structured and unstructured data.</div>
     <div class="iline-meta"><span class="badge rss">rss</span>
-      databricks-blog · 6h ago</div>
+      databricks-blog · 3d ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-08-13T17:52:04+00:00">
-    <span class="new-pill">new</span> <a href="https://databricks.com/blog/smart-routing-unity-ai-gateway-match-frontier-quality-30-lower-cost-task" target="_blank" rel="noopener">Smart Routing in Unity AI Gateway: Match frontier quality with 30%+ lower cost per task</a>
+  <div class="iline" data-pub="2026-08-11T12:30:00+00:00">
+    <a href="https://databricks.com/blog/modern-risk-demands-real-time-foundation-cros-mandate" target="_blank" rel="noopener">Modern Risk Demands a Real-Time Foundation: The CRO’s Mandate</a>
     
-    
+    <div class="iline-gist">Strategic perspective on building real-time data foundations for enterprise risk management.</div>
     <div class="iline-meta"><span class="badge rss">rss</span>
-      databricks-blog · 8h ago</div>
+      databricks-blog · 3d ago</div>
   </div>
   
       </div>
@@ -377,60 +512,36 @@
   </section>
   
   <section class="type" id="sec-ai">
-    <h2 class="section">AI <span class="count">· 6</span></h2>
-    <p class="type-summary">New releases bring fresh capabilities to AI development, including API access to DeepSeek V4 Pro [1] and Meta&#39;s open-source agentic multimodal model Muse Glimmer [2]. On the edge and domain-specific front, LFM2.5-VL-3B delivers fast vision capabilities [3], while OlmoEarth Studio introduced custom embedding exports [4]. Additional tools include datasette-upload-dbs for hosting SQLite databases [5], alongside reminders about the limits of AI coding tools when developer domain context is lacking [6].</p>
+    <h2 class="section">AI <span class="count">· 3</span></h2>
+    <p class="type-summary">New releases bring fresh capabilities to AI development, including API access to DeepSeek V4 Pro <a href="https://simonwillison.net/2026/Aug/12/deepseek-v4-pro-0813" target="_blank" rel="noopener" title="simonwillison — DeepSeek V4 Pro 0813 (on OpenRouter)">[1]</a> and Meta&#39;s open-source agentic multimodal model Muse Glimmer <a href="https://huggingface.co/blog/muse-glimmer" target="_blank" rel="noopener" title="huggingface-blog — Meta is back with Muse Glimmer: local, agentic, multimodal, and open source">[2]</a>. On the edge and domain-specific front, LFM2.5-VL-3B delivers fast vision capabilities <a href="https://huggingface.co/blog/LiquidAI/lfm2-5-vl-3b" target="_blank" rel="noopener" title="huggingface-blog — LFM2.5-VL-3B for Better and Faster Vision Capabilities for the Edge">[3]</a>, while OlmoEarth Studio introduced custom embedding exports <a href="https://huggingface.co/blog/allenai/olmoearth-embeddings" target="_blank" rel="noopener" title="huggingface-blog — Introducing OlmoEarth embeddings: Custom embedding exports from OlmoEarth Studio for downstream analysis">[4]</a>. Additional tools include datasette-upload-dbs for hosting SQLite databases <a href="https://simonwillison.net/2026/Aug/11/datasette-upload-dbs" target="_blank" rel="noopener" title="simonwillison — datasette-upload-dbs 0.5a0">[5]</a>, alongside reminders about the limits of AI coding tools when developer domain context is lacking <a href="https://simonwillison.net/2026/Aug/12/florian-herrengt" target="_blank" rel="noopener" title="simonwillison — Quoting Florian Herrengt">[6]</a>.</p>
     
     
     <details class="items-drawer">
-      <summary>6 items</summary>
+      <summary>3 items</summary>
       <div class="drawer-body">
         
-  <div class="iline" data-pub="2026-08-13T17:16:04+00:00">
-    <span class="new-pill">new</span> <a href="https://huggingface.co/blog/amazon/strands-lerobot-streaming-data-loop" target="_blank" rel="noopener">Record, train, and deploy from one place with Strands Agents, LeRobot, and Hugging Face Storage Buckets</a>
-    
-    
-    <div class="iline-meta"><span class="badge rss">rss</span>
-      huggingface-blog · 8h ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-08-13T23:53:47+00:00">
-    <span class="new-pill">new</span> <a href="https://simonwillison.net/2026/Aug/13/sqlite-utils-2" target="_blank" rel="noopener">sqlite-utils 4.2.1</a>
-    
-    
-    <div class="iline-meta"><span class="badge rss">rss</span>
-      simonwillison · 1h ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-08-12T19:51:30+00:00">
-    <a href="https://simonwillison.net/2026/Aug/12/alchemy-utils" target="_blank" rel="noopener">alchemy-utils 0.1a0</a>
+  <div class="iline" data-pub="2026-08-13T03:03:17+00:00">
+    <a href="https://simonwillison.net/2026/Aug/13/alchemy-utils" target="_blank" rel="noopener">alchemy-utils 0.1a1</a>
     
     
     <div class="iline-meta"><span class="badge rss">rss</span>
       simonwillison · 1d ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-08-13T00:00:00+00:00">
-    <a href="https://huggingface.co/blog/icml-2026-open-reproductions" target="_blank" rel="noopener">What We Learned by Reproducing 2,200 papers from ICML</a>
+  <div class="iline" data-pub="2026-08-13T20:11:29+00:00">
+    <span class="new-pill">new</span> <a href="https://simonwillison.net/2026/Aug/13/sqlite-utils" target="_blank" rel="noopener">sqlite-utils 4.2</a>
     
     
     <div class="iline-meta"><span class="badge rss">rss</span>
-      huggingface-blog · 1d ago</div>
+      simonwillison · 22h ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-08-10T10:05:36+00:00">
-    <a href="https://huggingface.co/blog/MultiverseComputingCAI/efficient-knowledge-distillation" target="_blank" rel="noopener">Making Knowledge Distillation Cheap Enough to Run at Scale</a>
+  <div class="iline" data-pub="2026-08-14T00:00:00+00:00">
+    <span class="new-pill">new</span> <a href="https://huggingface.co/blog/state-of-open-models-summer-2026" target="_blank" rel="noopener">State of Open Models: Summer 2026 Observations</a>
     
-    <div class="iline-gist">New research presents methods to reduce costs of knowledge distillation at scale.</div>
-    <div class="iline-meta"><span class="badge rss">rss</span>
-      huggingface-blog · 3d ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-08-10T02:05:16+00:00">
-    <a href="https://simonwillison.net/2026/Aug/10/openclaw" target="_blank" rel="noopener">Quoting OpenClaw</a>
     
-    <div class="iline-gist">OpenClaw demonstrates authorization flaw allowing cancellation of arbitrary user bookings.</div>
     <div class="iline-meta"><span class="badge rss">rss</span>
-      simonwillison · 3d ago</div>
+      huggingface-blog · 18h ago</div>
   </div>
   
       </div>
@@ -439,56 +550,32 @@
   </section>
   
   <section class="type" id="sec-releases">
-    <h2 class="section">📦 Releases <span class="count">· 6</span></h2>
-    <p class="type-summary">Apache Airflow rolled out version 3.3.1 alongside Task SDK 1.3.1 and updated dependency constraints [1] [2] [3]. On AWS, IAM introduced automated role manager setup [4], Amazon Connect enabled manual assignment of queued agent callbacks [5], and AWS Global View added an interactive infrastructure map [6].</p>
+    <h2 class="section">📦 Releases <span class="count">· 3</span></h2>
+    <p class="type-summary">Apache Airflow rolled out version 3.3.1 alongside Task SDK 1.3.1 and updated dependency constraints <a href="https://github.com/apache/airflow/releases/tag/3.3.1" target="_blank" rel="noopener" title="airflow-releases — Apache Airflow 3.3.1">[1]</a> <a href="https://github.com/apache/airflow/releases/tag/task-sdk%2F1.3.1" target="_blank" rel="noopener" title="airflow-releases — task-sdk/1.3.1">[2]</a> <a href="https://github.com/apache/airflow/releases/tag/constraints-latest" target="_blank" rel="noopener" title="airflow-releases — constraints-latest">[3]</a>. On AWS, IAM introduced automated role manager setup <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/aws-iam-role-manager" target="_blank" rel="noopener" title="aws-whats-new — AWS IAM now provides role manager to set up IAM roles automatically">[4]</a>, Amazon Connect enabled manual assignment of queued agent callbacks <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-connect-agent-callbacks" target="_blank" rel="noopener" title="aws-whats-new — Amazon Connect Customer supports manual assignment of queued agent-first callbacks">[5]</a>, and AWS Global View added an interactive infrastructure map <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/aws-global-view-map-view" target="_blank" rel="noopener" title="aws-whats-new — AWS Global View now offers an interactive map view for AWS Regions and AWS Local Zones">[6]</a>.</p>
     
     <div class="drawer-body">
-  <div class="iline" data-pub="2026-08-13T18:23:00+00:00">
-    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/07/claude-opus-5-aws-govcloud" target="_blank" rel="noopener">Claude Opus 5 is now available in AWS GovCloud (US)</a>
+  <div class="iline" data-pub="2026-08-13T19:34:00+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-redshift-adds-rg-large-12xlarge-aws-govcloud-regions" target="_blank" rel="noopener">Amazon Redshift adds rg.large and rg.12xlarge instance sizes in AWS GovCloud (US) Regions</a>
     
     
     <div class="iline-meta"><span class="badge rss">rss</span>
-      aws-whats-new · 7h ago</div>
+      aws-whats-new · 22h ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-08-13T09:50:58+00:00">
-    <span class="new-pill">new</span> <a href="https://github.com/apache/airflow/releases/tag/python-client%2F3.3.1rc1" target="_blank" rel="noopener">python-client/3.3.1rc1</a>
-    
-    
-    <div class="iline-meta"><span class="badge github">github</span>
-      airflow-releases · 16h ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-08-13T13:00:00+00:00">
-    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/s3-additional-policy-details-access-denied-error-messages" target="_blank" rel="noopener">Amazon S3 adds additional policy details to access denied error messages</a>
+  <div class="iline" data-pub="2026-08-14T02:00:00+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/aws-billing-and-cost-management-managed-dashboards" target="_blank" rel="noopener">AWS Billing and Cost Management introduces Managed Dashboards</a>
     
     
     <div class="iline-meta"><span class="badge rss">rss</span>
-      aws-whats-new · 12h ago</div>
+      aws-whats-new · 16h ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-08-13T20:49:00+00:00">
-    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/aws-client-vpn-cli" target="_blank" rel="noopener">AWS Client VPN now supports CLI, administration controls, and faster connections</a>
+  <div class="iline" data-pub="2026-08-13T17:13:00+00:00">
+    <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/spot-placement-score-local-zones" target="_blank" rel="noopener">Spot Placement Score now includes Local Zones</a>
     
     
     <div class="iline-meta"><span class="badge rss">rss</span>
-      aws-whats-new · 5h ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-08-12T08:45:56+00:00">
-    <a href="https://github.com/apache/airflow/releases/tag/constraints-3.3.1" target="_blank" rel="noopener">constraints-3.3.1</a>
-    
-    
-    <div class="iline-meta"><span class="badge github">github</span>
-      airflow-releases · 1d ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-08-10T15:32:05+00:00">
-    <a href="https://airflow.apache.org/docs/apache-airflow-providers-cncf-kubernetes/10.21.0/changelog.html" target="_blank" rel="noopener">providers-cncf-kubernetes/10.21.0</a>
-    
-    <div class="iline-gist">Airflow Kubernetes provider 10.21.0 adds pod cleanup delay option.</div>
-    <div class="iline-meta"><span class="badge github">github</span>
-      airflow-releases · 3d ago</div>
+      aws-whats-new · 1d ago</div>
   </div>
   </div>
     
@@ -536,6 +623,28 @@
     var un = document.getElementById("unseenNote");
     if (un && unseen > 0) { un.textContent = unseen + " new since your last visit"; un.hidden = false; }
     localStorage.setItem("pdt-last-visit", String(Date.now()));
+  } catch (e) {}
+  // Watching is intentionally a persistent queue. Opening a video marks only
+  // that entry watched in this browser; future daily renders keep other videos.
+  try {
+    var watchedKey = "pdt-watched-items";
+    var watched = JSON.parse(localStorage.getItem(watchedKey) || "[]");
+    watched = Array.isArray(watched) ? watched : [];
+    var watchedSet = {};
+    watched.forEach(function (id) { watchedSet[id] = true; });
+    document.querySelectorAll("[data-watching-id]").forEach(function (el) {
+      var id = el.getAttribute("data-watching-id");
+      if (watchedSet[id]) el.classList.add("watched");
+      var link = el.querySelector("a");
+      if (link) link.addEventListener("click", function () {
+        if (!watchedSet[id]) {
+          watchedSet[id] = true;
+          watched.push(id);
+          localStorage.setItem(watchedKey, JSON.stringify(watched));
+        }
+        el.classList.add("watched");
+      });
+    });
   } catch (e) {}
   // PWA: register the service worker (offline / installable)
   if ("serviceWorker" in navigator) {
