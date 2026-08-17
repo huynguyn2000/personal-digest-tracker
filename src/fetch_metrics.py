@@ -32,7 +32,7 @@ def weather_hcmc() -> list[tuple]:
             "latitude": HCMC_LAT,
             "longitude": HCMC_LON,
             "current": "temperature_2m,precipitation,weather_code",
-            "daily": "precipitation_probability_max,temperature_2m_max,temperature_2m_min,uv_index_max",
+            "daily": "precipitation_probability_max,temperature_2m_max,temperature_2m_min",
             "timezone": "Asia/Ho_Chi_Minh",
             "forecast_days": 1,
         },
@@ -53,27 +53,6 @@ def weather_hcmc() -> list[tuple]:
         out.append(("hcmc_temp_hi", float(hi), {"unit": "C"}))
     if lo is not None:
         out.append(("hcmc_temp_lo", float(lo), {"unit": "C"}))
-    uv = (daily.get("uv_index_max") or [None])[0]
-    if uv is not None:
-        out.append(("hcmc_uv", float(uv), {"scale": "who"}))
-    return out
-
-
-def aqi_hcmc() -> list[tuple]:
-    """US AQI + PM2.5 (open-meteo air-quality, no key)."""
-    data = _get_json(
-        "https://air-quality-api.open-meteo.com/v1/air-quality",
-        {
-            "latitude": HCMC_LAT,
-            "longitude": HCMC_LON,
-            "current": "us_aqi,pm2_5",
-            "timezone": "Asia/Ho_Chi_Minh",
-        },
-    )
-    cur = data.get("current", {})
-    out = []
-    if cur.get("us_aqi") is not None:
-        out.append(("hcmc_aqi", float(cur["us_aqi"]), {"pm2_5": cur.get("pm2_5")}))
     return out
 
 
@@ -141,7 +120,7 @@ def gold_sjc() -> list[tuple]:
 
 # gold_sjc intentionally omitted (Cloudflare-blocked, stretch goal). Re-add here
 # once you have a working source.
-METRIC_FNS = [weather_hcmc, aqi_hcmc, fx_vcb]
+METRIC_FNS = [weather_hcmc, fx_vcb]
 
 
 def run(conn: sqlite3.Connection) -> list[dict]:

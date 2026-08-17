@@ -56,7 +56,7 @@ digest/
     db.py               # schema init, connection helper
     fetch_rss.py        # rss + youtube + github releases
     fetch_imap.py       # gmail
-    fetch_metrics.py    # gold, fx, aqi, weather
+    fetch_metrics.py    # gold, fx, weather
     dedup.py
     score.py
     render.py           # html
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS feed_state (
 );
 
 CREATE TABLE IF NOT EXISTS metrics (
-  name    TEXT NOT NULL,               -- sjc_gold_buy, usd_vnd, hcmc_aqi, ...
+  name    TEXT NOT NULL,               -- sjc_gold_buy, usd_vnd, hcmc_temp, ...
   ts      TEXT NOT NULL,               -- ISO8601 UTC
   value   REAL NOT NULL,
   meta    TEXT,                        -- optional JSON
@@ -129,7 +129,7 @@ See section 7 of the original spec. Key rules:
 - One bad feed never kills the run; write error to `feed_state`, increment `error_count`.
 - `error_count >= 5` -> "dead feeds" section at bottom of digest.
 - IMAP: `imap.gmail.com:993` SSL, app password; SINCE last 3 days; id = sha256(Message-ID).
-- Metrics: weather+AQI (open-meteo), FX (Vietcombank XML), gold (SJC, fragile). Record gold spread.
+- Metrics: weather (open-meteo), FX (Vietcombank XML), gold (SJC, fragile). Record gold spread.
 
 ## 8. Dedup
 

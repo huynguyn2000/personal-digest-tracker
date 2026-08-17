@@ -37,53 +37,8 @@ TRACKER_SPECS = [
     {"name": "sjc_gold_spread", "label": "Gold spread", "fmt": lambda v: f"{v:,.0f}", "group": "Markets"},
     {"name": "hcmc_temp", "label": "Temp", "fmt": lambda v: f"{v:.0f}°C", "icon": "🌡", "group": "Environment"},
     {"name": "hcmc_rain_prob", "label": "Rain", "fmt": lambda v: f"{v:.0f}%", "icon": "🌧", "group": "Environment"},
-    {"name": "hcmc_aqi", "label": "AQI", "fmt": lambda v: f"{v:.0f}", "kind": "aqi", "group": "Environment"},
-    {"name": "hcmc_uv", "label": "UV", "fmt": lambda v: f"{v:.0f}", "kind": "uv", "icon": "☀️", "group": "Environment"},
 ]
 DEAD_FEED_THRESHOLD = 5
-
-# US AQI categories with their standard (theme-independent) colors.
-_AQI_BANDS = [
-    (50, "Good", "#2fa36b"),
-    (100, "Moderate", "#c9a227"),
-    (150, "Unhealthy for sensitive", "#e8730c"),
-    (200, "Unhealthy", "#d63b5b"),
-    (300, "Very unhealthy", "#8b5cf6"),
-    (10 ** 9, "Hazardous", "#7f1d1d"),
-]
-
-
-def _aqi_band(v: float) -> dict | None:
-    for hi, label, color in _AQI_BANDS:
-        if v <= hi:
-            return {"label": label, "color": color}
-    return None
-
-
-# WHO UV index categories.
-_UV_BANDS = [
-    (2, "Low", "#2fa36b"),
-    (5, "Moderate", "#c9a227"),
-    (7, "High", "#e8730c"),
-    (10, "Very high", "#d63b5b"),
-    (10 ** 9, "Extreme", "#8b5cf6"),
-]
-
-
-def _uv_band(v: float) -> dict | None:
-    for hi, label, color in _UV_BANDS:
-        if v <= hi:
-            return {"label": label, "color": color}
-    return None
-
-
-def _band_for(kind: str | None, value: float) -> dict | None:
-    if kind == "aqi":
-        return _aqi_band(value)
-    if kind == "uv":
-        return _uv_band(value)
-    return None
-
 
 # WMO weather codes -> (label, emoji).
 _WMO = {
@@ -171,17 +126,13 @@ def _trackers(conn: sqlite3.Connection, links: dict | None = None) -> list[dict]
             if wc is not None:
                 cond = _wmo(int(wc["value"]))
 
-        band = _band_for(spec.get("kind"), latest)
+        band = None
         if name == "hcmc_rain_prob" and latest >= 70:
             band = {"label": "Likely", "color": "#3b82f6"}
 
         # glanceable alert: emphasize the card only when it's actionable
         alert = None
-        if name == "hcmc_aqi" and latest > 100:
-            alert = band["color"] if band else "#d63b5b"
-        elif name == "hcmc_uv" and latest >= 8:
-            alert = band["color"] if band else "#e8730c"
-        elif name == "hcmc_rain_prob" and latest >= 70:
+        if name == "hcmc_rain_prob" and latest >= 70:
             alert = "#3b82f6"
 
         out.append(
@@ -323,16 +274,22 @@ def select_digest(conn: sqlite3.Connection) -> dict:
 
     cap = int(dcfg.get("per_source_cap", 0) or 0)
     newsletters = [r for r in candidates if is_newsletter(r)]
-    # Watching is a queue, not a daily-news window. Keep unclicked videos in
-    # the digest until the browser records that the user opened them.
-    watching = [
-        r
-        for r in conn.execute(
-            "SELECT * FROM items WHERE state='new' AND is_primary=1 "
-            "ORDER BY published_at DESC"
-        ).fetchall()
-        if is_watching(r)
-    ]
+    # Watching is a queue, not a daily-news window. Keep the newest unclicked
+    # videos from each channel until the browser records that they were opened.
+    watching_cap = int(dcfg.get("watching_per_source_cap", 3))
+    watching_counts: dict[str, int] = {}
+    watching = []
+    for r in conn.execute(
+        "SELECT * FROM items WHERE state='new' AND is_primary=1 "
+        "ORDER BY published_at DESC"
+    ).fetchall():
+        if not is_watching(r):
+            continue
+        source_id = r["source_id"]
+        if watching_counts.get(source_id, 0) >= watching_cap:
+            continue
+        watching_counts[source_id] = watching_counts.get(source_id, 0) + 1
+        watching.append(r)
     # releases get their own compact section + budget (keeps Airflow's provider
     # firehose out of Data Engineering / the max_items pool)
     releases = per_source_cap(

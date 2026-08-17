@@ -64,7 +64,6 @@ tracker_links:
   cny_vnd: https://www.google.com/finance/quote/CNY-VND
   hcmc_temp: https://www.windy.com/?10.823,106.630,8
   hcmc_rain_prob: https://www.windy.com/?rain,10.823,106.630,8
-  hcmc_aqi: https://aqicn.org/city/vietnam/ho-chi-minh-city/
 
 digest:
   max_items: 12
@@ -85,6 +84,9 @@ digest:
   # Pinned non-Watching sources surface their latest item within this wider
   # window. Watching/YouTube is instead a persistent queue until clicked.
   pin_window_days: 21
+  # Keep the watching queue compact while retaining the newest videos from
+  # every channel.
+  watching_per_source_cap: 3
   keyword_score_cap: 3.0
   # Section ordering in the HTML. Tags not listed fall into "other".
   section_order: [watching, aws, dataeng, ai, releases]

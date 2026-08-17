@@ -2,7 +2,7 @@
 
 One HTML page and one Telegram message every morning: AI/data-engineering news
 (RSS, YouTube, GitHub releases), your Gmail newsletters, and trackers (FX,
-weather, air quality). Deterministic ranking — **no LLM anywhere in the
+weather). Deterministic ranking — **no LLM anywhere in the
 pipeline**. See [PLAN.md](PLAN.md) for the full spec and hard constraints.
 
 ## How it works
@@ -19,8 +19,8 @@ Everything lives in one SQLite file (`data/digest.db`), committed back to the
 repo by the daily GitHub Action. The rendered page is `out/index.html`.
 
 **The page** leads with the day overview, then trackers (FX / weather / air
-quality — each with a day-over-day delta, the AQI air-quality category, a
-sparkline, and a `↗` to a larger-window view), then one **summary per section**
+weather — each with a day-over-day delta and a sparkline, plus a
+`↗` to a larger-window view), then one **summary per section**
 (AWS · Data Engineering · AI · Newsletters) with inline `[n]` citation links to
 sources; the underlying headlines sit in a collapsible drawer. It has a
 light/dark toggle, a "generated Xh ago" freshness stamp, and jump-nav.
@@ -51,7 +51,7 @@ Each stage runs standalone and prints what it did:
 ./.venv/bin/python -m src.db            # init/inspect schema
 ./.venv/bin/python -m src.fetch_rss     # rss + youtube + github feeds
 ./.venv/bin/python -m src.fetch_imap    # gmail newsletters
-./.venv/bin/python -m src.fetch_metrics # fx / weather / aqi
+./.venv/bin/python -m src.fetch_metrics # fx / weather
 ./.venv/bin/python -m src.dedup         # cluster + print multi-member clusters
 ./.venv/bin/python -m src.enrich        # fetch docs changelog for content-less items
 ./.venv/bin/python -m src.score         # score + print top items with reasons
