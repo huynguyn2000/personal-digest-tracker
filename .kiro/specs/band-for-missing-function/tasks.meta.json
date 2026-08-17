@@ -1,0 +1,14 @@
+{
+  "pbtResults": {
+    "1. Write bug condition exploration test": {
+      "status": "passed",
+      "failingExample": "ImportError: cannot import name '_band_for' from 'src.render' (C:\\Users\\Huy\\VSCode\\personal-digest-tracker\\src\\render.py) — raised at src\\dashboard.py:19 during `from .render import TRACKER_SPECS, _band_for, humanize_age, select_digest`. All 7 exploration tests failed as expected, confirming the bug exists.",
+      "lastRunTimestamp": 1786988972581
+    },
+    "2. Write preservation property tests (BEFORE implementing fix)": {
+      "status": "passed",
+      "lastRunTimestamp": 1786989052682
+    }
+  },
+  "executionHistory": {}
+}

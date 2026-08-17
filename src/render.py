@@ -60,6 +60,13 @@ def _wmo(code: int) -> dict:
     return {"label": label, "icon": icon}
 
 
+def _band_for(kind: str | None, value: float) -> dict | None:
+    """Return a band dict for a tracker value, or None if no band applies."""
+    if kind == "rain_prob" and value >= 70:
+        return {"label": "Likely", "color": "#3b82f6"}
+    return None
+
+
 def humanize_age(published_at: str, now: datetime) -> str:
     secs = max(0, (now.timestamp() - parse_iso(published_at).timestamp()))
     mins = secs / 60
@@ -126,9 +133,8 @@ def _trackers(conn: sqlite3.Connection, links: dict | None = None) -> list[dict]
             if wc is not None:
                 cond = _wmo(int(wc["value"]))
 
-        band = None
-        if name == "hcmc_rain_prob" and latest >= 70:
-            band = {"label": "Likely", "color": "#3b82f6"}
+        kind = spec.get("kind") or ("rain_prob" if name == "hcmc_rain_prob" else None)
+        band = _band_for(kind, latest)
 
         # glanceable alert: emphasize the card only when it's actionable
         alert = None
