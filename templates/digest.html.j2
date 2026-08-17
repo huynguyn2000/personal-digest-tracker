@@ -101,6 +101,13 @@
     border-radius:10px; padding:12px 14px; margin-bottom:24px; font-size:.95rem; line-height:1.55; }
   .overview .ov-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
     display:block; margin-bottom:4px; }
+  .daily-read { margin:0 0 28px; padding:18px 18px 8px; border:1px solid var(--border); border-radius:12px;
+    background:var(--card); }
+  .daily-read h2 { font-size:1.1rem; margin:0 0 3px; }
+  .daily-read .read-meta { color:var(--muted); font-size:.78rem; margin:0 0 14px; }
+  .daily-read .read-body { white-space:pre-line; line-height:1.7; font-size:1rem; }
+  .daily-read .read-body a { color:var(--accent); font-weight:600; text-decoration:none; }
+  .daily-read .read-body a:hover { text-decoration:underline; }
   .gist { font-size:.92rem; margin-top:4px; color:var(--fg); }
   .tracker .label a { color:var(--muted); text-decoration:none; }
   .tracker .label a:hover { color:var(--accent); }
@@ -175,6 +182,14 @@
   <div class="overview">
     <span class="ov-label">Today{% if today_label %} · {{ today_label }}{% endif %}</span>{{ overview }}
   </div>
+  {% endif %}
+
+  {% if daily_read_html %}
+  <article class="daily-read" id="daily-read">
+    <h2>Daily Read</h2>
+    <p class="read-meta">{{ daily_read_item_count }} feed items condensed for a {{ daily_read_pages }}-page reading budget. Source links are optional references.</p>
+    <div class="read-body">{{ daily_read_html }}</div>
+  </article>
   {% endif %}
 
   {% macro tracker_card(t) %}

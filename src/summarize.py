@@ -4,9 +4,12 @@ One call per run produces, from the items that will ship in today's digest:
   - a short day `overview`,
   - a `summary` per section/type (dataeng, ai, newsletter, …),
   - a one-line `gist` per item (used by Telegram + the dashboard).
+  - a bounded long-form `daily_read` covering every feed item in the daily
+    window, so the HTML page can be read without opening every source link.
 
 Section summaries land in `kv['section_summaries']` (JSON), the overview in
-`kv['overview']`, and gists in `items.summary`. Ranking + dedup stay
+`kv['overview']`, the long read in `kv['daily_read']`, and gists in
+`items.summary`. Ranking + dedup stay
 deterministic — only this descriptive text is generated.
 
 Best-effort: if GEMINI_API_KEY is unset (or the call fails), it skips and the
@@ -31,6 +34,8 @@ _SCHEMA = {
     "type": "object",
     "properties": {
         "overview": {"type": "string"},
+        "daily_read": {"type": "string"},
+        "daily_read_refs": {"type": "array", "items": {"type": "string"}},
         "sections": {
             "type": "array",
             "items": {
@@ -53,7 +58,7 @@ _SCHEMA = {
             },
         },
     },
-    "required": ["overview", "sections", "gists"],
+    "required": ["overview", "daily_read", "daily_read_refs", "sections", "gists"],
 }
 
 
@@ -91,13 +96,21 @@ def _call_gemini(model: str, key: str, prompt: str) -> dict:
     raise last_exc
 
 
-def _build_prompt(grouped: list[dict], max_chars: int) -> str:
+def _build_prompt(grouped: list[dict], daily_items: list[dict], max_chars: int,
+                  daily_read_words: int) -> str:
     lines = [
         "You are a terse tech-news editor for a personal daily digest covering "
         "data engineering and AI. Write plainly, no marketing, no fluff.",
         "",
         "Return JSON matching the schema:",
         "- overview: 2 sentences on the day's themes across ALL sections.",
+        "- daily_read: a self-contained, plain-text daily briefing that lets the reader "
+        "understand the material without opening source links. Cover EVERY supplied item: "
+        "combine duplicates or minor updates, give important items proportionally more space, "
+        "and use short titled paragraphs. Do not use markdown, sales language, or a headline list. "
+        f"It must be no more than {daily_read_words} words. Cite source material inline with [n] "
+        "markers, whose IDs appear in daily_read_refs in matching order.",
+        "- daily_read_refs: every item id cited in daily_read, in the order of its [n] markers.",
         "- sections: for EACH section tag below, an object with:",
         "    * summary: 2-4 sentences synthesizing what happened in that category "
         "(what the items mean, don't just relist titles). Cite sources inline with "
@@ -116,7 +129,35 @@ def _build_prompt(grouped: list[dict], max_chars: int) -> str:
             snip = (it.get("snip") or "").replace("\n", " ").strip()[:300]
             lines.append(f"- id={it['id']} | {it['title']} | {snip}")
         lines.append("")
+    lines.append("## DAILY READ SOURCE MATERIAL (cover every item below)")
+    for it in daily_items:
+        snip = (it.get("snip") or "").replace("\n", " ").strip()[:1200]
+        lines.append(f"- id={it['id']} | source={it['source_id']} | {it['title']} | {snip}")
     return "\n".join(lines)
+
+
+def _daily_read_items(conn: sqlite3.Connection, window_days: float) -> list[dict]:
+    """All primary feed entries available for this daily run, including videos."""
+    cutoff = time.time() - window_days * 86400
+    rows = conn.execute(
+        "SELECT id, source_id, title, raw_text, published_at FROM items "
+        "WHERE state='new' AND is_primary=1 ORDER BY published_at DESC"
+    ).fetchall()
+    from .db import parse_iso
+    return [
+        {"id": r["id"], "source_id": r["source_id"], "title": r["title"],
+         "snip": r["raw_text"] or ""}
+        for r in rows
+        if parse_iso(r["published_at"]).timestamp() >= cutoff
+    ]
+
+
+def _limit_words(text: str, maximum: int) -> str:
+    """Keep the promised reading budget even if the model overshoots it."""
+    words = text.split()
+    if len(words) <= maximum:
+        return text.strip()
+    return " ".join(words[:maximum]).rstrip(".,;: ") + "…"
 
 
 def run(conn: sqlite3.Connection, force: bool = False) -> dict:
@@ -129,6 +170,9 @@ def run(conn: sqlite3.Connection, force: bool = False) -> dict:
     scfg = cfg.get("summarize", {})
     model = os.environ.get("GEMINI_MODEL") or scfg.get("model", "gemini-flash-latest")
     max_chars = int(scfg.get("max_gist_chars", 140))
+    daily_read_words = int(scfg.get("daily_read_pages", 10)) * int(
+        scfg.get("daily_read_words_per_page", 320)
+    )
 
     payload = select_digest(conn)
     # Watching is a persistent, user-managed queue. Do not re-summarize it on
@@ -155,8 +199,10 @@ def run(conn: sqlite3.Connection, force: bool = False) -> dict:
         print("  nothing in the digest window to summarize")
         return {"status": "empty"}
 
+    daily_items = _daily_read_items(conn, float(cfg["digest"].get("render_window_days", 4)))
     have_all = all(v.get("summary") for v in items)
-    if have_all and get_kv(conn, "overview") and get_kv(conn, "section_summaries") and not force:
+    if (have_all and get_kv(conn, "overview") and get_kv(conn, "section_summaries")
+            and get_kv(conn, "daily_read") and not force):
         print(f"  all {len(items)} items already summarized (cached)")
         return {"status": "cached", "items": len(items)}
 
@@ -171,7 +217,7 @@ def run(conn: sqlite3.Connection, force: bool = False) -> dict:
         for it in g["items"]:
             it["snip"] = raw_map.get(it["id"], "")
 
-    prompt = _build_prompt(grouped, max_chars)
+    prompt = _build_prompt(grouped, daily_items, max_chars, daily_read_words)
     try:
         result = _call_gemini(model, key, prompt)
     except Exception as exc:  # noqa: BLE001 - best-effort
@@ -198,10 +244,17 @@ def run(conn: sqlite3.Connection, force: bool = False) -> dict:
     overview = (result.get("overview") or "").strip()
     if overview:
         set_kv(conn, "overview", overview)
+    daily_read = _limit_words(result.get("daily_read") or "", daily_read_words)
+    if daily_read:
+        set_kv(conn, "daily_read", daily_read)
+        set_kv(conn, "daily_read_refs", json.dumps(result.get("daily_read_refs", [])))
+        set_kv(conn, "daily_read_item_count", str(len(daily_items)))
     conn.commit()
     print(
-        f"  {model}: overview {'set' if overview else 'empty'}, "
-        f"{len(sec_summaries)} section summaries, {updated}/{len(items)} gists"
+        f"  {model}: overview {'set' if overview else 'empty'}, daily read "
+        f"{'set' if daily_read else 'empty'} ({len(daily_items)} feed items, "
+        f"{daily_read_words} words max), {len(sec_summaries)} section summaries, "
+        f"{updated}/{len(items)} gists"
     )
     return {"status": "ok", "model": model, "sections": len(sec_summaries), "gists": updated}
 

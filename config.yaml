@@ -51,6 +51,10 @@ summarize:
   # won't 404 when specific versions get gated/rotated. Override via GEMINI_MODEL.
   model: gemini-flash-latest
   max_gist_chars: 140
+  # The main reading view covers every primary feed item in the daily window.
+  # A page is budgeted at roughly 320 words; output is hard-trimmed if needed.
+  daily_read_pages: 10
+  daily_read_words_per_page: 320
 
 # Enrich content-less items (e.g. GitHub release tags with no notes) by fetching
 # their official docs changelog, so summaries + links carry real insight.

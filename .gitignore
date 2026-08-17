@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+.tools/
 .env
 
 # SQLite side files (the DB itself IS committed; its journals are not)

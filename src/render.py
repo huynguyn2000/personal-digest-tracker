@@ -188,6 +188,23 @@ def _linkify_summary(text: str | None, refs: list[dict]):
     return Markup(_CITE_RE.sub(repl, esc))
 
 
+def _daily_read_refs(conn: sqlite3.Connection) -> list[dict]:
+    """Resolve the long-read citations without requiring its items to be visible."""
+    try:
+        ids = json.loads(get_kv(conn, "daily_read_refs") or "[]")
+    except (ValueError, TypeError):
+        return []
+    refs = []
+    for n, item_id in enumerate(ids, start=1):
+        row = conn.execute(
+            "SELECT source_id, title, url FROM items WHERE id=?", (item_id,)
+        ).fetchone()
+        if row:
+            refs.append({"n": n, "source_id": row["source_id"], "title": row["title"],
+                         "url": row["url"]})
+    return refs
+
+
 def _section_for(tags: list[str], order: list[str]) -> str:
     # release feeds go to their own compact section, regardless of other tags.
     if "releases" in tags:
@@ -408,6 +425,9 @@ def select_digest(conn: sqlite3.Connection) -> dict:
         "generated_iso": now.isoformat(),
         "today_label": now_local.strftime("%a %d %b"),
         "overview": get_kv(conn, "overview"),
+        "daily_read_html": _linkify_summary(get_kv(conn, "daily_read"), _daily_read_refs(conn)),
+        "daily_read_item_count": int(get_kv(conn, "daily_read_item_count", "0") or 0),
+        "daily_read_pages": int(cfg.get("summarize", {}).get("daily_read_pages", 10)),
         "trackers": _trackers(conn, cfg.get("tracker_links", {})),
         "sections": ordered_sections,
         "newsletters": newsletter_views,

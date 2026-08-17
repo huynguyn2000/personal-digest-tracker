@@ -12,13 +12,17 @@ fetch (rss/imap/metrics) → dedup → score → summarize (Gemini) → render (
 ```
 
 Ranking and dedup are strictly deterministic (no LLM). Gemini is used only to
-write a one-line **gist** per item and a short **day overview** — best-effort,
-skipped entirely if `GEMINI_API_KEY` is unset (items then show raw snippets).
+write a one-line **gist** per item, a short **day overview**, and a long-form
+**Daily Read** covering every primary feed item in the daily window. The Daily
+Read is constrained to a configurable 10-page reading budget (3,200 words by
+default), so source links are reference material rather than required reading.
+All summaries are best-effort and are skipped entirely if `GEMINI_API_KEY` is
+unset (items then show raw snippets).
 
 Everything lives in one SQLite file (`data/digest.db`), committed back to the
 repo by the daily GitHub Action. The rendered page is `out/index.html`.
 
-**The page** leads with the day overview, then trackers (FX / weather / air
+**The page** leads with the day overview and the bounded **Daily Read**, then trackers (FX / weather / air
 weather — each with a day-over-day delta and a sparkline, plus a
 `↗` to a larger-window view), then one **summary per section**
 (AWS · Data Engineering · AI · Newsletters) with inline `[n]` citation links to
@@ -55,7 +59,7 @@ Each stage runs standalone and prints what it did:
 ./.venv/bin/python -m src.dedup         # cluster + print multi-member clusters
 ./.venv/bin/python -m src.enrich        # fetch docs changelog for content-less items
 ./.venv/bin/python -m src.score         # score + print top items with reasons
-./.venv/bin/python -m src.summarize     # Gemini: overview + section summaries + gists
+./.venv/bin/python -m src.summarize     # Gemini: Daily Read + overview + section summaries + gists
 ./.venv/bin/python -m src.render        # write out/index.html (no state change)
 ./.venv/bin/python -m src.dashboard     # write out/dashboard.html (pipeline console)
 ./.venv/bin/python -m src.notify        # preview + send Telegram message
