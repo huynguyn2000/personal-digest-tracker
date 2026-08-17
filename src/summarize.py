@@ -141,7 +141,7 @@ def _daily_read_items(conn: sqlite3.Connection, window_days: float) -> list[dict
     cutoff = time.time() - window_days * 86400
     rows = conn.execute(
         "SELECT id, source_id, title, raw_text, published_at FROM items "
-        "WHERE state='new' AND is_primary=1 ORDER BY published_at DESC"
+        "WHERE is_primary=1 ORDER BY published_at DESC"
     ).fetchall()
     from .db import parse_iso
     return [
