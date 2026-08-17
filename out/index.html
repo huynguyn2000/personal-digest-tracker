@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Morning Digest — 2026-08-17 08:09 +07</title>
+<title>Morning Digest — 2026-08-18 01:05 +07</title>
 <meta name="description" content="Your morning digest — AWS, data engineering & AI news, deduped and summarized, with FX / weather / air-quality trackers.">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><text x="1" y="14" font-size="14">📰</text></svg>'>
@@ -101,6 +101,13 @@
     border-radius:10px; padding:12px 14px; margin-bottom:24px; font-size:.95rem; line-height:1.55; }
   .overview .ov-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
     display:block; margin-bottom:4px; }
+  .daily-read { margin:0 0 28px; padding:18px 18px 8px; border:1px solid var(--border); border-radius:12px;
+    background:var(--card); }
+  .daily-read h2 { font-size:1.1rem; margin:0 0 3px; }
+  .daily-read .read-meta { color:var(--muted); font-size:.78rem; margin:0 0 14px; }
+  .daily-read .read-body { white-space:pre-line; line-height:1.7; font-size:1rem; }
+  .daily-read .read-body a { color:var(--accent); font-weight:600; text-decoration:none; }
+  .daily-read .read-body a:hover { text-decoration:underline; }
   .gist { font-size:.92rem; margin-top:4px; color:var(--fg); }
   .tracker .label a { color:var(--muted); text-decoration:none; }
   .tracker .label a:hover { color:var(--accent); }
@@ -155,7 +162,7 @@
   <header class="topbar">
     <div>
       <h1>Morning Digest</h1>
-      <div class="sub">2026-08-17 08:09 +07 · 3 items · 0 newsletters<span class="fresh" id="fresh" data-generated="2026-08-17T01:09:47+00:00"></span></div>
+      <div class="sub">2026-08-18 01:05 +07 · 6 items · 0 newsletters<span class="fresh" id="fresh" data-generated="2026-08-17T18:05:02+00:00"></span></div>
       <div class="unseen-note" id="unseenNote" hidden></div>
     </div>
     <button class="theme-btn" id="themeBtn" title="Toggle light / dark" aria-label="Toggle theme">◐</button>
@@ -167,14 +174,16 @@
   
   <nav class="jump" aria-label="Jump to section">
     <a href="#trackers">Trackers</a>
-    <a href="#sec-watching">📺 Watching</a><a href="#sec-ai">AI</a><a href="#sec-releases">📦 Releases</a>
+    <a href="#sec-watching">📺 Watching</a><a href="#sec-aws">AWS</a><a href="#sec-ai">AI</a><a href="#sec-releases">📦 Releases</a>
   </nav>
   
 
   
   <div class="overview">
-    <span class="ov-label">Today · Mon 17 Aug</span>Cloud providers continue to expand enterprise data governance, managed application platforms, and multimodal AI infrastructure in regulated regions. Meanwhile, miscellaneous feed updates cover local ecological observations.
+    <span class="ov-label">Today · Tue 18 Aug</span>Cloud providers continue to expand enterprise data governance, managed application platforms, and multimodal AI infrastructure in regulated regions. Meanwhile, miscellaneous feed updates cover local ecological observations.
   </div>
+  
+
   
 
   
@@ -189,17 +198,17 @@
     <div class="tracker">
       <div class="label"><a href="https://www.google.com/finance/quote/USD-VND" target="_blank" rel="noopener" title="Open a larger time-window view">USD/VND ↗</a></div>
       <div class="value-row">
-        <span class="value">25,950</span>
-        
+        <span class="value">26,020</span>
+        <span class="delta up" title="vs previous reading">▲ 0.3%</span>
       </div>
       
       
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 9.0,3.0 15.0,3.0 21.0,3.0 27.0,3.0 33.0,12.8 39.0,12.8 45.0,12.8 51.0,12.8 57.0,12.8 63.0,12.8 69.0,12.8 75.0,17.6 81.0,17.6 87.0,29.0 93.0,25.8 99.0,16.0 105.0,16.0 111.0,16.0 117.0,16.0 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 9.0,3.0 15.0,3.0 21.0,3.0 27.0,3.0 33.0,12.8 39.0,12.8 45.0,12.8 51.0,12.8 57.0,12.8 63.0,12.8 69.0,12.8 75.0,17.6 81.0,17.6 87.0,29.0 93.0,25.8 99.0,16.0 105.0,16.0 111.0,16.0 117.0,16.0" class="spark-line"/>
-        <circle cx="117.0" cy="16.0" r="2.4" class="spark-dot"/>
+        <polygon points="3,29 3.0,3.0 8.7,3.0 14.4,3.0 20.1,3.0 25.8,3.0 31.5,12.8 37.2,12.8 42.9,12.8 48.6,12.8 54.3,12.8 60.0,12.8 65.7,12.8 71.4,17.6 77.1,17.6 82.8,29.0 88.5,25.8 94.2,16.0 99.9,16.0 105.6,16.0 111.3,16.0 117.0,4.6 117,29" class="spark-area"/>
+        <polyline points="3.0,3.0 8.7,3.0 14.4,3.0 20.1,3.0 25.8,3.0 31.5,12.8 37.2,12.8 42.9,12.8 48.6,12.8 54.3,12.8 60.0,12.8 65.7,12.8 71.4,17.6 77.1,17.6 82.8,29.0 88.5,25.8 94.2,16.0 99.9,16.0 105.6,16.0 111.3,16.0 117.0,4.6" class="spark-line"/>
+        <circle cx="117.0" cy="4.6" r="2.4" class="spark-dot"/>
       </svg>
       
     </div>
@@ -207,17 +216,17 @@
     <div class="tracker">
       <div class="label"><a href="https://www.google.com/finance/quote/CNY-VND" target="_blank" rel="noopener" title="Open a larger time-window view">CNY/VND ↗</a></div>
       <div class="value-row">
-        <span class="value">3,817</span>
-        
+        <span class="value">3,827</span>
+        <span class="delta up" title="vs previous reading">▲ 0.3%</span>
       </div>
       
       
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 9.0,3.0 15.0,3.0 21.0,3.0 27.0,3.0 33.0,12.3 39.0,12.3 45.0,12.3 51.0,12.3 57.0,12.3 63.0,12.3 69.0,12.3 75.0,17.6 81.0,17.8 87.0,29.0 93.0,25.1 99.0,13.6 105.0,13.6 111.0,13.6 117.0,13.6 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 9.0,3.0 15.0,3.0 21.0,3.0 27.0,3.0 33.0,12.3 39.0,12.3 45.0,12.3 51.0,12.3 57.0,12.3 63.0,12.3 69.0,12.3 75.0,17.6 81.0,17.8 87.0,29.0 93.0,25.1 99.0,13.6 105.0,13.6 111.0,13.6 117.0,13.6" class="spark-line"/>
-        <circle cx="117.0" cy="13.6" r="2.4" class="spark-dot"/>
+        <polygon points="3,29 3.0,4.6 8.7,4.6 14.4,4.6 20.1,4.6 25.8,4.6 31.5,13.3 37.2,13.3 42.9,13.3 48.6,13.3 54.3,13.3 60.0,13.3 65.7,13.3 71.4,18.3 77.1,18.5 82.8,29.0 88.5,25.4 94.2,14.6 99.9,14.6 105.6,14.6 111.3,14.6 117.0,3.0 117,29" class="spark-area"/>
+        <polyline points="3.0,4.6 8.7,4.6 14.4,4.6 20.1,4.6 25.8,4.6 31.5,13.3 37.2,13.3 42.9,13.3 48.6,13.3 54.3,13.3 60.0,13.3 65.7,13.3 71.4,18.3 77.1,18.5 82.8,29.0 88.5,25.4 94.2,14.6 99.9,14.6 105.6,14.6 111.3,14.6 117.0,3.0" class="spark-line"/>
+        <circle cx="117.0" cy="3.0" r="2.4" class="spark-dot"/>
       </svg>
       
     </div>
@@ -232,16 +241,16 @@
       <div class="label"><a href="https://www.windy.com/?10.823,106.630,8" target="_blank" rel="noopener" title="Open a larger time-window view">Temp ↗</a></div>
       <div class="value-row">
         <span class="value">🌡 26°C</span>
-        <span class="delta down" title="vs previous reading">▼ 6.5%</span>
+        <span class="delta up" title="vs previous reading">▲ 2.3%</span>
       </div>
       
       <div class="tcond">☁️ Overcast</div>
-      <div class="tsub">H 31° · L 26°</div>
+      <div class="tsub">H 32° · L 25°</div>
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,9.1 9.0,8.0 15.0,8.0 21.0,4.5 27.0,3.0 33.0,25.2 39.0,28.6 45.0,29.0 51.0,29.0 57.0,29.0 63.0,23.3 69.0,23.3 75.0,22.9 81.0,10.3 87.0,11.0 93.0,12.9 99.0,22.9 105.0,16.0 111.0,18.3 117.0,25.2 117,29" class="spark-area"/>
-        <polyline points="3.0,9.1 9.0,8.0 15.0,8.0 21.0,4.5 27.0,3.0 33.0,25.2 39.0,28.6 45.0,29.0 51.0,29.0 57.0,29.0 63.0,23.3 69.0,23.3 75.0,22.9 81.0,10.3 87.0,11.0 93.0,12.9 99.0,22.9 105.0,16.0 111.0,18.3 117.0,25.2" class="spark-line"/>
-        <circle cx="117.0" cy="25.2" r="2.4" class="spark-dot"/>
+        <polygon points="3,29 3.0,9.1 8.7,8.0 14.4,8.0 20.1,4.5 25.8,3.0 31.5,25.2 37.2,28.6 42.9,29.0 48.6,29.0 54.3,29.0 60.0,23.3 65.7,23.3 71.4,22.9 77.1,10.3 82.8,11.0 88.5,12.9 94.2,22.9 99.9,16.0 105.6,18.3 111.3,25.2 117.0,22.9 117,29" class="spark-area"/>
+        <polyline points="3.0,9.1 8.7,8.0 14.4,8.0 20.1,4.5 25.8,3.0 31.5,25.2 37.2,28.6 42.9,29.0 48.6,29.0 54.3,29.0 60.0,23.3 65.7,23.3 71.4,22.9 77.1,10.3 82.8,11.0 88.5,12.9 94.2,22.9 99.9,16.0 105.6,18.3 111.3,25.2 117.0,22.9" class="spark-line"/>
+        <circle cx="117.0" cy="22.9" r="2.4" class="spark-dot"/>
       </svg>
       
     </div>
@@ -249,53 +258,17 @@
     <div class="tracker alert" style="border-color:#3b82f6">
       <div class="label"><a href="https://www.windy.com/?rain,10.823,106.630,8" target="_blank" rel="noopener" title="Open a larger time-window view">Rain ↗</a></div>
       <div class="value-row">
-        <span class="value">🌧 94%</span>
-        <span class="delta down" title="vs previous reading">▼ 6.0%</span>
+        <span class="value">🌧 99%</span>
+        <span class="delta up" title="vs previous reading">▲ 5.3%</span>
       </div>
       <div class="band"><span class="dot" style="background:#3b82f6"></span>Likely</div>
       
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,6.1 9.0,6.1 15.0,6.1 21.0,6.1 27.0,6.1 33.0,9.2 39.0,9.2 45.0,9.2 51.0,9.2 57.0,9.2 63.0,9.2 69.0,9.2 75.0,3.0 81.0,29.0 87.0,5.1 93.0,3.0 99.0,3.0 105.0,3.0 111.0,3.0 117.0,6.1 117,29" class="spark-area"/>
-        <polyline points="3.0,6.1 9.0,6.1 15.0,6.1 21.0,6.1 27.0,6.1 33.0,9.2 39.0,9.2 45.0,9.2 51.0,9.2 57.0,9.2 63.0,9.2 69.0,9.2 75.0,3.0 81.0,29.0 87.0,5.1 93.0,3.0 99.0,3.0 105.0,3.0 111.0,3.0 117.0,6.1" class="spark-line"/>
-        <circle cx="117.0" cy="6.1" r="2.4" class="spark-dot"/>
-      </svg>
-      
-    </div>
-  
-    <div class="tracker">
-      <div class="label"><a href="https://aqicn.org/city/vietnam/ho-chi-minh-city/" target="_blank" rel="noopener" title="Open a larger time-window view">AQI ↗</a></div>
-      <div class="value-row">
-        <span class="value">66</span>
-        <span class="delta down" title="vs previous reading">▼ 2.9%</span>
-      </div>
-      <div class="band"><span class="dot" style="background:#c9a227"></span>Moderate</div>
-      
-      
-      
-      <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 9.0,3.0 15.0,3.0 21.0,3.0 27.0,3.0 33.0,23.8 39.0,23.2 45.0,23.2 51.0,23.2 57.0,23.2 63.0,25.8 69.0,25.8 75.0,24.4 81.0,21.8 87.0,21.2 93.0,24.4 99.0,27.1 105.0,26.4 111.0,27.7 117.0,29.0 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 9.0,3.0 15.0,3.0 21.0,3.0 27.0,3.0 33.0,23.8 39.0,23.2 45.0,23.2 51.0,23.2 57.0,23.2 63.0,25.8 69.0,25.8 75.0,24.4 81.0,21.8 87.0,21.2 93.0,24.4 99.0,27.1 105.0,26.4 111.0,27.7 117.0,29.0" class="spark-line"/>
-        <circle cx="117.0" cy="29.0" r="2.4" class="spark-dot"/>
-      </svg>
-      
-    </div>
-  
-    <div class="tracker alert" style="border-color:#d63b5b">
-      <div class="label">UV</div>
-      <div class="value-row">
-        <span class="value">☀️ 8</span>
-        <span class="delta up" title="vs previous reading">▲ 2.5%</span>
-      </div>
-      <div class="band"><span class="dot" style="background:#d63b5b"></span>Very high</div>
-      
-      
-      
-      <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,12.6 14.4,3.0 25.8,3.0 37.2,4.4 48.6,3.5 60.0,5.3 71.4,29.0 82.8,10.8 94.2,27.6 105.6,10.8 117.0,8.9 117,29" class="spark-area"/>
-        <polyline points="3.0,12.6 14.4,3.0 25.8,3.0 37.2,4.4 48.6,3.5 60.0,5.3 71.4,29.0 82.8,10.8 94.2,27.6 105.6,10.8 117.0,8.9" class="spark-line"/>
-        <circle cx="117.0" cy="8.9" r="2.4" class="spark-dot"/>
+        <polygon points="3,29 3.0,6.1 8.7,6.1 14.4,6.1 20.1,6.1 25.8,6.1 31.5,9.2 37.2,9.2 42.9,9.2 48.6,9.2 54.3,9.2 60.0,9.2 65.7,9.2 71.4,3.0 77.1,29.0 82.8,5.1 88.5,3.0 94.2,3.0 99.9,3.0 105.6,3.0 111.3,6.1 117.0,3.5 117,29" class="spark-area"/>
+        <polyline points="3.0,6.1 8.7,6.1 14.4,6.1 20.1,6.1 25.8,6.1 31.5,9.2 37.2,9.2 42.9,9.2 48.6,9.2 54.3,9.2 60.0,9.2 65.7,9.2 71.4,3.0 77.1,29.0 82.8,5.1 88.5,3.0 94.2,3.0 99.9,3.0 105.6,3.0 111.3,6.1 117.0,3.5" class="spark-line"/>
+        <circle cx="117.0" cy="3.5" r="2.4" class="spark-dot"/>
       </svg>
       
     </div>
@@ -318,12 +291,12 @@
 
   
   <section class="type" id="sec-watching">
-    <h2 class="section">📺 Watching <span class="count">· 14</span></h2>
+    <h2 class="section">📺 Watching <span class="count">· 3</span></h2>
     
     
     
     <details class="items-drawer" open>
-      <summary>14 items</summary>
+      <summary>3 items</summary>
       <div class="drawer-body">
         
   <div class="iline" data-pub="2026-07-17T12:45:31+00:00" data-watching-id="ab284ff8fb04005fed6d14e15c2568bee036f06bd3feb23d81de074fdb7ad442">
@@ -331,7 +304,7 @@
     
     
     <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 30d ago</div>
+      tubakhuym-yt · 31d ago</div>
   </div>
   
   <div class="iline" data-pub="2026-06-13T09:33:48+00:00" data-watching-id="151e02b5e002045c893157db50b509d29fcf3cac01850a19165e7625fdf58741">
@@ -339,7 +312,7 @@
     
     
     <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 64d ago</div>
+      tubakhuym-yt · 65d ago</div>
   </div>
   
   <div class="iline" data-pub="2026-06-02T14:23:05+00:00" data-watching-id="57559b197428d0bb8b0b8fca2f4db3f8d837690de55da8365ce49f216484c686">
@@ -347,95 +320,53 @@
     
     
     <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 75d ago</div>
+      tubakhuym-yt · 76d ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-05-30T02:56:07+00:00" data-watching-id="34f7a893bfbd94705b4bf97dd14d990505e1bb69b91d1ac5bb1b2ac23644ff38">
-    <a href="https://youtube.com/watch?v=gQLhchHmRKs" target="_blank" rel="noopener">Bắt đầu Harness Engineering từ đâu? Từ đây!!</a>
+      </div>
+    </details>
+    
+  </section>
+  
+  <section class="type" id="sec-aws">
+    <h2 class="section">AWS <span class="count">· 4</span></h2>
     
     
-    <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 78d ago</div>
+    
+    <details class="items-drawer" open>
+      <summary>4 items</summary>
+      <div class="drawer-body">
+        
+  <div class="iline" data-pub="2026-08-17T16:02:36+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/blogs/aws/aws-weekly-roundup-ec2-application-status-checks-iam-role-manager-openai-daybreak-on-bedrock-and-more-august-17-2026" target="_blank" rel="noopener">AWS Weekly Roundup: EC2 application status checks, IAM role manager, OpenAI Daybreak on Bedrock, and more (August 17, 2026)</a>
+    
+    
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      aws-news · 2h ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-05-19T14:17:40+00:00" data-watching-id="f654756ea5358902bf47d59a578b5ec802ec4980aa60380fc7f205cd71c18482">
-    <a href="https://youtube.com/watch?v=efxiuDAIVlw" target="_blank" rel="noopener">Tips sử dụng Goal Mode của Codex hiệu quả hơn.</a>
+  <div class="iline" data-pub="2026-08-17T16:37:43+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/blogs/big-data/iam-authentication-with-oauth-2-0-for-amazon-mq-for-rabbitmq" target="_blank" rel="noopener">IAM authentication with OAuth 2.0 for Amazon MQ for RabbitMQ</a>
     
     
-    <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 89d ago</div>
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      aws-big-data · 1h ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-05-13T15:01:46+00:00" data-watching-id="d0297fc55a8aae29115653ea1bf78a72e8e0a86f013c32b45cad642ec7390351">
-    <a href="https://youtube.com/watch?v=SloXHfkYk34" target="_blank" rel="noopener">Chia sẻ về bộ khung Harness Engineering cho chính repository của bạn.</a>
+  <div class="iline" data-pub="2026-08-17T16:28:00+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/blogs/big-data/naranjax-manages-multiple-amazon-msk-serverless-clusters-in-different-accounts-from-their-idp-using-aws-ram-and-route-53" target="_blank" rel="noopener">NaranjaX manages multiple Amazon MSK Serverless clusters in different accounts from their IDP using AWS RAM and Route 53</a>
     
     
-    <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 95d ago</div>
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      aws-big-data · 1h ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-04-30T04:20:29+00:00" data-watching-id="db88c9869844c2e0819918e8d6adc70ff9d82a0ae2fd1e301556ba17959f7350">
-    <a href="https://youtube.com/watch?v=zygsgz2k6zI" target="_blank" rel="noopener">Có thể bạn chưa biết về Codex.</a>
+  <div class="iline" data-pub="2026-08-17T16:46:28+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/blogs/big-data/how-zepto-powers-sub-second-search-using-opensearch-service-or2-instances" target="_blank" rel="noopener">How Zepto powers sub-second search using OpenSearch Service OR2 instances</a>
     
     
-    <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 108d ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-04-19T02:52:09+00:00" data-watching-id="0b8f461c3826aa3653de8ff43b78f89ff8a73f1e2ca5e6b2e3f3f59e2cb61614">
-    <a href="https://youtube.com/watch?v=Yv7WcJes03g" target="_blank" rel="noopener">Nếu chỉ được chọn một gói Token cho AI.</a>
-    
-    
-    <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 119d ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-04-15T06:20:58+00:00" data-watching-id="946d6e04521a95068fba83c5226d2dc3a965ed233e663b6dcfb48a7789727f81">
-    <a href="https://youtube.com/watch?v=qFuMl_-Xm9Y" target="_blank" rel="noopener">Thiết lập các công cụ cơ bản cho Openclaw.</a>
-    
-    
-    <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 123d ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-04-07T05:09:36+00:00" data-watching-id="c37b6c961f75fe50d764f04f1ffb286ed774c603b8bf258345de01a38c6b7408">
-    <a href="https://youtube.com/watch?v=LalLR78sLFY" target="_blank" rel="noopener">Mang GLM 5.1 - MiniMax 2.7 và Kimi 2.5 (fireworks) lên bàn cân!</a>
-    
-    
-    <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 131d ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-03-28T05:42:21+00:00" data-watching-id="34f3092666aab1ed5c8219e4abd9b1a96038b38917a79059786fe97f460f5d91">
-    <a href="https://youtube.com/watch?v=IiHXXr_coeU" target="_blank" rel="noopener">Openclaw - Càng chat càng đốt token.</a>
-    
-    
-    <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 141d ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-03-17T00:56:38+00:00" data-watching-id="37f3f746eecb6a05162d2e920f86de432015a46cd1bdb25886b4a28c5e7f86ea">
-    <a href="https://youtube.com/watch?v=V7i4fTRFZD0" target="_blank" rel="noopener">Nhốt OpenClaw vào MacOS Virtual Machine với Lume.</a>
-    
-    
-    <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 153d ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-03-11T05:06:11+00:00" data-watching-id="a256f12d7a6632e5fbd2ed7ced050c8bd2ba4716b7dda9b652507091ef8367d6">
-    <a href="https://youtube.com/watch?v=P8SuIyIZ4o0" target="_blank" rel="noopener">Flywheel Toolkit+: UBS, CASS, CASS Memory, DCG, SLB</a>
-    
-    
-    <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 158d ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-02-27T13:02:12+00:00" data-watching-id="5d43417e89409d9273e67d238ba77a90da86a8a3bf4e036752ffbbf8ea3d7e10">
-    <a href="https://youtube.com/watch?v=cGDdr-6ALpc" target="_blank" rel="noopener">Minimal Agent Flywheel</a>
-    
-    
-    <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 170d ago</div>
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      aws-big-data · 1h ago</div>
   </div>
   
       </div>
@@ -444,36 +375,28 @@
   </section>
   
   <section class="type" id="sec-ai">
-    <h2 class="section">AI <span class="count">· 3</span></h2>
+    <h2 class="section">AI <span class="count">· 2</span></h2>
     <p class="type-summary">A single community entry highlights an observation of Morris, a solitary Northern Gannet residing in California waters <a href="https://simonwillison.net/2026/Aug/15/sighting-391300422" target="_blank" rel="noopener" title="simonwillison — Northern Gannet">[1]</a>.</p>
     
     
     <details class="items-drawer">
-      <summary>3 items</summary>
+      <summary>2 items</summary>
       <div class="drawer-body">
         
-  <div class="iline" data-pub="2026-08-16T22:00:39+00:00">
-    <span class="new-pill">new</span> <a href="https://simonwillison.net/2026/Aug/16/qwen-38-27b" target="_blank" rel="noopener">Qwen 3.8 27B is excellent, but it defaults to wildly overthinking things</a>
+  <div class="iline" data-pub="2026-08-17T15:21:29+00:00">
+    <span class="new-pill">new</span> <a href="https://simonwillison.net/2026/Aug/17/we-tracked-a-shipment-of-rare-books-it-ended-at-an-amazon-ai-tra" target="_blank" rel="noopener">We Tracked a Shipment of Rare Books. It Ended at an Amazon AI Training Facility</a>
     
     
     <div class="iline-meta"><span class="badge rss">rss</span>
-      simonwillison · 3h ago</div>
+      simonwillison · 2h ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-08-16T23:59:37+00:00">
-    <span class="new-pill">new</span> <a href="https://simonwillison.net/2026/Aug/16/markdown-svg-upgrades" target="_blank" rel="noopener">Markdown SVG upgrades</a>
+  <div class="iline" data-pub="2026-08-15T14:49:54+00:00">
+    <a href="https://simonwillison.net/2026/Aug/15/cors-chat" target="_blank" rel="noopener">CORS Chat</a>
     
     
     <div class="iline-meta"><span class="badge rss">rss</span>
-      simonwillison · 1h ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-08-16T15:05:36+00:00">
-    <span class="new-pill">new</span> <a href="https://simonwillison.net/2026/Aug/16/dario-amodei" target="_blank" rel="noopener">Quoting Dario Amodei</a>
-    
-    
-    <div class="iline-meta"><span class="badge rss">rss</span>
-      simonwillison · 10h ago</div>
+      simonwillison · 2d ago</div>
   </div>
   
       </div>
@@ -482,16 +405,32 @@
   </section>
   
   <section class="type" id="sec-releases">
-    <h2 class="section">📦 Releases <span class="count">· 1</span></h2>
+    <h2 class="section">📦 Releases <span class="count">· 3</span></h2>
     <p class="type-summary">AWS has expanded regulated AI capabilities by launching Amazon Nova Multimodal Embeddings in AWS GovCloud (US-West) for cross-modal RAG and semantic search <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-nova-mme-govcloud" target="_blank" rel="noopener" title="aws-whats-new — Amazon Nova Multimodal Embeddings is now available in AWS GovCloud (US-West)">[1]</a>. On the data privacy and database fronts, AWS Clean Rooms added minimum aggregation thresholds to custom analysis rules to prevent re-identification of individuals <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/aws-clean-rooms-minimum-aggregation-custom-analysis-rules" target="_blank" rel="noopener" title="aws-whats-new — AWS Clean Rooms supports minimum aggregation thresholds in custom analysis rules">[2]</a>, and Amazon RDS for Oracle updated support to Oracle APEX version 26.1 <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-rds-oracle-apex-26-1" target="_blank" rel="noopener" title="aws-whats-new — Amazon RDS for Oracle now supports Oracle Application Express (APEX) version 26.1">[3]</a>.</p>
     
     <div class="drawer-body">
-  <div class="iline" data-pub="2026-08-13T18:00:00+00:00">
-    <a href="https://aws.amazon.com/amazon-quick-microsoft-365-extensions-generally-available" target="_blank" rel="noopener">Amazon Quick Microsoft 365 extensions are now generally available</a>
+  <div class="iline" data-pub="2026-08-17T13:00:00+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/aws-cloudshell-visual-file-editor" target="_blank" rel="noopener">AWS CloudShell now includes a built-in visual file editor</a>
     
     
     <div class="iline-meta"><span class="badge rss">rss</span>
-      aws-whats-new · 3d ago</div>
+      aws-whats-new · 5h ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-08-17T15:41:00+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-quick-microsoft-365-extensions-generally-available" target="_blank" rel="noopener">Amazon Quick Microsoft 365 extensions are now generally available</a>
+    
+    
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      aws-whats-new · 2h ago</div>
+  </div>
+  
+  <div class="iline" data-pub="2026-08-17T15:39:00+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-opensearch-service-vpc" target="_blank" rel="noopener">Amazon OpenSearch Service now supports automatic semantic enrichment for VPC domains</a>
+    
+    
+    <div class="iline-meta"><span class="badge rss">rss</span>
+      aws-whats-new · 2h ago</div>
   </div>
   </div>
     
