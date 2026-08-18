@@ -77,7 +77,8 @@ def _call_gemini(model: str, key: str, prompt: str) -> dict:
     }
     url = GEMINI_URL.format(model=model)
     last_exc = None
-    for attempt in range(4):
+    max_attempts = 6
+    for attempt in range(max_attempts):
         try:
             r = httpx.post(url, params={"key": key}, json=body, timeout=90.0)
             if r.status_code in (429, 500, 503):  # transient — back off and retry
@@ -91,8 +92,10 @@ def _call_gemini(model: str, key: str, prompt: str) -> dict:
             status = getattr(getattr(exc, "response", None), "status_code", None)
             if status not in (429, 500, 503) and not isinstance(exc, httpx.TransportError):
                 raise
-            if attempt < 3:
-                time.sleep(2 ** attempt)  # 1s, 2s, 4s
+            if attempt < max_attempts - 1:
+                wait = min(2 ** attempt, 60)  # 1s, 2s, 4s, 8s, 16s (capped at 60s)
+                print(f"  Gemini {status or 'transport error'} on attempt {attempt + 1}/{max_attempts}, retrying in {wait}s…")
+                time.sleep(wait)
     raise last_exc
 
 
