@@ -4,13 +4,14 @@ One call per run produces, from the items that will ship in today's digest:
   - a short day `overview`,
   - a `summary` per section/type (dataeng, ai, newsletter, …),
   - a one-line `gist` per item (used by Telegram + the dashboard).
-  - a bounded long-form `daily_read` covering every feed item in the daily
-    window, so the HTML page can be read without opening every source link.
+  - a `daily_read` array — one article object per feed item — covering every
+    item in the daily window, so the HTML page can be read without opening
+    every source link. Each article has a heading, a Vietnamese body, and refs.
 
 Section summaries land in `kv['section_summaries']` (JSON), the overview in
-`kv['overview']`, the long read in `kv['daily_read']`, and gists in
-`items.summary`. Ranking + dedup stay
-deterministic — only this descriptive text is generated.
+`kv['overview']`, the long read (JSON array) in `kv['daily_read']`, and gists
+in `items.summary`. Ranking + dedup stay deterministic — only this descriptive
+text is generated.
 
 Best-effort: if GEMINI_API_KEY is unset (or the call fails), it skips and the
 digest falls back to the compact item list. Uses httpx, no extra dependency.
@@ -34,8 +35,18 @@ _SCHEMA = {
     "type": "object",
     "properties": {
         "overview": {"type": "string"},
-        "daily_read": {"type": "string"},
-        "daily_read_refs": {"type": "array", "items": {"type": "string"}},
+        "daily_read": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "heading": {"type": "string"},
+                    "body": {"type": "string"},
+                    "refs": {"type": "array", "items": {"type": "string"}},
+                },
+                "required": ["heading", "body", "refs"],
+            },
+        },
         "sections": {
             "type": "array",
             "items": {
@@ -58,7 +69,7 @@ _SCHEMA = {
             },
         },
     },
-    "required": ["overview", "daily_read", "daily_read_refs", "sections", "gists"],
+    "required": ["overview", "daily_read", "sections", "gists"],
 }
 
 
@@ -104,26 +115,24 @@ def _build_prompt(grouped: list[dict], daily_items: list[dict], max_chars: int,
     lines = [
         "You are a terse tech-news editor for a personal daily digest covering "
         "data engineering and AI. Write plainly, no marketing, no fluff.",
+        "IMPORTANT: Write ALL human-readable text — overview, daily_read headings and bodies, "
+        "section summaries, and gists — in Vietnamese (Tiếng Việt).",
         "",
         "Return JSON matching the schema:",
-        "- overview: 2 sentences on the day's themes across ALL sections.",
-        "- daily_read: a self-contained, plain-text daily briefing that lets the reader "
-        "understand the material without opening source links. Cover EVERY supplied item: "
-        "combine duplicates or minor updates, give important items proportionally more space, "
-        "and use short titled paragraphs. Do not use markdown, sales language, or a headline list. "
-        f"It must be no more than {daily_read_words} words. Cite source material inline with [n] "
-        "markers, whose IDs appear in daily_read_refs in matching order.",
-        "- daily_read_refs: every item id cited in daily_read, in the order of its [n] markers.",
+        "- overview: 2 sentences (in Vietnamese) on the day's themes across ALL sections.",
+        "- daily_read: an ARRAY of article objects, one object per source article supplied below. "
+        "Each object has:",
+        "    * heading: a short Vietnamese title for this article (max 12 words).",
+        f"    * body: a self-contained Vietnamese summary of that article (max {daily_read_words // max(len(daily_items), 1)} words). "
+        "Write plainly, no markdown, no sales language. "
+        "Cite source material inline with [n] markers, where [n] is the 1-based index into this article's own 'refs' list.",
+        "    * refs: the item ids cited in this article's body, in the order the [n] markers appear.",
         "- sections: for EACH section tag below, an object with:",
-        "    * summary: 2-4 sentences synthesizing what happened in that category "
-        "(what the items mean, don't just relist titles). Cite sources inline with "
-        "bracketed numbers [1], [2], … where [1] is the first id in 'refs', [2] the "
-        "second, and so on.",
-        "    * refs: the item ids the summary actually draws from, in the SAME order "
-        "as the [n] markers used in the summary text.",
-        "    * top_pick: the id of the SINGLE most significant / must-read item in "
-        "that section.",
-        f"- gists: for EACH item id, a one-line gist (max {max_chars} chars).",
+        "    * summary: 2-4 Vietnamese sentences synthesizing what happened in that category. "
+        "Cite sources inline with [1], [2], … where [1] is the first id in 'refs'.",
+        "    * refs: the item ids the summary draws from, in the SAME order as the [n] markers.",
+        "    * top_pick: the id of the SINGLE most significant / must-read item in that section.",
+        f"- gists: for EACH item id, a one-line Vietnamese gist (max {max_chars} chars).",
         "",
     ]
     for g in grouped:
@@ -132,7 +141,7 @@ def _build_prompt(grouped: list[dict], daily_items: list[dict], max_chars: int,
             snip = (it.get("snip") or "").replace("\n", " ").strip()[:300]
             lines.append(f"- id={it['id']} | {it['title']} | {snip}")
         lines.append("")
-    lines.append("## DAILY READ SOURCE MATERIAL (cover every item below)")
+    lines.append("## DAILY READ SOURCE MATERIAL (produce one daily_read article object per item below)")
     for it in daily_items:
         snip = (it.get("snip") or "").replace("\n", " ").strip()[:1200]
         lines.append(f"- id={it['id']} | source={it['source_id']} | {it['title']} | {snip}")
@@ -154,13 +163,6 @@ def _daily_read_items(conn: sqlite3.Connection, window_days: float) -> list[dict
         if parse_iso(r["published_at"]).timestamp() >= cutoff
     ]
 
-
-def _limit_words(text: str, maximum: int) -> str:
-    """Keep the promised reading budget even if the model overshoots it."""
-    words = text.split()
-    if len(words) <= maximum:
-        return text.strip()
-    return " ".join(words[:maximum]).rstrip(".,;: ") + "…"
 
 
 def run(conn: sqlite3.Connection, force: bool = False) -> dict:
@@ -247,16 +249,20 @@ def run(conn: sqlite3.Connection, force: bool = False) -> dict:
     overview = (result.get("overview") or "").strip()
     if overview:
         set_kv(conn, "overview", overview)
-    daily_read = _limit_words(result.get("daily_read") or "", daily_read_words)
-    if daily_read:
-        set_kv(conn, "daily_read", daily_read)
-        set_kv(conn, "daily_read_refs", json.dumps(result.get("daily_read_refs", [])))
+
+    # daily_read is now an array of {heading, body, refs} objects — one per article.
+    daily_read_articles = [
+        a for a in result.get("daily_read", [])
+        if isinstance(a, dict) and a.get("heading") and a.get("body")
+    ]
+    if daily_read_articles:
+        set_kv(conn, "daily_read", json.dumps(daily_read_articles))
         set_kv(conn, "daily_read_item_count", str(len(daily_items)))
     conn.commit()
     print(
         f"  {model}: overview {'set' if overview else 'empty'}, daily read "
-        f"{'set' if daily_read else 'empty'} ({len(daily_items)} feed items, "
-        f"{daily_read_words} words max), {len(sec_summaries)} section summaries, "
+        f"{'set' if daily_read_articles else 'empty'} ({len(daily_items)} feed items → "
+        f"{len(daily_read_articles)} articles), {len(sec_summaries)} section summaries, "
         f"{updated}/{len(items)} gists"
     )
     return {"status": "ok", "model": model, "sections": len(sec_summaries), "gists": updated}

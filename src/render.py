@@ -194,14 +194,10 @@ def _linkify_summary(text: str | None, refs: list[dict]):
     return Markup(_CITE_RE.sub(repl, esc))
 
 
-def _daily_read_refs(conn: sqlite3.Connection) -> list[dict]:
-    """Resolve the long-read citations without requiring its items to be visible."""
-    try:
-        ids = json.loads(get_kv(conn, "daily_read_refs") or "[]")
-    except (ValueError, TypeError):
-        return []
+def _resolve_refs(conn: sqlite3.Connection, ref_ids: list[str]) -> list[dict]:
+    """Resolve a list of item ids into numbered ref dicts for _linkify_summary."""
     refs = []
-    for n, item_id in enumerate(ids, start=1):
+    for n, item_id in enumerate(ref_ids, start=1):
         row = conn.execute(
             "SELECT source_id, title, url FROM items WHERE id=?", (item_id,)
         ).fetchone()
@@ -209,6 +205,36 @@ def _daily_read_refs(conn: sqlite3.Connection) -> list[dict]:
             refs.append({"n": n, "source_id": row["source_id"], "title": row["title"],
                          "url": row["url"]})
     return refs
+
+
+def _daily_read_articles(conn: sqlite3.Connection) -> list[dict]:
+    """Parse the stored daily_read JSON array and linkify each article's body.
+
+    Returns a list of dicts with keys: heading (str), body_html (Markup), refs (list).
+    Empty list if daily_read is absent or malformed.
+    """
+    try:
+        raw = json.loads(get_kv(conn, "daily_read") or "[]")
+    except (ValueError, TypeError):
+        return []
+    if not isinstance(raw, list):
+        return []
+    articles = []
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        heading = (item.get("heading") or "").strip()
+        body = (item.get("body") or "").strip()
+        ref_ids = item.get("refs") or []
+        if not heading and not body:
+            continue
+        refs = _resolve_refs(conn, ref_ids)
+        articles.append({
+            "heading": heading,
+            "body_html": _linkify_summary(body, refs),
+            "refs": refs,
+        })
+    return articles
 
 
 def _section_for(tags: list[str], order: list[str]) -> str:
@@ -431,7 +457,7 @@ def select_digest(conn: sqlite3.Connection) -> dict:
         "generated_iso": now.isoformat(),
         "today_label": now_local.strftime("%a %d %b"),
         "overview": get_kv(conn, "overview"),
-        "daily_read_html": _linkify_summary(get_kv(conn, "daily_read"), _daily_read_refs(conn)),
+        "daily_read_articles": _daily_read_articles(conn),
         "daily_read_item_count": int(get_kv(conn, "daily_read_item_count", "0") or 0),
         "daily_read_pages": int(cfg.get("summarize", {}).get("daily_read_pages", 10)),
         "trackers": _trackers(conn, cfg.get("tracker_links", {})),

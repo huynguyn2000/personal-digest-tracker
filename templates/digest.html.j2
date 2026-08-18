@@ -101,13 +101,22 @@
     border-radius:10px; padding:12px 14px; margin-bottom:24px; font-size:.95rem; line-height:1.55; }
   .overview .ov-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
     display:block; margin-bottom:4px; }
-  .daily-read { margin:0 0 28px; padding:18px 18px 8px; border:1px solid var(--border); border-radius:12px;
+  .daily-read { margin:0 0 28px; padding:18px 18px 12px; border:1px solid var(--border); border-radius:12px;
     background:var(--card); }
   .daily-read h2 { font-size:1.1rem; margin:0 0 3px; }
   .daily-read .read-meta { color:var(--muted); font-size:.78rem; margin:0 0 14px; }
-  .daily-read .read-body { white-space:pre-line; line-height:1.7; font-size:1rem; }
-  .daily-read .read-body a { color:var(--accent); font-weight:600; text-decoration:none; }
-  .daily-read .read-body a:hover { text-decoration:underline; }
+  .daily-read .dr-article { display:none; }
+  .daily-read .dr-article.dr-active { display:block; }
+  .daily-read .dr-article h3 { font-size:1rem; font-weight:700; margin:0 0 8px; line-height:1.4; }
+  .daily-read .dr-article .dr-body { white-space:pre-line; line-height:1.7; font-size:1rem; }
+  .daily-read .dr-article .dr-body a { color:var(--accent); font-weight:600; text-decoration:none; }
+  .daily-read .dr-article .dr-body a:hover { text-decoration:underline; }
+  .daily-read .dr-nav { display:flex; align-items:center; gap:10px; margin-top:14px; border-top:1px solid var(--border); padding-top:12px; }
+  .daily-read .dr-nav button { background:var(--card); border:1px solid var(--border); color:var(--fg);
+    padding:5px 14px; border-radius:8px; font-size:.85rem; cursor:pointer; }
+  .daily-read .dr-nav button:hover:not(:disabled) { border-color:var(--accent); color:var(--accent); }
+  .daily-read .dr-nav button:disabled { opacity:.35; cursor:default; }
+  .daily-read .dr-counter { font-size:.78rem; color:var(--muted); flex:1; text-align:center; }
   .gist { font-size:.92rem; margin-top:4px; color:var(--fg); }
   .tracker .label a { color:var(--muted); text-decoration:none; }
   .tracker .label a:hover { color:var(--accent); }
@@ -174,6 +183,7 @@
   {% if nav %}
   <nav class="jump" aria-label="Jump to section">
     {% if trackers %}<a href="#trackers">Trackers</a>{% endif %}
+    {% if daily_read_articles %}<a href="#daily-read">Đọc hôm nay</a>{% endif %}
     {% for label, anchor in nav %}<a href="#{{ anchor }}">{{ SECTION_NAMES.get(label, label) }}</a>{% endfor %}
   </nav>
   {% endif %}
@@ -184,11 +194,21 @@
   </div>
   {% endif %}
 
-  {% if daily_read_html %}
+  {% if daily_read_articles %}
   <article class="daily-read" id="daily-read">
-    <h2>Daily Read</h2>
-    <p class="read-meta">{{ daily_read_item_count }} feed items condensed for a {{ daily_read_pages }}-page reading budget. Source links are optional references.</p>
-    <div class="read-body">{{ daily_read_html }}</div>
+    <h2>Đọc hôm nay</h2>
+    <p class="read-meta">{{ daily_read_item_count }} bài · {{ daily_read_articles | length }} trang · ngân sách {{ daily_read_pages }} trang đọc.</p>
+    {% for art in daily_read_articles %}
+    <div class="dr-article{% if loop.first %} dr-active{% endif %}" data-dr-idx="{{ loop.index0 }}">
+      <h3>{{ art.heading }}</h3>
+      <div class="dr-body">{{ art.body_html }}</div>
+    </div>
+    {% endfor %}
+    <div class="dr-nav">
+      <button id="drPrev" aria-label="Bài trước" disabled>&#8592; Trước</button>
+      <span class="dr-counter" id="drCounter">1 / {{ daily_read_articles | length }}</span>
+      <button id="drNext" aria-label="Bài tiếp theo"{% if daily_read_articles | length <= 1 %} disabled{% endif %}>Tiếp &#8594;</button>
+    </div>
   </article>
   {% endif %}
 
@@ -314,6 +334,25 @@
     root.setAttribute("data-theme", next);
     try { localStorage.setItem("pdt-theme", next); } catch (e) {}
   });
+  // Daily Read paginator
+  (function () {
+    var articles = document.querySelectorAll(".dr-article");
+    var prev = document.getElementById("drPrev");
+    var next = document.getElementById("drNext");
+    var counter = document.getElementById("drCounter");
+    if (!articles.length || !prev || !next) return;
+    var current = 0;
+    function show(idx) {
+      articles[current].classList.remove("dr-active");
+      current = idx;
+      articles[current].classList.add("dr-active");
+      counter.textContent = (current + 1) + " / " + articles.length;
+      prev.disabled = current === 0;
+      next.disabled = current === articles.length - 1;
+    }
+    prev.addEventListener("click", function () { if (current > 0) show(current - 1); });
+    next.addEventListener("click", function () { if (current < articles.length - 1) show(current + 1); });
+  })();
   var f = document.getElementById("fresh");
   if (f) {
     var g = Date.parse(f.getAttribute("data-generated"));
