@@ -1,20 +1,21 @@
 """LLM summaries via Gemini.
 
-One call per run produces, from the items that will ship in today's digest:
-  - a short day `overview`,
-  - a `summary` per section/type (dataeng, ai, newsletter, …),
-  - a one-line `gist` per item (used by Telegram + the dashboard).
-  - a `daily_read` array — one article object per feed item — covering every
-    item in the daily window, so the HTML page can be read without opening
-    every source link. Each article has a heading, a Vietnamese body, and refs.
+Two focused calls per run (split to stay under free-tier TPM limits):
 
-Section summaries land in `kv['section_summaries']` (JSON), the overview in
-`kv['overview']`, the long read (JSON array) in `kv['daily_read']`, and gists
-in `items.summary`. Ranking + dedup stay deterministic — only this descriptive
-text is generated.
+  Call 1 — digest pass (fast, small):
+    overview, per-section summaries, per-item gists
+    Input: digest items only (~12 items × 300-char snips)
 
-Best-effort: if GEMINI_API_KEY is unset (or the call fails), it skips and the
-digest falls back to the compact item list. Uses httpx, no extra dependency.
+  Call 2 — daily_read pass (heavier, best-effort):
+    one article object per feed item in the daily window
+    Input: daily window items (title + 300-char snip, no long body)
+
+Results land in:
+  kv['overview'], kv['section_summaries'], kv['daily_read']
+  items.summary (gists)
+
+Best-effort: if GEMINI_API_KEY is unset or any call fails the digest falls
+back to the compact item list. Uses httpx, no extra dependency.
 """
 from __future__ import annotations
 
@@ -31,22 +32,12 @@ from .render import select_digest
 
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 
-_SCHEMA = {
+# ── JSON schemas ──────────────────────────────────────────────────────────────
+
+_SCHEMA_DIGEST = {
     "type": "object",
     "properties": {
         "overview": {"type": "string"},
-        "daily_read": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "heading": {"type": "string"},
-                    "body": {"type": "string"},
-                    "refs": {"type": "array", "items": {"type": "string"}},
-                },
-                "required": ["heading", "body", "refs"],
-            },
-        },
         "sections": {
             "type": "array",
             "items": {
@@ -69,21 +60,40 @@ _SCHEMA = {
             },
         },
     },
-    "required": ["overview", "daily_read", "sections", "gists"],
+    "required": ["overview", "sections", "gists"],
+}
+
+_SCHEMA_DAILY_READ = {
+    "type": "object",
+    "properties": {
+        "daily_read": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "heading": {"type": "string"},
+                    "body": {"type": "string"},
+                    "refs": {"type": "array", "items": {"type": "string"}},
+                },
+                "required": ["heading", "body", "refs"],
+            },
+        },
+    },
+    "required": ["daily_read"],
 }
 
 
-def _call_gemini(model: str, key: str, prompt: str) -> dict:
+# ── Gemini HTTP call ──────────────────────────────────────────────────────────
+
+def _call_gemini(model: str, key: str, prompt: str, schema: dict,
+                 max_output_tokens: int = 8192) -> dict:
     body = {
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.3,
-            # Newer flash models spend "thinking" tokens from this same budget,
-            # so keep it well above the JSON we expect or the output truncates
-            # (summary + refs + top_pick + a gist per item, across all sections).
-            "maxOutputTokens": 16384,
+            "maxOutputTokens": max_output_tokens,
             "responseMimeType": "application/json",
-            "responseSchema": _SCHEMA,
+            "responseSchema": schema,
         },
     }
     url = GEMINI_URL.format(model=model)
@@ -92,8 +102,10 @@ def _call_gemini(model: str, key: str, prompt: str) -> dict:
     for attempt in range(max_attempts):
         try:
             r = httpx.post(url, params={"key": key}, json=body, timeout=90.0)
-            if r.status_code in (429, 500, 503):  # transient — back off and retry
-                raise httpx.HTTPStatusError(f"transient {r.status_code}", request=r.request, response=r)
+            if r.status_code in (429, 500, 503):
+                raise httpx.HTTPStatusError(
+                    f"transient {r.status_code}", request=r.request, response=r
+                )
             r.raise_for_status()
             data = r.json()
             text = data["candidates"][0]["content"]["parts"][0]["text"]
@@ -104,37 +116,32 @@ def _call_gemini(model: str, key: str, prompt: str) -> dict:
             if status not in (429, 500, 503) and not isinstance(exc, httpx.TransportError):
                 raise
             if attempt < max_attempts - 1:
-                wait = min(2 ** attempt, 60)  # 1s, 2s, 4s, 8s, 16s, 32s (capped at 60s)
-                print(f"  Gemini {status or 'transport error'} on attempt {attempt + 1}/{max_attempts}, retrying in {wait}s…")
-                if status == 429 and attempt >= 3:
-                    print("  (persistent 429 likely means the prompt is too large for the free-tier TPM quota)")
+                wait = min(2 ** attempt, 60)
+                print(
+                    f"  Gemini {status or 'transport error'} on attempt "
+                    f"{attempt + 1}/{max_attempts}, retrying in {wait}s…"
+                )
                 time.sleep(wait)
-    raise last_exc
+    raise last_exc  # type: ignore[misc]
 
 
-def _build_prompt(grouped: list[dict], daily_items: list[dict], max_chars: int,
-                  daily_read_words: int) -> str:
+# ── Prompt builders ───────────────────────────────────────────────────────────
+
+def _build_digest_prompt(grouped: list[dict], max_chars: int) -> str:
+    """Small prompt: overview + section summaries + one-line gists."""
     lines = [
         "You are a terse tech-news editor for a personal daily digest covering "
         "data engineering and AI. Write plainly, no marketing, no fluff.",
-        "IMPORTANT: Write ALL human-readable text — overview, daily_read headings and bodies, "
-        "section summaries, and gists — in Vietnamese (Tiếng Việt).",
+        "IMPORTANT: Write ALL human-readable text in Vietnamese (Tiếng Việt).",
         "",
-        "Return JSON matching the schema:",
-        "- overview: 2 sentences (in Vietnamese) on the day's themes across ALL sections.",
-        "- daily_read: an ARRAY of article objects, one object per source article supplied below. "
-        "Each object has:",
-        "    * heading: a short Vietnamese title for this article (max 12 words).",
-        f"    * body: a self-contained Vietnamese summary of that article (max {daily_read_words // max(len(daily_items), 1)} words). "
-        "Write plainly, no markdown, no sales language. "
-        "Cite source material inline with [n] markers, where [n] is the 1-based index into this article's own 'refs' list.",
-        "    * refs: the item ids cited in this article's body, in the order the [n] markers appear.",
-        "- sections: for EACH section tag below, an object with:",
-        "    * summary: 2-4 Vietnamese sentences synthesizing what happened in that category. "
-        "Cite sources inline with [1], [2], … where [1] is the first id in 'refs'.",
-        "    * refs: the item ids the summary draws from, in the SAME order as the [n] markers.",
-        "    * top_pick: the id of the SINGLE most significant / must-read item in that section.",
-        f"- gists: for EACH item id, a one-line Vietnamese gist (max {max_chars} chars).",
+        "Return JSON with:",
+        "- overview: 2 Vietnamese sentences on the day's themes across all sections.",
+        "- sections: for EACH section tag, an object with:",
+        "    * summary: 2-4 Vietnamese sentences synthesising what happened.",
+        "      Cite sources inline as [1], [2], … where [n] is the nth id in 'refs'.",
+        "    * refs: item ids cited, in marker order.",
+        "    * top_pick: id of the single most significant item.",
+        f"- gists: for EACH item id below, a one-line Vietnamese gist (max {max_chars} chars).",
         "",
     ]
     for g in grouped:
@@ -143,15 +150,32 @@ def _build_prompt(grouped: list[dict], daily_items: list[dict], max_chars: int,
             snip = (it.get("snip") or "").replace("\n", " ").strip()[:300]
             lines.append(f"- id={it['id']} | {it['title']} | {snip}")
         lines.append("")
-    lines.append("## DAILY READ SOURCE MATERIAL (produce one daily_read article object per item below)")
-    for it in daily_items:
-        snip = (it.get("snip") or "").replace("\n", " ").strip()[:500]
-        lines.append(f"- id={it['id']} | source={it['source_id']} | {it['title']} | {snip}")
     return "\n".join(lines)
 
 
+def _build_daily_read_prompt(daily_items: list[dict], words_per_article: int) -> str:
+    """Heavier prompt: one article object per feed item."""
+    lines = [
+        "You are a terse tech-news editor. Write plainly in Vietnamese (Tiếng Việt).",
+        "",
+        "For EACH source article listed below produce one object in daily_read with:",
+        "  * heading: short Vietnamese title (max 12 words).",
+        f"  * body: self-contained Vietnamese summary (max {words_per_article} words). "
+        "Cite with [n] markers referencing this article's own refs list.",
+        "  * refs: item ids cited, in marker order.",
+        "",
+        "## SOURCE ARTICLES",
+    ]
+    for it in daily_items:
+        snip = (it.get("snip") or "").replace("\n", " ").strip()[:300]
+        lines.append(f"- id={it['id']} | {it['title']} | {snip}")
+    return "\n".join(lines)
+
+
+# ── Daily-read item loader ────────────────────────────────────────────────────
+
 def _daily_read_items(conn: sqlite3.Connection, window_days: float) -> list[dict]:
-    """All primary feed entries available for this daily run, including videos."""
+    """Primary feed items within the daily window, ordered newest-first."""
     cutoff = time.time() - window_days * 86400
     rows = conn.execute(
         "SELECT id, source_id, title, raw_text, published_at FROM items "
@@ -159,13 +183,18 @@ def _daily_read_items(conn: sqlite3.Connection, window_days: float) -> list[dict
     ).fetchall()
     from .db import parse_iso
     return [
-        {"id": r["id"], "source_id": r["source_id"], "title": r["title"],
-         "snip": r["raw_text"] or ""}
+        {
+            "id": r["id"],
+            "source_id": r["source_id"],
+            "title": r["title"],
+            "snip": r["raw_text"] or "",
+        }
         for r in rows
         if parse_iso(r["published_at"]).timestamp() >= cutoff
     ]
 
 
+# ── Main entry point ──────────────────────────────────────────────────────────
 
 def run(conn: sqlite3.Connection, force: bool = False) -> dict:
     key = os.environ.get("GEMINI_API_KEY")
@@ -177,26 +206,34 @@ def run(conn: sqlite3.Connection, force: bool = False) -> dict:
     scfg = cfg.get("summarize", {})
     model = os.environ.get("GEMINI_MODEL") or scfg.get("model", "gemini-flash-latest")
     max_chars = int(scfg.get("max_gist_chars", 140))
-    daily_read_words = int(scfg.get("daily_read_pages", 10)) * int(
-        scfg.get("daily_read_words_per_page", 320)
-    )
+    daily_read_pages = int(scfg.get("daily_read_pages", 5))
+    words_per_page = int(scfg.get("daily_read_words_per_page", 320))
+    # words budget spread evenly across however many items are in the window
+    # (resolved per-call once we know the item count)
+    words_per_page_total = daily_read_pages * words_per_page
 
     payload = select_digest(conn)
-    # Watching is a persistent, user-managed queue. Do not re-summarize it on
-    # every daily run; its entries remain unchanged until opened in the page.
-    summarizable_sections = [sec for sec in payload["sections"] if sec["tag"] != "watching"]
+    summarizable_sections = [s for s in payload["sections"] if s["tag"] != "watching"]
     grouped = [
-        {"tag": sec["tag"], "items": [{"id": e["id"], "title": e["title"]} for e in sec["entries"]]}
+        {
+            "tag": sec["tag"],
+            "items": [{"id": e["id"], "title": e["title"]} for e in sec["entries"]],
+        }
         for sec in summarizable_sections
     ]
     if payload["newsletters"]:
         grouped.append(
-            {"tag": "newsletter",
-             "items": [{"id": e["id"], "title": e["title"]} for e in payload["newsletters"]]}
+            {
+                "tag": "newsletter",
+                "items": [{"id": e["id"], "title": e["title"]} for e in payload["newsletters"]],
+            }
         )
 
-    all_views = [e for sec in summarizable_sections for e in sec["entries"]] + payload["newsletters"]
-    seen, items = set(), []
+    all_views = (
+        [e for sec in summarizable_sections for e in sec["entries"]] + payload["newsletters"]
+    )
+    seen: set[str] = set()
+    items: list[dict] = []
     for v in all_views:
         if v["id"] not in seen:
             seen.add(v["id"])
@@ -206,13 +243,7 @@ def run(conn: sqlite3.Connection, force: bool = False) -> dict:
         print("  nothing in the digest window to summarize")
         return {"status": "empty"}
 
-    daily_items = _daily_read_items(conn, float(cfg["digest"].get("render_window_days", 4)))
-    have_all = all(v.get("summary") for v in items)
-    if (have_all and get_kv(conn, "overview") and get_kv(conn, "section_summaries")
-            and get_kv(conn, "daily_read") and not force):
-        print(f"  all {len(items)} items already summarized (cached)")
-        return {"status": "cached", "items": len(items)}
-
+    # Fill per-item snips for the digest prompt
     raw_map = {
         r["id"]: r["raw_text"]
         for r in conn.execute(
@@ -224,49 +255,91 @@ def run(conn: sqlite3.Connection, force: bool = False) -> dict:
         for it in g["items"]:
             it["snip"] = raw_map.get(it["id"], "")
 
-    prompt = _build_prompt(grouped, daily_items, max_chars, daily_read_words)
+    have_all_gists = all(v.get("summary") for v in items)
+    have_cache = (
+        have_all_gists
+        and get_kv(conn, "overview")
+        and get_kv(conn, "section_summaries")
+        and get_kv(conn, "daily_read")
+    )
+    if have_cache and not force:
+        print(f"  all {len(items)} items already summarized (cached)")
+        return {"status": "cached", "items": len(items)}
+
+    # ── Call 1: digest pass (overview + sections + gists) ────────────────────
+    digest_prompt = _build_digest_prompt(grouped, max_chars)
+    digest_result: dict = {}
     try:
-        result = _call_gemini(model, key, prompt)
-    except Exception as exc:  # noqa: BLE001 - best-effort
-        print(f"  summarize failed ({type(exc).__name__}: {exc}) -> falling back to item list")
+        digest_result = _call_gemini(model, key, digest_prompt, _SCHEMA_DIGEST,
+                                     max_output_tokens=8192)
+    except Exception as exc:  # noqa: BLE001
+        print(f"  digest pass failed ({type(exc).__name__}: {exc}) -> skipping summaries")
         return {"status": "error", "error": str(exc)}
 
-    # per-item gists
-    gists = {g["id"]: g["gist"].strip() for g in result.get("gists", []) if g.get("id")}
+    # Persist gists
+    gists = {g["id"]: g["gist"].strip() for g in digest_result.get("gists", []) if g.get("id")}
     updated = 0
     for iid, gist in gists.items():
         if gist:
-            conn.execute("UPDATE items SET summary = ? WHERE id = ?", (gist[: max_chars * 2], iid))
+            conn.execute(
+                "UPDATE items SET summary = ? WHERE id = ?", (gist[: max_chars * 2], iid)
+            )
             updated += 1
 
-    # per-section summaries + the sources (item ids) each one cites
     sec_summaries = {
-        s["tag"]: {"summary": s["summary"].strip(), "refs": s.get("refs", []),
-                   "top_pick": s.get("top_pick")}
-        for s in result.get("sections", [])
+        s["tag"]: {
+            "summary": s["summary"].strip(),
+            "refs": s.get("refs", []),
+            "top_pick": s.get("top_pick"),
+        }
+        for s in digest_result.get("sections", [])
         if s.get("tag") and s.get("summary")
     }
     set_kv(conn, "section_summaries", json.dumps(sec_summaries))
 
-    overview = (result.get("overview") or "").strip()
+    overview = (digest_result.get("overview") or "").strip()
     if overview:
         set_kv(conn, "overview", overview)
 
-    # daily_read is now an array of {heading, body, refs} objects — one per article.
-    daily_read_articles = [
-        a for a in result.get("daily_read", [])
-        if isinstance(a, dict) and a.get("heading") and a.get("body")
-    ]
-    if daily_read_articles:
-        set_kv(conn, "daily_read", json.dumps(daily_read_articles))
-        set_kv(conn, "daily_read_item_count", str(len(daily_items)))
     conn.commit()
     print(
-        f"  {model}: overview {'set' if overview else 'empty'}, daily read "
-        f"{'set' if daily_read_articles else 'empty'} ({len(daily_items)} feed items → "
-        f"{len(daily_read_articles)} articles), {len(sec_summaries)} section summaries, "
-        f"{updated}/{len(items)} gists"
+        f"  [{model}] digest pass: overview={'set' if overview else 'empty'}, "
+        f"{len(sec_summaries)} sections, {updated}/{len(items)} gists"
     )
+
+    # ── Call 2: daily_read pass (best-effort, separate quota hit) ────────────
+    daily_items = _daily_read_items(
+        conn, float(cfg["digest"].get("render_window_days", 4))
+    )
+    if not daily_items:
+        print("  daily_read pass: no items in window, skipping")
+        return {"status": "ok", "model": model, "sections": len(sec_summaries), "gists": updated}
+
+    words_per_article = max(30, words_per_page_total // len(daily_items))
+    daily_prompt = _build_daily_read_prompt(daily_items, words_per_article)
+    try:
+        daily_result = _call_gemini(model, key, daily_prompt, _SCHEMA_DAILY_READ,
+                                    max_output_tokens=8192)
+        daily_read_articles = [
+            a
+            for a in daily_result.get("daily_read", [])
+            if isinstance(a, dict) and a.get("heading") and a.get("body")
+        ]
+        if daily_read_articles:
+            set_kv(conn, "daily_read", json.dumps(daily_read_articles))
+            set_kv(conn, "daily_read_item_count", str(len(daily_items)))
+            conn.commit()
+        print(
+            f"  [{model}] daily_read pass: "
+            f"{len(daily_items)} items → {len(daily_read_articles)} articles"
+        )
+    except Exception as exc:  # noqa: BLE001
+        # daily_read is display-only; gists + section summaries are already saved
+        print(
+            f"  daily_read pass failed ({type(exc).__name__}: {exc}) "
+            f"-> digest gists/sections still saved"
+        )
+
     return {"status": "ok", "model": model, "sections": len(sec_summaries), "gists": updated}
 
 
