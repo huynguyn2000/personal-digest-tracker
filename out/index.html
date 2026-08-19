@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Morning Digest — 2026-08-18 23:04 +07</title>
+<title>Morning Digest — 2026-08-19 23:34 +07</title>
 <meta name="description" content="Your morning digest — AWS, data engineering & AI news, deduped and summarized, with FX / weather / air-quality trackers.">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><text x="1" y="14" font-size="14">📰</text></svg>'>
@@ -101,13 +101,22 @@
     border-radius:10px; padding:12px 14px; margin-bottom:24px; font-size:.95rem; line-height:1.55; }
   .overview .ov-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
     display:block; margin-bottom:4px; }
-  .daily-read { margin:0 0 28px; padding:18px 18px 8px; border:1px solid var(--border); border-radius:12px;
+  .daily-read { margin:0 0 28px; padding:18px 18px 12px; border:1px solid var(--border); border-radius:12px;
     background:var(--card); }
   .daily-read h2 { font-size:1.1rem; margin:0 0 3px; }
   .daily-read .read-meta { color:var(--muted); font-size:.78rem; margin:0 0 14px; }
-  .daily-read .read-body { white-space:pre-line; line-height:1.7; font-size:1rem; }
-  .daily-read .read-body a { color:var(--accent); font-weight:600; text-decoration:none; }
-  .daily-read .read-body a:hover { text-decoration:underline; }
+  .daily-read .dr-article { display:none; }
+  .daily-read .dr-article.dr-active { display:block; }
+  .daily-read .dr-article h3 { font-size:1rem; font-weight:700; margin:0 0 8px; line-height:1.4; }
+  .daily-read .dr-article .dr-body { white-space:pre-line; line-height:1.7; font-size:1rem; }
+  .daily-read .dr-article .dr-body a { color:var(--accent); font-weight:600; text-decoration:none; }
+  .daily-read .dr-article .dr-body a:hover { text-decoration:underline; }
+  .daily-read .dr-nav { display:flex; align-items:center; gap:10px; margin-top:14px; border-top:1px solid var(--border); padding-top:12px; }
+  .daily-read .dr-nav button { background:var(--card); border:1px solid var(--border); color:var(--fg);
+    padding:5px 14px; border-radius:8px; font-size:.85rem; cursor:pointer; }
+  .daily-read .dr-nav button:hover:not(:disabled) { border-color:var(--accent); color:var(--accent); }
+  .daily-read .dr-nav button:disabled { opacity:.35; cursor:default; }
+  .daily-read .dr-counter { font-size:.78rem; color:var(--muted); flex:1; text-align:center; }
   .gist { font-size:.92rem; margin-top:4px; color:var(--fg); }
   .tracker .label a { color:var(--muted); text-decoration:none; }
   .tracker .label a:hover { color:var(--accent); }
@@ -162,7 +171,7 @@
   <header class="topbar">
     <div>
       <h1>Morning Digest</h1>
-      <div class="sub">2026-08-18 23:04 +07 · 4 items · 0 newsletters<span class="fresh" id="fresh" data-generated="2026-08-18T16:04:38+00:00"></span></div>
+      <div class="sub">2026-08-19 23:34 +07 · 2 items · 0 newsletters<span class="fresh" id="fresh" data-generated="2026-08-19T16:34:50+00:00"></span></div>
       <div class="unseen-note" id="unseenNote" hidden></div>
     </div>
     <button class="theme-btn" id="themeBtn" title="Toggle light / dark" aria-label="Toggle theme">◐</button>
@@ -174,32 +183,17 @@
   
   <nav class="jump" aria-label="Jump to section">
     <a href="#trackers">Trackers</a>
-    <a href="#sec-watching">📺 Watching</a><a href="#sec-aws">AWS</a><a href="#sec-dataeng">Data Engineering</a><a href="#sec-ai">AI</a><a href="#sec-releases">📦 Releases</a>
+    
+    <a href="#sec-watching">📺 Watching</a><a href="#sec-dataeng">Data Engineering</a><a href="#sec-ai">AI</a><a href="#sec-releases">📦 Releases</a>
   </nav>
   
 
   
   <div class="overview">
-    <span class="ov-label">Today · Tue 18 Aug</span>Cloud infrastructure updates today focus on enhanced data governance, scalable inference routing, and enterprise controls across AWS and Databricks. Open-source AI tooling advances with late-interaction multi-vector search alongside high-performing open weights like Qwen 3.8 27B.
+    <span class="ov-label">Today · Wed 19 Aug</span>Cloud infrastructure updates today focus on enhanced data governance, scalable inference routing, and enterprise controls across AWS and Databricks. Open-source AI tooling advances with late-interaction multi-vector search alongside high-performing open weights like Qwen 3.8 27B.
   </div>
   
 
-  
-  <article class="daily-read" id="daily-read">
-    <h2>Daily Read</h2>
-    <p class="read-meta">36 feed items condensed for a 10-page reading budget. Source links are optional references.</p>
-    <div class="read-body">Enterprise AI Governance and Evaluation
-Databricks examined retail AI adoption, emphasizing the necessity of a dedicated control plane to manage contextual business data safely <a href="https://databricks.com/blog/when-it-comes-governance-retailers-need-control-plane-context" target="_blank" rel="noopener" title="databricks-blog — When it comes to Governance, Retailers need a control plane for context">[1]</a>. At their Grounded Reasoning Cup, Databricks tested autonomous AI agents in real-time environments to benchmark reasoning fidelity against structured enterprise requirements <a href="https://databricks.com/blog/evaluating-ai-agents-live-grounded-reasoning-cup" target="_blank" rel="noopener" title="databricks-blog — Evaluating AI Agents Live at the Grounded Reasoning Cup">[2]</a>. For enterprise teams navigating development bottlenecks, Databricks discussed avoiding the prototyping tax by moving prototypes swiftly to production-grade data pipelines <a href="https://databricks.com/blog/prototyping-tax-killing-your-ai-roadmap" target="_blank" rel="noopener" title="databricks-blog — The prototyping tax is killing your AI roadmap">[3]</a>. In the analytics layer, integrating SQL AI functions directly inside data warehouses enables automated categorization and transformation of unstructured fields alongside structured tables <a href="https://databricks.com/blog/using-aifunctions-your-data-warehouse-top-use-cases" target="_blank" rel="noopener" title="databricks-blog — Using AI_Functions in Your Data Warehouse: Top Use Cases">[4]</a>.
-
-AI Models, Efficiency, and Developer Tools
-Sentence Transformers introduced multi-vector late-interaction retrieval support, bringing ColBERT-style efficiency to standard embedding workflows <a href="https://huggingface.co/blog/multi-vector-encoder" target="_blank" rel="noopener" title="huggingface-blog — Multi-Vector (Late Interaction) Embedding Models with Sentence Transformers">[5]</a>. In open models, Qwen 3.8 27B demonstrated competitive benchmark results on the Artificial Analysis index, matching significantly larger frontier models <a href="https://simonwillison.net/2026/Aug/17/qwen-38-27b-scores-52" target="_blank" rel="noopener" title="simonwillison — Qwen 3.8 27B scores 52 on the Artificial Analysis Intelligence Index">[6]</a>. However, practical testing indicates the model defaults to intensive reasoning modes that require deliberate tuning to avoid unnecessary computational overhead <a href="https://simonwillison.net/2026/Aug/16/qwen-38-27b" target="_blank" rel="noopener" title="simonwillison — Qwen 3.8 27B is excellent, but it defaults to wildly overthinking things">[7]</a>. Developer Simon Willison documented building CORS Chat to interactively benchmark local models like Qwen 3.8 with progressive SVG rendering <a href="https://simonwillison.net/2026/Aug/15/cors-chat" target="_blank" rel="noopener" title="simonwillison — CORS Chat">[8]</a>, highlighted novel hallucinate-and-embed tagging strategies to categorize unstructured posts without fixed vocabularies <a href="https://simonwillison.net/2026/Aug/14/dont-classify-hallucinate" target="_blank" rel="noopener" title="simonwillison — Don&#39;t classify. Hallucinate!">[9]</a>, and updated his markdown-svg-renderer web tool <a href="https://simonwillison.net/2026/Aug/16/markdown-svg-upgrades" target="_blank" rel="noopener" title="simonwillison — Markdown SVG upgrades">[10]</a>. Hugging Face published cluster optimization strategies demonstrating a 33-point increase in GPU utilization purely by reordering job queuing and scheduling <a href="https://huggingface.co/blog/Dharma-AI/gpu-management-pt2" target="_blank" rel="noopener" title="huggingface-blog — Same Cluster, 33 Points More Utilization: What Changed Was the Order">[11]</a>. In industry perspectives, Anthropic CEO Dario Amodei argued that public skepticism toward AI stems from unmet societal promises rather than messaging issues <a href="https://simonwillison.net/2026/Aug/16/dario-amodei" target="_blank" rel="noopener" title="simonwillison — Quoting Dario Amodei">[12]</a>. On AI data sourcing, an investigative report traced physical shipments of purchased rare books directly to an Amazon scanning and training facility in Las Vegas <a href="https://simonwillison.net/2026/Aug/17/we-tracked-a-shipment-of-rare-books-it-ended-at-an-amazon-ai-tra" target="_blank" rel="noopener" title="simonwillison — We Tracked a Shipment of Rare Books. It Ended at an Amazon AI Training Facility">[13]</a>. Outside tech, Willison noted a sighting of Morris, a lone Northern Gannet residing in Pillar Point Harbor <a href="https://simonwillison.net/2026/Aug/15/sighting-391300422" target="_blank" rel="noopener" title="simonwillison — Northern Gannet">[14]</a>.
-
-AWS Infrastructure and Database Enhancements
-Amazon Bedrock expanded support for OpenAI GPT-5.6 models with Global and Geo cross-region inference to optimize costs and balance throughput across regional constraints <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-bedrock-cross-region-openai-v2" target="_blank" rel="noopener" title="aws-whats-new — Amazon Bedrock expands API support and introduces Cross Region Inferencing for OpenAI models">[15]</a>. Databricks detailed architecture patterns for sub-second feature retrieval to support low-latency machine learning scoring <a href="https://databricks.com/blog/how-databricks-feature-store-serves-features-sub-second-freshness" target="_blank" rel="noopener" title="databricks-blog — How Databricks Feature Store serves features with sub-second freshness">[16]</a>. In search infrastructure, quick-commerce platform Zepto migrated Amazon OpenSearch Service to OR2 instances, doubling indexing throughput while reducing fleet node counts by one third <a href="https://aws.amazon.com/blogs/big-data/how-zepto-powers-sub-second-search-using-opensearch-service-or2-instances" target="_blank" rel="noopener" title="aws-big-data — How Zepto powers sub-second search using OpenSearch Service OR2 instances">[17]</a>. OpenSearch Service also extended automatic semantic enrichment to VPC-isolated domains without requiring public internet egress <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-opensearch-service-vpc" target="_blank" rel="noopener" title="aws-whats-new — Amazon OpenSearch Service now supports automatic semantic enrichment for VPC domains">[18]</a>. Amazon MSK introduced cluster-level custom domain name configurations for ZooKeeper and KRaft provisioned clusters to eliminate broker-level endpoint reconfigurations <a href="https://aws.amazon.com/about-aws/whats-new/2026/17/amazon-msk-custom-domain-names" target="_blank" rel="noopener" title="aws-whats-new — Amazon MSK now supports configuring custom domain names for MSK Provisioned clusters">[19]</a>. NaranjaX demonstrated centralized multi-account MSK Serverless routing using AWS RAM and Route 53 Resolvers across 40 accounts <a href="https://aws.amazon.com/blogs/big-data/naranjax-manages-multiple-amazon-msk-serverless-clusters-in-different-accounts-from-their-idp-using-aws-ram-and-route-53" target="_blank" rel="noopener" title="aws-big-data — NaranjaX manages multiple Amazon MSK Serverless clusters in different accounts from their IDP using AWS RAM and Route 53">[20]</a>. AWS MQ for RabbitMQ received comprehensive documentation on authentication architectures, covering OAuth 2.0 integration with AWS IAM <a href="https://aws.amazon.com/blogs/big-data/iam-authentication-with-oauth-2-0-for-amazon-mq-for-rabbitmq" target="_blank" rel="noopener" title="aws-big-data — IAM authentication with OAuth 2.0 for Amazon MQ for RabbitMQ">[21]</a>, general identity provider options <a href="https://aws.amazon.com/blogs/big-data/authentication-and-authorization-options-for-amazon-mq-for-rabbitmq" target="_blank" rel="noopener" title="aws-big-data — Authentication and authorization options for Amazon MQ for RabbitMQ">[22]</a>, external LDAP and HTTP backends <a href="https://aws.amazon.com/blogs/big-data/oauth-2-0-ldap-and-http-auth-for-amazon-mq-for-rabbitmq" target="_blank" rel="noopener" title="aws-big-data — OAuth 2.0, LDAP, and HTTP auth for Amazon MQ for RabbitMQ">[23]</a>, and mutual TLS certificate validation <a href="https://aws.amazon.com/blogs/big-data/mutual-tls-and-ssl-certificate-authentication-for-amazon-mq-for-rabbitmq" target="_blank" rel="noopener" title="aws-big-data — Mutual TLS and SSL certificate authentication for Amazon MQ for RabbitMQ">[24]</a>. In network security, AWS Network Firewall enabled stateful rule hit counts to help administrators audit traffic patterns and eliminate stale firewall rules <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/aws-network-firewall-stateful-rule-hit-counts" target="_blank" rel="noopener" title="aws-whats-new — AWS Network Firewall Now Supports Stateful Rule Hit Counts">[25]</a>. AWS EC2 expanded R8i and R8i-Flex instances with Intel Xeon 6 processors to Canada West <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-ec2-r8i-r8i-flex-calgary" target="_blank" rel="noopener" title="aws-whats-new — Amazon EC2 R8i and R8i-Flex instances are now available in Canada West (Calgary) region">[26]</a>, AWS CloudShell launched a built-in visual editor <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/aws-cloudshell-visual-file-editor" target="_blank" rel="noopener" title="aws-whats-new — AWS CloudShell now includes a built-in visual file editor">[27]</a>, AWS highlighted ongoing open-source community investments and events in its weekly roundup <a href="https://aws.amazon.com/blogs/aws/aws-weekly-roundup-ec2-application-status-checks-iam-role-manager-openai-daybreak-on-bedrock-and-more-august-17-2026" target="_blank" rel="noopener" title="aws-news — AWS Weekly Roundup: EC2 application status checks, IAM role manager, OpenAI Daybreak on Bedrock, and more (August 17, 2026)">[28]</a>, and announced physical AWS Builder Lofts opening in Berlin, Hyderabad, and São Paulo <a href="https://aws.amazon.com/blogs/aws/in-the-works-aws-builder-lofts-in-berlin-hyderabad-and-sao-paulo" target="_blank" rel="noopener" title="aws-news — In the works: AWS Builder Lofts in Berlin, Hyderabad, and São Paulo">[29]</a>.
-
-Amazon Quick and Management Releases
-Amazon Quick rolled out native Microsoft 365 extensions across Word, Excel, PowerPoint, and Outlook for automated local data operations <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-quick-microsoft-365-extensions-generally-available" target="_blank" rel="noopener" title="aws-whats-new — Amazon Quick Microsoft 365 extensions are now generally available">[30]</a>. To enforce enterprise guardrails, Quick introduced per-user usage limits on index storage and agent runtimes <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-quick-per-user-resource-limits" target="_blank" rel="noopener" title="aws-whats-new — Amazon Quick now supports per-user resource limits">[31]</a>, integrated data loss prevention policies with Microsoft Purview sensitivity labels <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-quick-dlp-purview" target="_blank" rel="noopener" title="aws-whats-new — Amazon Quick now supports data loss prevention with Microsoft Purview">[32]</a>, and launched auditable approval policies for shared workspaces, knowledge bases, and custom agents <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-quick-approval-policies-sharing" target="_blank" rel="noopener" title="aws-whats-new — Amazon Quick now supports approval policies for sharing">[33]</a>. In core compute releases, Amazon EC2 Auto Scaling added single-call batch instance terminations for up to 100 instances <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-ec2-auto-scaling-batch-termination" target="_blank" rel="noopener" title="aws-whats-new — Amazon EC2 Auto Scaling now supports batch instance termination">[34]</a>, Amazon ECR increased replication rule limits to 25 per registry <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-ecr-increased-replication-rules-limit" target="_blank" rel="noopener" title="aws-whats-new — Amazon ECR now supports 25 replication rules per registry">[35]</a>, and Amazon Connect dashboards added tracking for routing steps and agent proficiency matching <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-connect-routing-steps" target="_blank" rel="noopener" title="aws-whats-new — Amazon Connect Customer dashboards now support reporting on routing steps and agent proficiencies">[36]</a>.</div>
-  </article>
   
 
   
@@ -214,17 +208,17 @@ Amazon Quick rolled out native Microsoft 365 extensions across Word, Excel, Powe
     <div class="tracker">
       <div class="label"><a href="https://www.google.com/finance/quote/USD-VND" target="_blank" rel="noopener" title="Open a larger time-window view">USD/VND ↗</a></div>
       <div class="value-row">
-        <span class="value">26,000</span>
-        <span class="delta down" title="vs previous reading">▼ 0.1%</span>
+        <span class="value">25,990</span>
+        
       </div>
       
       
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,3.0 8.0,3.0 12.9,3.0 17.9,3.0 22.8,3.0 27.8,12.8 32.7,12.8 37.7,12.8 42.7,12.8 47.6,12.8 52.6,12.8 57.5,12.8 62.5,17.6 67.4,17.6 72.4,29.0 77.3,25.8 82.3,16.0 87.3,16.0 92.2,16.0 97.2,16.0 102.1,4.6 107.1,4.6 112.0,4.6 117.0,7.9 117,29" class="spark-area"/>
-        <polyline points="3.0,3.0 8.0,3.0 12.9,3.0 17.9,3.0 22.8,3.0 27.8,12.8 32.7,12.8 37.7,12.8 42.7,12.8 47.6,12.8 52.6,12.8 57.5,12.8 62.5,17.6 67.4,17.6 72.4,29.0 77.3,25.8 82.3,16.0 87.3,16.0 92.2,16.0 97.2,16.0 102.1,4.6 107.1,4.6 112.0,4.6 117.0,7.9" class="spark-line"/>
-        <circle cx="117.0" cy="7.9" r="2.4" class="spark-dot"/>
+        <polygon points="3,29 3.0,3.0 7.2,3.0 11.4,3.0 15.7,3.0 19.9,3.0 24.1,12.8 28.3,12.8 32.6,12.8 36.8,12.8 41.0,12.8 45.2,12.8 49.4,12.8 53.7,17.6 57.9,17.6 62.1,29.0 66.3,25.8 70.6,16.0 74.8,16.0 79.0,16.0 83.2,16.0 87.4,4.6 91.7,4.6 95.9,4.6 100.1,7.9 104.3,7.9 108.6,7.9 112.8,9.5 117.0,9.5 117,29" class="spark-area"/>
+        <polyline points="3.0,3.0 7.2,3.0 11.4,3.0 15.7,3.0 19.9,3.0 24.1,12.8 28.3,12.8 32.6,12.8 36.8,12.8 41.0,12.8 45.2,12.8 49.4,12.8 53.7,17.6 57.9,17.6 62.1,29.0 66.3,25.8 70.6,16.0 74.8,16.0 79.0,16.0 83.2,16.0 87.4,4.6 91.7,4.6 95.9,4.6 100.1,7.9 104.3,7.9 108.6,7.9 112.8,9.5 117.0,9.5" class="spark-line"/>
+        <circle cx="117.0" cy="9.5" r="2.4" class="spark-dot"/>
       </svg>
       
     </div>
@@ -232,17 +226,17 @@ Amazon Quick rolled out native Microsoft 365 extensions across Word, Excel, Powe
     <div class="tracker">
       <div class="label"><a href="https://www.google.com/finance/quote/CNY-VND" target="_blank" rel="noopener" title="Open a larger time-window view">CNY/VND ↗</a></div>
       <div class="value-row">
-        <span class="value">3,824</span>
-        <span class="delta down" title="vs previous reading">▼ 0.1%</span>
+        <span class="value">3,822</span>
+        
       </div>
       
       
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,4.6 8.0,4.6 12.9,4.6 17.9,4.6 22.8,4.6 27.8,13.3 32.7,13.3 37.7,13.3 42.7,13.3 47.6,13.3 52.6,13.3 57.5,13.3 62.5,18.3 67.4,18.5 72.4,29.0 77.3,25.4 82.3,14.6 87.3,14.6 92.2,14.6 97.2,14.6 102.1,3.0 107.1,3.0 112.0,3.0 117.0,7.4 117,29" class="spark-area"/>
-        <polyline points="3.0,4.6 8.0,4.6 12.9,4.6 17.9,4.6 22.8,4.6 27.8,13.3 32.7,13.3 37.7,13.3 42.7,13.3 47.6,13.3 52.6,13.3 57.5,13.3 62.5,18.3 67.4,18.5 72.4,29.0 77.3,25.4 82.3,14.6 87.3,14.6 92.2,14.6 97.2,14.6 102.1,3.0 107.1,3.0 112.0,3.0 117.0,7.4" class="spark-line"/>
-        <circle cx="117.0" cy="7.4" r="2.4" class="spark-dot"/>
+        <polygon points="3,29 3.0,4.6 7.2,4.6 11.4,4.6 15.7,4.6 19.9,4.6 24.1,13.3 28.3,13.3 32.6,13.3 36.8,13.3 41.0,13.3 45.2,13.3 49.4,13.3 53.7,18.3 57.9,18.5 62.1,29.0 66.3,25.4 70.6,14.6 74.8,14.6 79.0,14.6 83.2,14.6 87.4,3.0 91.7,3.0 95.9,3.0 100.1,7.4 104.3,7.4 108.6,7.4 112.8,8.7 117.0,8.7 117,29" class="spark-area"/>
+        <polyline points="3.0,4.6 7.2,4.6 11.4,4.6 15.7,4.6 19.9,4.6 24.1,13.3 28.3,13.3 32.6,13.3 36.8,13.3 41.0,13.3 45.2,13.3 49.4,13.3 53.7,18.3 57.9,18.5 62.1,29.0 66.3,25.4 70.6,14.6 74.8,14.6 79.0,14.6 83.2,14.6 87.4,3.0 91.7,3.0 95.9,3.0 100.1,7.4 104.3,7.4 108.6,7.4 112.8,8.7 117.0,8.7" class="spark-line"/>
+        <circle cx="117.0" cy="8.7" r="2.4" class="spark-dot"/>
       </svg>
       
     </div>
@@ -257,15 +251,15 @@ Amazon Quick rolled out native Microsoft 365 extensions across Word, Excel, Powe
       <div class="label"><a href="https://www.windy.com/?10.823,106.630,8" target="_blank" rel="noopener" title="Open a larger time-window view">Temp ↗</a></div>
       <div class="value-row">
         <span class="value">🌡 26°C</span>
-        <span class="delta down" title="vs previous reading">▼ 5.1%</span>
+        <span class="delta down" title="vs previous reading">▼ 1.5%</span>
       </div>
       
       <div class="tcond">☁️ Overcast</div>
-      <div class="tsub">H 30° · L 25°</div>
+      <div class="tsub">H 29° · L 25°</div>
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,9.1 8.0,8.0 12.9,8.0 17.9,4.5 22.8,3.0 27.8,25.2 32.7,28.6 37.7,29.0 42.7,29.0 47.6,29.0 52.6,23.3 57.5,23.3 62.5,22.9 67.4,10.3 72.4,11.0 77.3,12.9 82.3,22.9 87.3,16.0 92.2,18.3 97.2,25.2 102.1,22.9 107.1,22.9 112.0,18.3 117.0,23.6 117,29" class="spark-area"/>
-        <polyline points="3.0,9.1 8.0,8.0 12.9,8.0 17.9,4.5 22.8,3.0 27.8,25.2 32.7,28.6 37.7,29.0 42.7,29.0 47.6,29.0 52.6,23.3 57.5,23.3 62.5,22.9 67.4,10.3 72.4,11.0 77.3,12.9 82.3,22.9 87.3,16.0 92.2,18.3 97.2,25.2 102.1,22.9 107.1,22.9 112.0,18.3 117.0,23.6" class="spark-line"/>
+        <polygon points="3,29 3.0,9.1 7.2,8.0 11.4,8.0 15.7,4.5 19.9,3.0 24.1,25.2 28.3,28.6 32.6,29.0 36.8,29.0 41.0,29.0 45.2,23.3 49.4,23.3 53.7,22.9 57.9,10.3 62.1,11.0 66.3,12.9 70.6,22.9 74.8,16.0 79.0,18.3 83.2,25.2 87.4,22.9 91.7,22.9 95.9,18.3 100.1,23.6 104.3,24.0 108.6,24.4 112.8,22.1 117.0,23.6 117,29" class="spark-area"/>
+        <polyline points="3.0,9.1 7.2,8.0 11.4,8.0 15.7,4.5 19.9,3.0 24.1,25.2 28.3,28.6 32.6,29.0 36.8,29.0 41.0,29.0 45.2,23.3 49.4,23.3 53.7,22.9 57.9,10.3 62.1,11.0 66.3,12.9 70.6,22.9 74.8,16.0 79.0,18.3 83.2,25.2 87.4,22.9 91.7,22.9 95.9,18.3 100.1,23.6 104.3,24.0 108.6,24.4 112.8,22.1 117.0,23.6" class="spark-line"/>
         <circle cx="117.0" cy="23.6" r="2.4" class="spark-dot"/>
       </svg>
       
@@ -275,15 +269,15 @@ Amazon Quick rolled out native Microsoft 365 extensions across Word, Excel, Powe
       <div class="label"><a href="https://www.windy.com/?rain,10.823,106.630,8" target="_blank" rel="noopener" title="Open a larger time-window view">Rain ↗</a></div>
       <div class="value-row">
         <span class="value">🌧 100%</span>
-        <span class="delta up" title="vs previous reading">▲ 2.0%</span>
+        <span class="delta up" title="vs previous reading">▲ 8.7%</span>
       </div>
       <div class="band"><span class="dot" style="background:#3b82f6"></span>Likely</div>
       
       
       
       <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="3,29 3.0,6.1 8.0,6.1 12.9,6.1 17.9,6.1 22.8,6.1 27.8,9.2 32.7,9.2 37.7,9.2 42.7,9.2 47.6,9.2 52.6,9.2 57.5,9.2 62.5,3.0 67.4,29.0 72.4,5.1 77.3,3.0 82.3,3.0 87.3,3.0 92.2,3.0 97.2,6.1 102.1,3.5 107.1,3.5 112.0,4.0 117.0,3.0 117,29" class="spark-area"/>
-        <polyline points="3.0,6.1 8.0,6.1 12.9,6.1 17.9,6.1 22.8,6.1 27.8,9.2 32.7,9.2 37.7,9.2 42.7,9.2 47.6,9.2 52.6,9.2 57.5,9.2 62.5,3.0 67.4,29.0 72.4,5.1 77.3,3.0 82.3,3.0 87.3,3.0 92.2,3.0 97.2,6.1 102.1,3.5 107.1,3.5 112.0,4.0 117.0,3.0" class="spark-line"/>
+        <polygon points="3,29 3.0,6.1 7.2,6.1 11.4,6.1 15.7,6.1 19.9,6.1 24.1,9.2 28.3,9.2 32.6,9.2 36.8,9.2 41.0,9.2 45.2,9.2 49.4,9.2 53.7,3.0 57.9,29.0 62.1,5.1 66.3,3.0 70.6,3.0 74.8,3.0 79.0,3.0 83.2,6.1 87.4,3.5 91.7,3.5 95.9,4.0 100.1,3.0 104.3,3.0 108.6,7.2 112.8,7.2 117.0,3.0 117,29" class="spark-area"/>
+        <polyline points="3.0,6.1 7.2,6.1 11.4,6.1 15.7,6.1 19.9,6.1 24.1,9.2 28.3,9.2 32.6,9.2 36.8,9.2 41.0,9.2 45.2,9.2 49.4,9.2 53.7,3.0 57.9,29.0 62.1,5.1 66.3,3.0 70.6,3.0 74.8,3.0 79.0,3.0 83.2,6.1 87.4,3.5 91.7,3.5 95.9,4.0 100.1,3.0 104.3,3.0 108.6,7.2 112.8,7.2 117.0,3.0" class="spark-line"/>
         <circle cx="117.0" cy="3.0" r="2.4" class="spark-dot"/>
       </svg>
       
@@ -320,7 +314,7 @@ Amazon Quick rolled out native Microsoft 365 extensions across Word, Excel, Powe
     
     
     <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 32d ago</div>
+      tubakhuym-yt · 33d ago</div>
   </div>
   
   <div class="iline" data-pub="2026-06-13T09:33:48+00:00" data-watching-id="151e02b5e002045c893157db50b509d29fcf3cac01850a19165e7625fdf58741">
@@ -328,7 +322,7 @@ Amazon Quick rolled out native Microsoft 365 extensions across Word, Excel, Powe
     
     
     <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 66d ago</div>
+      tubakhuym-yt · 67d ago</div>
   </div>
   
   <div class="iline" data-pub="2026-06-02T14:23:05+00:00" data-watching-id="57559b197428d0bb8b0b8fca2f4db3f8d837690de55da8365ce49f216484c686">
@@ -336,31 +330,7 @@ Amazon Quick rolled out native Microsoft 365 extensions across Word, Excel, Powe
     
     
     <div class="iline-meta"><span class="badge youtube">youtube</span>
-      tubakhuym-yt · 77d ago</div>
-  </div>
-  
-      </div>
-    </details>
-    
-  </section>
-  
-  <section class="type" id="sec-aws">
-    <h2 class="section">AWS <span class="count">· 1</span></h2>
-    <p class="type-summary">AWS continues expanding physical presence with new Builder Loft developer spaces planned in Berlin, Hyderabad, and São Paulo <a href="https://aws.amazon.com/blogs/aws/in-the-works-aws-builder-lofts-in-berlin-hyderabad-and-sao-paulo" target="_blank" rel="noopener" title="aws-news — In the works: AWS Builder Lofts in Berlin, Hyderabad, and São Paulo">[1]</a>. These spaces aim to foster regional developer collaboration, technical workshops, and startup networking events.</p>
-    
-    <div class="top-pick"><span class="star" title="Top pick">★</span> <a href="https://aws.amazon.com/blogs/aws/in-the-works-aws-builder-lofts-in-berlin-hyderabad-and-sao-paulo" target="_blank" rel="noopener">In the works: AWS Builder Lofts in Berlin, Hyderabad, and São Paulo</a> <span class="tp-gist">— AWS is opening permanent Builder Loft developer community spaces in Berlin, Hyderabad, and São Paulo.</span></div>
-    
-    
-    <details class="items-drawer">
-      <summary>1 item</summary>
-      <div class="drawer-body">
-        
-  <div class="iline" data-pub="2026-08-18T13:58:41+00:00">
-    <span class="new-pill">new</span> <a href="https://aws.amazon.com/blogs/aws/in-the-works-aws-builder-lofts-in-berlin-hyderabad-and-sao-paulo" target="_blank" rel="noopener">In the works: AWS Builder Lofts in Berlin, Hyderabad, and São Paulo</a>
-    
-    <div class="iline-gist">AWS is opening permanent Builder Loft developer community spaces in Berlin, Hyderabad, and São Paulo.</div>
-    <div class="iline-meta"><span class="badge rss">rss</span>
-      aws-news · 2h ago</div>
+      tubakhuym-yt · 78d ago</div>
   </div>
   
       </div>
@@ -369,30 +339,20 @@ Amazon Quick rolled out native Microsoft 365 extensions across Word, Excel, Powe
   </section>
   
   <section class="type" id="sec-dataeng">
-    <h2 class="section">Data Engineering <span class="count">· 2</span></h2>
+    <h2 class="section">Data Engineering <span class="count">· 1</span></h2>
     <p class="type-summary">Data engineering strategies are adapting to AI requirements across governance and operational benchmarking. Databricks held a live competition to evaluate agent reasoning in complex multi-step tasks <a href="https://databricks.com/blog/evaluating-ai-agents-live-grounded-reasoning-cup" target="_blank" rel="noopener" title="databricks-blog — Evaluating AI Agents Live at the Grounded Reasoning Cup">[1]</a> while outlining architectural patterns for context control planes in enterprise retail deployments <a href="https://databricks.com/blog/when-it-comes-governance-retailers-need-control-plane-context" target="_blank" rel="noopener" title="databricks-blog — When it comes to Governance, Retailers need a control plane for context">[2]</a>.</p>
-    
-    <div class="top-pick"><span class="star" title="Top pick">★</span> <a href="https://databricks.com/blog/evaluating-ai-agents-live-grounded-reasoning-cup" target="_blank" rel="noopener">Evaluating AI Agents Live at the Grounded Reasoning Cup</a> <span class="tp-gist">— Databricks hosted the Grounded Reasoning Cup to benchmark AI agent performance on real-world logic tasks.</span></div>
     
     
     <details class="items-drawer">
-      <summary>2 items</summary>
+      <summary>1 item</summary>
       <div class="drawer-body">
         
-  <div class="iline" data-pub="2026-08-18T15:00:00+00:00">
-    <span class="new-pill">new</span> <a href="https://databricks.com/blog/evaluating-ai-agents-live-grounded-reasoning-cup" target="_blank" rel="noopener">Evaluating AI Agents Live at the Grounded Reasoning Cup</a>
+  <div class="iline" data-pub="2026-08-19T16:00:00+00:00">
+    <span class="new-pill">new</span> <a href="https://databricks.com/blog/designing-effective-genie-agents-single-prompt" target="_blank" rel="noopener">Designing effective Genie Agents from a single prompt</a>
     
-    <div class="iline-gist">Databricks hosted the Grounded Reasoning Cup to benchmark AI agent performance on real-world logic tasks.</div>
-    <div class="iline-meta"><span class="badge rss">rss</span>
-      databricks-blog · 1h ago</div>
-  </div>
-  
-  <div class="iline" data-pub="2026-08-18T15:18:00+00:00">
-    <span class="new-pill">new</span> <a href="https://databricks.com/blog/when-it-comes-governance-retailers-need-control-plane-context" target="_blank" rel="noopener">When it comes to Governance, Retailers need a control plane for context</a>
     
-    <div class="iline-gist">Retail AI adoption requires a specialized context control plane to govern domain data and privacy.</div>
     <div class="iline-meta"><span class="badge rss">rss</span>
-      databricks-blog · 46m ago</div>
+      databricks-blog · 34m ago</div>
   </div>
   
       </div>
@@ -404,19 +364,17 @@ Amazon Quick rolled out native Microsoft 365 extensions across Word, Excel, Powe
     <h2 class="section">AI <span class="count">· 1</span></h2>
     <p class="type-summary">Sentence Transformers added native support for multi-vector late interaction models <a href="https://huggingface.co/blog/multi-vector-encoder" target="_blank" rel="noopener" title="huggingface-blog — Multi-Vector (Late Interaction) Embedding Models with Sentence Transformers">[1]</a>. This enables developers to implement ColBERT-style retrieval directly within standard sentence embedding pipelines for improved retrieval ranking.</p>
     
-    <div class="top-pick"><span class="star" title="Top pick">★</span> <a href="https://huggingface.co/blog/multi-vector-encoder" target="_blank" rel="noopener">Multi-Vector (Late Interaction) Embedding Models with Sentence Transformers</a> <span class="tp-gist">— Sentence Transformers added support for multi-vector late-interaction retrieval embedding architectures.</span></div>
-    
     
     <details class="items-drawer">
       <summary>1 item</summary>
       <div class="drawer-body">
         
-  <div class="iline" data-pub="2026-08-18T00:00:00+00:00">
-    <span class="new-pill">new</span> <a href="https://huggingface.co/blog/multi-vector-encoder" target="_blank" rel="noopener">Multi-Vector (Late Interaction) Embedding Models with Sentence Transformers</a>
+  <div class="iline" data-pub="2026-08-19T13:48:49+00:00">
+    <span class="new-pill">new</span> <a href="https://huggingface.co/blog/LiquidAI/qad" target="_blank" rel="noopener">LFM2.5 Q4\_0 Checkpoints from Quantization-Aware Distillation</a>
     
-    <div class="iline-gist">Sentence Transformers added support for multi-vector late-interaction retrieval embedding architectures.</div>
+    
     <div class="iline-meta"><span class="badge rss">rss</span>
-      huggingface-blog · 16h ago</div>
+      huggingface-blog · 2h ago</div>
   </div>
   
       </div>
@@ -429,28 +387,28 @@ Amazon Quick rolled out native Microsoft 365 extensions across Word, Excel, Powe
     <p class="type-summary">AWS delivered targeted administrative and compute optimizations across core services. Amazon Connect introduced granular dashboards for contact routing steps and agent proficiencies <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-connect-routing-steps" target="_blank" rel="noopener" title="aws-whats-new — Amazon Connect Customer dashboards now support reporting on routing steps and agent proficiencies">[1]</a>, ECR expanded its replication capacity to 25 rules per registry <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-ecr-increased-replication-rules-limit" target="_blank" rel="noopener" title="aws-whats-new — Amazon ECR now supports 25 replication rules per registry">[2]</a>, and EC2 Auto Scaling enabled batch terminations for up to 100 instances per call <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-ec2-auto-scaling-batch-termination" target="_blank" rel="noopener" title="aws-whats-new — Amazon EC2 Auto Scaling now supports batch instance termination">[3]</a>.</p>
     
     <div class="drawer-body">
-  <div class="iline" data-pub="2026-08-17T17:23:00+00:00">
-    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-connect-routing-steps" target="_blank" rel="noopener">Amazon Connect Customer dashboards now support reporting on routing steps and agent proficiencies</a>
+  <div class="iline" data-pub="2026-08-18T18:00:00+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/mwaa-serverless-pythonoperator-bashoperator" target="_blank" rel="noopener">Amazon MWAA Serverless now supports PythonOperator and BashOperator</a>
     
-    <div class="iline-gist">Amazon Connect Customer dashboards added reporting for routing steps and agent skill proficiencies.</div>
+    
     <div class="iline-meta"><span class="badge rss">rss</span>
       aws-whats-new · 22h ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-08-17T19:01:00+00:00">
-    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-ecr-increased-replication-rules-limit" target="_blank" rel="noopener">Amazon ECR now supports 25 replication rules per registry</a>
+  <div class="iline" data-pub="2026-08-19T05:18:00+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-bedrock-grok-4-6" target="_blank" rel="noopener">Amazon Bedrock now supports SpaceXAI Grok 4.6</a>
     
-    <div class="iline-gist">Amazon ECR increased its registry replication configuration limit from 10 to 25 rules.</div>
+    
     <div class="iline-meta"><span class="badge rss">rss</span>
-      aws-whats-new · 21h ago</div>
+      aws-whats-new · 11h ago</div>
   </div>
   
-  <div class="iline" data-pub="2026-08-17T18:11:00+00:00">
-    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-ec2-auto-scaling-batch-termination" target="_blank" rel="noopener">Amazon EC2 Auto Scaling now supports batch instance termination</a>
+  <div class="iline" data-pub="2026-08-18T22:30:00+00:00">
+    <span class="new-pill">new</span> <a href="https://aws.amazon.com/about-aws/whats-new/2026/08/aws-iam-european-sovereign-cloud" target="_blank" rel="noopener">AWS IAM identity federation to external services is now available in AWS European Sovereign Cloud Region</a>
     
-    <div class="iline-gist">Amazon EC2 Auto Scaling now allows batch instance termination of up to 100 instances per API call.</div>
+    
     <div class="iline-meta"><span class="badge rss">rss</span>
-      aws-whats-new · 21h ago</div>
+      aws-whats-new · 18h ago</div>
   </div>
   </div>
     
@@ -475,6 +433,25 @@ Amazon Quick rolled out native Microsoft 365 extensions across Word, Excel, Powe
     root.setAttribute("data-theme", next);
     try { localStorage.setItem("pdt-theme", next); } catch (e) {}
   });
+  // Daily Read paginator
+  (function () {
+    var articles = document.querySelectorAll(".dr-article");
+    var prev = document.getElementById("drPrev");
+    var next = document.getElementById("drNext");
+    var counter = document.getElementById("drCounter");
+    if (!articles.length || !prev || !next) return;
+    var current = 0;
+    function show(idx) {
+      articles[current].classList.remove("dr-active");
+      current = idx;
+      articles[current].classList.add("dr-active");
+      counter.textContent = (current + 1) + " / " + articles.length;
+      prev.disabled = current === 0;
+      next.disabled = current === articles.length - 1;
+    }
+    prev.addEventListener("click", function () { if (current > 0) show(current - 1); });
+    next.addEventListener("click", function () { if (current < articles.length - 1) show(current + 1); });
+  })();
   var f = document.getElementById("fresh");
   if (f) {
     var g = Date.parse(f.getAttribute("data-generated"));
