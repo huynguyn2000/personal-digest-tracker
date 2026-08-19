@@ -31,6 +31,7 @@ from .db import (
 # Trackers to display, in order. Each: name, label, fmt; optional icon/kind.
 TRACKER_SPECS = [
     {"name": "usd_vnd", "label": "USD/VND", "fmt": lambda v: f"{v:,.0f}", "group": "Markets"},
+    {"name": "sgd_vnd", "label": "SGD/VND", "fmt": lambda v: f"{v:,.0f}", "group": "Markets"},
     {"name": "cny_vnd", "label": "CNY/VND", "fmt": lambda v: f"{v:,.0f}", "group": "Markets"},
     {"name": "sjc_gold_buy", "label": "Gold buy", "fmt": lambda v: f"{v:,.0f}", "group": "Markets"},
     {"name": "sjc_gold_sell", "label": "Gold sell", "fmt": lambda v: f"{v:,.0f}", "group": "Markets"},

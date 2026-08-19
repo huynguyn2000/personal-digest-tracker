@@ -104,8 +104,10 @@ def _call_gemini(model: str, key: str, prompt: str) -> dict:
             if status not in (429, 500, 503) and not isinstance(exc, httpx.TransportError):
                 raise
             if attempt < max_attempts - 1:
-                wait = min(2 ** attempt, 60)  # 1s, 2s, 4s, 8s, 16s (capped at 60s)
+                wait = min(2 ** attempt, 60)  # 1s, 2s, 4s, 8s, 16s, 32s (capped at 60s)
                 print(f"  Gemini {status or 'transport error'} on attempt {attempt + 1}/{max_attempts}, retrying in {wait}s…")
+                if status == 429 and attempt >= 3:
+                    print("  (persistent 429 likely means the prompt is too large for the free-tier TPM quota)")
                 time.sleep(wait)
     raise last_exc
 
@@ -143,7 +145,7 @@ def _build_prompt(grouped: list[dict], daily_items: list[dict], max_chars: int,
         lines.append("")
     lines.append("## DAILY READ SOURCE MATERIAL (produce one daily_read article object per item below)")
     for it in daily_items:
-        snip = (it.get("snip") or "").replace("\n", " ").strip()[:1200]
+        snip = (it.get("snip") or "").replace("\n", " ").strip()[:500]
         lines.append(f"- id={it['id']} | source={it['source_id']} | {it['title']} | {snip}")
     return "\n".join(lines)
 

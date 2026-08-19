@@ -73,7 +73,7 @@ def fx_vcb() -> list[tuple]:
     )
     r.raise_for_status()
     root = ET.fromstring(r.content)
-    wanted = {"USD": "usd_vnd", "CNY": "cny_vnd"}
+    wanted = {"USD": "usd_vnd", "CNY": "cny_vnd", "SGD": "sgd_vnd"}
     out = []
     for ex in root.iter("Exrate"):
         code = ex.get("CurrencyCode")

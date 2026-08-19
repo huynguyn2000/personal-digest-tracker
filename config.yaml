@@ -53,7 +53,10 @@ summarize:
   max_gist_chars: 140
   # The main reading view covers every primary feed item in the daily window.
   # A page is budgeted at roughly 320 words; output is hard-trimmed if needed.
-  daily_read_pages: 10
+  # Keep pages low: the daily_read section sends 1 item * snip_chars of input per
+  # feed item, so a large page count quickly blows Gemini Flash's per-request
+  # token quota and triggers 429s on every attempt.
+  daily_read_pages: 5
   daily_read_words_per_page: 320
 
 # Enrich content-less items (e.g. GitHub release tags with no notes) by fetching
@@ -65,6 +68,7 @@ enrich:
 # External pages for a larger time-window view of each tracker.
 tracker_links:
   usd_vnd: https://www.google.com/finance/quote/USD-VND
+  sgd_vnd: https://www.google.com/finance/quote/SGD-VND
   cny_vnd: https://www.google.com/finance/quote/CNY-VND
   hcmc_temp: https://www.windy.com/?10.823,106.630,8
   hcmc_rain_prob: https://www.windy.com/?rain,10.823,106.630,8
