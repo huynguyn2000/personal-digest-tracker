@@ -81,11 +81,11 @@ sources:
     tags: [aws]
     weight: 1.2
 
-  - id: aws-whats-new
+  - id: aws-week-in-review
     type: rss
-    url: https://aws.amazon.com/about-aws/whats-new/recent/feed/
-    tags: [aws, releases]
-    weight: 1.0
+    url: https://aws.amazon.com/blogs/aws/tag/week-in-review/feed/
+    tags: [aws]
+    weight: 1.2
 
   - id: aws-big-data
     type: rss
