@@ -327,6 +327,8 @@ def select_digest(conn: sqlite3.Connection) -> dict:
     # Watching is a queue, not a daily-news window. Keep the newest unclicked
     # videos from each channel until the browser records that they were opened.
     watching_cap = int(dcfg.get("watching_per_source_cap", 3))
+    watching_max_age = float(dcfg.get("watching_max_age_days", 14)) * 86400
+    watching_cutoff = now.timestamp() - watching_max_age
     watching_counts: dict[str, int] = {}
     watching = []
     for r in conn.execute(
@@ -334,6 +336,8 @@ def select_digest(conn: sqlite3.Connection) -> dict:
         "ORDER BY published_at DESC"
     ).fetchall():
         if not is_watching(r):
+            continue
+        if parse_iso(r["published_at"]).timestamp() < watching_cutoff:
             continue
         source_id = r["source_id"]
         if watching_counts.get(source_id, 0) >= watching_cap:

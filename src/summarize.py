@@ -94,8 +94,8 @@ def _call_gemini(model: str, key: str, prompt: str, schema: dict,
             "maxOutputTokens": max_output_tokens,
             "responseMimeType": "application/json",
             "responseSchema": schema,
+            "thinkingConfig": {"thinkingBudget": 0},
         },
-        "thinkingConfig": {"thinkingBudget": 0},
     }
     url = GEMINI_URL.format(model=model)
     last_exc = None

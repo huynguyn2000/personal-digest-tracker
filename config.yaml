@@ -49,7 +49,7 @@ negative_keywords:
 summarize:
   # An alias that tracks the current flash model, so an unattended daily cron
   # won't 404 when specific versions get gated/rotated. Override via GEMINI_MODEL.
-  model: gemini-2.5-flash
+  model: gemini-2.5-flash-lite
   max_gist_chars: 140
   # The main reading view covers every primary feed item in the daily window.
   # A page is budgeted at roughly 320 words; output is hard-trimmed if needed.
@@ -95,6 +95,8 @@ digest:
   # Keep the watching queue compact while retaining the newest videos from
   # every channel.
   watching_per_source_cap: 3
+  # Drop watching items older than this many days so stale videos don't linger.
+  watching_max_age_days: 14
   keyword_score_cap: 3.0
   # Section ordering in the HTML. Tags not listed fall into "other".
   section_order: [watching, aws, dataeng, ai, releases]
