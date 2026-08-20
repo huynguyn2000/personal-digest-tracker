@@ -117,9 +117,17 @@ def _call_gemini(model: str, key: str, prompt: str, schema: dict,
                 raise
             if attempt < max_attempts - 1:
                 wait = min(2 ** attempt, 60)
+                # Print the raw error body so we can distinguish quota types
+                raw_body = ""
+                if hasattr(exc, "response"):
+                    try:
+                        raw_body = exc.response.text[:400]
+                    except Exception:
+                        pass
                 print(
                     f"  Gemini {status or 'transport error'} on attempt "
                     f"{attempt + 1}/{max_attempts}, retrying in {wait}s…"
+                    + (f"\n  error body: {raw_body}" if raw_body else "")
                 )
                 time.sleep(wait)
     raise last_exc  # type: ignore[misc]
