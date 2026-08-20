@@ -30,7 +30,7 @@ import httpx
 from .db import get_conn, get_kv, init_db, load_config, set_kv
 from .render import select_digest
 
-GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+GEMINI_URL = "https://generativelanguage.googleapis.com/v1/models/{model}:generateContent"
 
 # ── JSON schemas ──────────────────────────────────────────────────────────────
 
@@ -94,8 +94,8 @@ def _call_gemini(model: str, key: str, prompt: str, schema: dict,
             "maxOutputTokens": max_output_tokens,
             "responseMimeType": "application/json",
             "responseSchema": schema,
-            "thinkingConfig": {"thinkingBudget": 0},
         },
+        "thinkingConfig": {"thinkingBudget": 0},
     }
     url = GEMINI_URL.format(model=model)
     last_exc = None
